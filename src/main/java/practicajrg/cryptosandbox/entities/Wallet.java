@@ -16,10 +16,26 @@ public class Wallet {
     @Column(name = "balance", nullable = false)
     private double balance;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id")
-    private User user;
+    private Usuario user;
 
     @OneToMany(mappedBy = "wallet")
     private Set<Transaction> transactions;
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
 }
