@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form method="post" th:object="${transaction}" th:action="@{/createTransaction}">
+    <input th:field="*{wallet}" hidden>
+    <label for="i1">Operation</label>
+    <select name="i1" id="i1" th:field="*{operation}" onchange="toggleExchangeFields()">
+        <option value="Venta">venta</option>
+        <option value="Compra">compra</option>
+        <option value="Intercambio">intercambio</option>
+    </select>
+
+    <label for="i4">Crypto</label>
+    <select name="i4" id="i4" th:field="*{crypto_name}" onchange="checkExchange()">
+        <option th:each="crypto : ${cryptos}" th:value="${crypto.name}" th:text="${crypto.name}"></option>
+    </select>
+
+    <label for="i3">quantity</label>
+    <input type="number" id="i3" required th:field="*{quantity}" step="0.01" min="0">
+
+    <div id="exchangeFields" style="display: none;">
+        <h3>Exchange Details</h3>
+        <label for="i5">Crypto to Exchange</label>
+        <select name="crypto_name2" id="i5" th:field="*{crypto_exchange}" onchange="checkExchange()">
+            <option th:each="crypto : ${cryptos}" th:value="${crypto.name}" th:text="${crypto.name}"></option>
+        </select>
+    </div>
+
+    <input type="submit" value="submit" id="s">
+</form>
+<script>
+    function toggleExchangeFields() {
+        let operation = document.getElementById('i1').value;
+        let exchangeFields = document.getElementById('exchangeFields');
+
+        exchangeFields.style.display = operation === 'Intercambio' ? 'block' : 'none';
+    }
+
+    function checkExchange(){
+        let boton = document.getElementById('s');
+        let s1 = document.getElementById('i4');
+        let s2 = document.getElementById('i5')
+        if (s1.value === s2.value){
+            boton.style.display = "none"
+        }else{
+            boton.style.display = "block"
+        }
+    }
+</script>
+</body>
+</html>

@@ -6,4 +6,7 @@ import practicajrg.cryptosandbox.entities.Usuario;
 
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, Long> {
+    Usuario findByEmail(String email);
+    Usuario findByUsername(String username);
+
 }

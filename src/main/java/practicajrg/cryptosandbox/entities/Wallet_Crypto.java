@@ -10,7 +10,7 @@ public class Wallet_Crypto {
     private Long id;
 
     @Column(name = "quantity")
-    private int quantity;
+    private double quantity;
 
     @ManyToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id", nullable = false)
@@ -20,4 +20,35 @@ public class Wallet_Crypto {
     @JoinColumn(name = "crypto_id", referencedColumnName = "id", nullable = false)
     private Crypto crypto;
 
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public Crypto getCrypto() {
+        return crypto;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public void setCrypto(Crypto crypto) {
+        this.crypto = crypto;
+    }
 }

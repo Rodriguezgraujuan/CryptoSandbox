@@ -8,13 +8,36 @@
     <title>Document</title>
 </head>
 <body>
+<a th:href="@{/actualizarBD}">Actualizar BD</a>
 <a th:href="@{/create}">Crear</a>
 <h1>Pruebas</h1>
-    <div th:each="user : ${users}">
-        <p th:text="${user.username}"></p>
-        <p th:text="${user.password}"></p>
-        <p th:text="${user.rol}"></p>
-        <p th:text="${user.wallet.balance}"></p>
+<div th:each="usuario : ${users}">
+    <p th:text="${usuario.username}"></p>
+    <p th:text="${usuario.password}"></p>
+    <p th:text="${usuario.rol}"></p>
+    <p th:text="${usuario.wallet.balance}"></p>
+    <a th:href="@{/transactionCreate/{id}(id=${usuario.wallet.id})}">Create Transaction</a>
+    <a th:href="@{/delete/{id}(id=${usuario.id})}">Delete</a>
+    <!---
+    <div th:each="transaction : ${usuario.wallet.transactions}">
+        <p th:text="${transaction.operation}"></p>
+        <p th:text="${transaction.crypto_name}"></p>
+        <p th:text="${transaction.quantity}"></p>
+        <p th:text="${transaction.amount}"></p>
+    </div>-->
+    <div th:each="cry : ${wallet_cryptos}">
+        <p th:if="${cry.wallet.id == usuario.wallet.id}" th:text="${cry.crypto.name}"></p>
+        <p th:if="${cry.wallet.id == usuario.wallet.id}" th:text="${cry.quantity}"></p>
     </div>
+
+</div>
+<!--
+<div th:each="crypto : ${cryptos}">
+    <p th:text="${crypto.name}" style="display: inline"></p>
+    <b style="display: inline">:</b>
+    <p th:text="${crypto.getValue()}" style="display: inline"></p>
+</div>-->
+
+
 </body>
 </html>

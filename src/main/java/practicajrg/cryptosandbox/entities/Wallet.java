@@ -1,6 +1,9 @@
 package practicajrg.cryptosandbox.entities;
 
 import jakarta.persistence.*;
+import practicajrg.cryptosandbox.entities.Transaction;
+import practicajrg.cryptosandbox.entities.Usuario;
+import practicajrg.cryptosandbox.entities.Wallet_Crypto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,8 +23,11 @@ public class Wallet {
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private Usuario user;
 
-    @OneToMany(mappedBy = "wallet")
+    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
+
+    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Wallet_Crypto> walletCryptos = new HashSet<>();
 
     public void setUser(Usuario user) {
         this.user = user;
@@ -37,5 +43,29 @@ public class Wallet {
 
     public double getBalance() {
         return balance;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public Set<Wallet_Crypto> getWalletCryptos() {
+        return walletCryptos;
+    }
+
+    public void setWalletCryptos(Set<Wallet_Crypto> walletCryptos) {
+        this.walletCryptos = walletCryptos;
     }
 }

@@ -17,14 +17,15 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(auth -> auth
-                //Autorizar rutas
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/**").permitAll()
+                                .anyRequest().authenticated()
                 )
-                //Creara la pagina de login automaticamente
                 .formLogin(login -> login
-                        .defaultSuccessUrl("/", true).permitAll()
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error")
+                        .permitAll()
                 )
-                //Creara el logout automaticmente
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")

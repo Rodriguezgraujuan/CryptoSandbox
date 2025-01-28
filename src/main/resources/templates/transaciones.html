@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Pruebas</h1>
+    <div th:each="transaction : ${transactions}">
+        <p th:text="${transaction.operation}"></p>
+        <p th:text="${transaction.crypto_name}"></p>
+        <p th:text="${transaction.quantity}"></p>
+        <p th:text="${transaction.amount}"></p>
+        <p th:text="${transaction.getWallet().getUser().getUsername()}"></p>
+    </div>
+</body>
+</html>
