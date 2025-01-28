@@ -10,6 +10,7 @@ import java.util.List;
 
 @Controller
 public class pruebasController {
+    /*
 
     private final UserService userService;
     private final WalletService walletService;
@@ -143,6 +144,10 @@ public class pruebasController {
         transaction.setCommission(0);
         transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
         transactionService.saveTransaction(transaction);
+
+
     }
+
+     */
 
 }
