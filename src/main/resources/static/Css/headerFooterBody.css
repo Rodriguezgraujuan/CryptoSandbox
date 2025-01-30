@@ -1,0 +1,39 @@
+.carrusel-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    cursor: default;
+}
+
+.carrusel-content:hover{
+    animation-play-state: paused;
+}
+
+.carrusel-content {
+    animation: scroll 60s linear infinite;
+    gap: 100px;
+}
+
+/* Animación del carrusel */
+@keyframes scroll {
+    from {
+        transform: translateX(10);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+
+
+/* Main Content */
+main {
+    background-color: #102f39;
+}
+
+body {
+    background-color: #0b2027;
+    color: #ffffff;
+}

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto SandBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="Css/headerFooterBody.css">
+    <link rel="stylesheet" href="char/char.css">
+    <link rel="stylesheet" href="Css/home.css">
+    <script src="Js/renderCryptos.js"></script>
+    <script src="Js/carrusel.js"></script>
+    <script src="SetColor.js"></script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Carrusel de criptomonedas -->
+        <section class="container-fluid navbar navbar-expand-md navbar-dark">
+            <div class="carrusel-container">
+                <div class="carrusel-content d-flex" id="carrusel"></div>
+            </div>
+        </section>
+        <!-- Inicio del menu -->
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid">
+                <!-- icono o nombre -->
+
+                <a class="navbar-brand" href="Home.html">
+                    <i class="bi bi-flower1"></i>
+                    <span class="text-warning">Crypto SandBox</span>
+                </a>
+
+                <!-- boton del menu -->
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- elementos del menu colapsable -->
+
+                <div class="collapse navbar-collapse" >
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Usuario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="toggle-theme">Modo Claro</a>
+                        </li>
+
+                        <li class="navbar-toggler">
+                            <a class="nav-link" href="wallet.html">Wallet</a>
+                        </li>
+
+                    </ul>
+
+                    <hr class="d-md-none text-white-50">
+
+                    <!-- enlaces redes sociales -->
+
+                    <ul class="navbar-nav flex-row flex-wrap text-light">
+
+                        <li class="nav-item col-6 col-md-auto p-3">
+                            <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
+
+                                <i class="bi bi-github"></i>
+                                <small class="d-md-none ms-2">GitHub</small>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!--boton Informacion -->
+
+                    <form class="d-flex">
+                        <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit"
+                            href="wallet.html">Wallet</a>
+                    </form>
+
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <div class="container-fluid flex-grow-1">
+        <div class="row flex-grow-1">
+            <!-- Sidebar de Criptos -->
+            <aside class="col-md-3 p-3">
+                <h3>Cryptos</h3>
+                <div class="scroll-div">
+                    <ul class="list-group" id="crypto-list">
+
+                    </ul>
+                </div>
+
+            </aside>
+
+            <!-- Panel de Compra/Venta -->
+            <aside class="col-md-3 p-3">
+                <h3>Comprar o Vender</h3>
+                <div id="selected-crypto" class="text-center my-2 text-warning">Selecciona una crypto</div>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-success" id="btn-comprar">Comprar</button>
+                    <button class="btn btn-danger" id="btn-vender">Vender</button>
+                </div>
+
+                <!-- Inputs de Compra -->
+                <div id="comprar-inputs" class="input-container">
+                    <input type="number" id="comprar-amount" placeholder="Cantidad de dinero a gastar">
+                    <div id="comprar-result" class="result"></div>
+                    <button class="btn btn-primary" id="comprar-confirm">Confirmar Compra</button>
+                </div>
+
+                <!-- Inputs de Venta -->
+                <div id="vender-inputs" class="input-container">
+                    <input type="number" id="vender-amount" placeholder="Cantidad de cryptos a vender">
+                    <div id="vender-result" class="result"></div>
+                    <button class="btn btn-primary" id="vender-confirm">Confirmar Venta</button>
+                </div>
+            </aside>
+
+
+            <!-- Estadísticas -->
+            <div class="col-md-6 p-3">
+                <h3>Estadísticas</h3>
+                <div id="chart-container">
+                    <script src="https://fastly.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+                    <script src="char/Grafico.js"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>CryptoSandbox
+                        </h6>
+                        <p>
+                            Esperamos que disfrutes aprendiendo.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            TECNOLOGIA UTILIZADA
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">bootstrap</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">jquery</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">spring</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Useful links
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">Pricing</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Settings</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Orders</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Help</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            info@example.com
+                        </p>
+                        <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+                        <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+
+    <!-- Script to Handle Crypto Selection -->
+    <script>
+        $(document).ready(function () {
+            let selectedCurrency = null;
+            let cryptoData = {};
+
+            // Cargar y renderizar criptomonedas desde el servidor
+            $.get("http://localhost:8080/cryptos", (data) => {
+                cryptoData = data.reduce((acc, crypto) => {
+                    acc[crypto.name] = crypto.value;
+                    return acc;
+                }, {});
+            }).done((data) => {
+                renderCryptos(data);
+            }).fail((error) => alert("Error al obtener criptomonedas: " + error.responseText));
+
+            // Manejador de selección de criptomoneda
+            $(document).on("click", "#crypto-list li", function () {
+                selectedCurrency = $(this).find("span:first").text();
+                $("#selected-crypto").text(`Seleccionado: ${selectedCurrency}`).addClass("text-warning");
+            });
+
+            // Mostrar inputs al comprar o vender
+            $("#btn-comprar").click(() => {
+                if (selectedCurrency) {
+                    $("#comprar-inputs").show();
+                    $("#vender-inputs").hide();
+                } else {
+                    alert("Por favor, selecciona una criptomoneda antes de comprar.");
+                }
+            });
+
+            $("#btn-vender").click(() => {
+                if (selectedCurrency) {
+                    $("#vender-inputs").show();
+                    $("#comprar-inputs").hide();
+                } else {
+                    alert("Por favor, selecciona una criptomoneda antes de vender.");
+                }
+            });
+
+            // Calcular resultado de la compra
+            $("#comprar-amount").on("input", function () {
+                let money = parseFloat($(this).val());
+                if (money && selectedCurrency) {
+                    let cryptoAmount = (money / cryptoData[selectedCurrency]).toFixed(4);
+                    $("#comprar-result").text(`Puedes comprar ${cryptoAmount} ${selectedCurrency}`);
+                } else {
+                    $("#comprar-result").text("");
+                }
+            });
+
+            // Calcular resultado de la venta
+            $("#vender-amount").on("input", function () {
+                let cryptoAmount = parseFloat($(this).val());
+                if (cryptoAmount && selectedCurrency) {
+                    let moneyEarned = (cryptoAmount * cryptoData[selectedCurrency]).toFixed(2);
+                    $("#vender-result").text(`Ganancia estimada: $${moneyEarned}`);
+                } else {
+                    $("#vender-result").text("");
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
