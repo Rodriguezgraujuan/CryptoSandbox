@@ -25,8 +25,8 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/**").permitAll()
+                                .anyRequest().hasRole("USER")
                 )
                 .formLogin(login -> login
                         .loginPage("/login") // Define la URL de tu propio formulario de login

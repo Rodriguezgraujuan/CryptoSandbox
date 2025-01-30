@@ -49,7 +49,9 @@ public class UsuarioController {
     ResponseEntity<?> create(@RequestBody Usuario user) {
         if (user.getUsername() == null || user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("Faltan datos requeridos");
-        }else {
+        } else if (userService.findByEmail(user.getEmail()) != null) {
+            return ResponseEntity.badRequest().body("El correo ya esta registrado");
+        }else{
             try {
                 user.setRol("USER");
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
