@@ -286,6 +286,20 @@
                     $("#vender-result").text("");
                 }
             });
+            $("#comprar-confirm").click(() => {
+                let money = parseFloat($("#comprar-amount").val());
+                if (!money || money <= 0 || !selectedCurrency) {
+                    alert("Por favor ingresa una cantidad válida de dinero y selecciona una criptomoneda.");
+                    return;
+                }
+                let cryptoAmount = (money / cryptoData[selectedCurrency]).toFixed(4);
+                console.log(`Compraste ${cryptoAmount} ${selectedCurrency} por $${money}`);
+            });
+            $("#vender-confirm").click(() => {
+                let cryptoAmount = parseFloat($("#vender-amount").val());
+                let moneyEarned = (cryptoAmount * cryptoData[selectedCurrency]).toFixed(2);
+                console.log(`Vendiste ${cryptoAmount} ${selectedCurrency} por $${moneyEarned}`);
+            });
         });
     </script>
 
