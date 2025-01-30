@@ -15,6 +15,7 @@ import practicajrg.cryptosandbox.entities.Usuario;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -44,8 +45,9 @@ public class CryptoService {
         return cryptoRepository.findByName(name);
     }
 
-    @Scheduled(fixedRate=180000)
+    @Scheduled(fixedRate=1800000)
     public void updateBD() {
+
         if (cryptoRepository.findAll().isEmpty()) {
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<List> response = restTemplate.getForEntity(API_URL, List.class);
@@ -55,8 +57,11 @@ public class CryptoService {
             List<Registro> registros = new ArrayList<>();
             if (cryptoList != null) {
                 for (Map<String, Object> crypto : cryptoList) {
+                    String last_updated = (String) crypto.get("last_updated");
+                    Instant instant = Instant.parse(last_updated);
+                    LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
                     result.add(cryptoApiGet(crypto));
-                    registros.add(new Registro(cryptoApiGet(crypto).getValue(), cryptoApiGet(crypto).getLast_updated(), cryptoApiGet(crypto)));
+                    registros.add(new Registro(cryptoApiGet(crypto).getValue(), date, cryptoApiGet(crypto)));
                 }
             }
             cryptoRepository.saveAll(result);
@@ -70,18 +75,20 @@ public class CryptoService {
             if (cryptoList != null) {
                 for (Map<String, Object> crypto : cryptoList) {
                     Crypto cryptoApiGet = cryptoApiGet(crypto);
-
+                    String last_updated = (String) crypto.get("last_updated");
+                    Instant instant = Instant.parse(last_updated);
+                    LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
                     // Buscar si la criptomoneda ya está en la base de datos
                     Optional<Crypto> existingCrypto = Optional.ofNullable(cryptoRepository.findByName(cryptoApiGet.getName()));
 
                     if (existingCrypto.isPresent()) {
                         Crypto cryptoToUpdate = getCrypto(existingCrypto, cryptoApiGet);
                         cryptoRepository.save(cryptoToUpdate);
-                        registroRepository.save(new Registro(cryptoToUpdate.getValue(), cryptoToUpdate.getLast_updated(), cryptoToUpdate));
+                        registroRepository.save(new Registro(cryptoToUpdate.getValue(), date, cryptoToUpdate));
                     } else {
                         // Si la criptomoneda no existe, la creamos y la guardamos
                         cryptoRepository.save(cryptoApiGet(crypto)); // Guardamos la nueva criptomoneda
-                        new Registro(cryptoApiGet(crypto).getValue(), cryptoApiGet(crypto).getLast_updated(), cryptoApiGet(crypto));
+                        new Registro(cryptoApiGet(crypto).getValue(), date, cryptoApiGet(crypto));
                     }
                 }
             }

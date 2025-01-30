@@ -33,7 +33,7 @@ public class WebSecurity {
                         .loginProcessingUrl("/login") // URL que manejará la autenticación
                         .usernameParameter("email") // Nombre del parámetro del formulario
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/prueba", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )
