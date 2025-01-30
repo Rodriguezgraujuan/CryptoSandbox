@@ -108,25 +108,8 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-<form class="login-form" method="post" action="/login">
-  <h2>Please sign in</h2>
 
-  <p>
-    <label for="username" class="screenreader">Username</label>
-    <input type="text" id="username" name="username" placeholder="Username" required autofocus>
-  </p>
-  <p>
-    <label for="password" class="screenreader">Password</label>
-    <input type="password" id="password" name="password" placeholder="Password" required>
-  </p>
-
-  <input name="_csrf" type="hidden" value="XkqIbHA4K1lECSgKX5TAvioJutozpkJynUErp44ysYrx-ts6bX25X0kMTmBpaxw7Z7n0jElql-ILl3ZfryIdkO0BienCyL4L" />
-  <button type="submit" class="primary">Sign in</button>
-</form>
-
-
-
-  <!--<header class="bg-primary text-white py-3 row mx-0">
+  <header class="bg-primary text-white py-3 row mx-0">
     <div class="col-10 container">
       <a href="invitado.html" class="text-decoration-none text-white">
         <h1 class="display-6">Crypto SandBox</h1>
@@ -140,9 +123,9 @@
     <div>
       <form class="form" th:action="@{/login}" method="POST">
         <div class="flex-column">
-          <label for="username" class="form-label">Username</label>
+          <label for="email" class="form-label">Email</label>
           <div class="inputForm">
-            <input type="text" id="username" name="username" class="input" placeholder="Put your username">
+            <input type="text" id="email" name="email" class="input" placeholder="Put your email">
           </div>
         </div>
         <div class="flex-column">
@@ -157,17 +140,17 @@
             <label for="check">Check me out</label>
           </div>
         </div>
-        <a th:href="@{/register}">Register</a>
+        <a href="http://127.0.0.1:5500/Pruebas/register.html">Register</a>
         <button type="submit" class="button-submit">Submit</button>
       </form>
     </div>
-  </div>-->
+  </div>
   <!-- Footer -->
-<!--  <footer class="bg-dark text-white py-3 mt-auto">
+<footer class="bg-dark text-white py-3 mt-auto">
     <div class="container text-center">
       <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
     </div>
-  </footer>-->
+  </footer>
 </body>
 
 </html>

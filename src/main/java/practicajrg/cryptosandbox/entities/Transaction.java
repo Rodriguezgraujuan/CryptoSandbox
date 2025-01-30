@@ -2,6 +2,9 @@ package practicajrg.cryptosandbox.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Table(name = "Transaction")
 public class Transaction {
@@ -27,6 +30,9 @@ public class Transaction {
 
     @Column(name = "commission")
     private double commission;
+
+    @Column(name = "Date")
+    private LocalDate date;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "wallet_id", nullable = false)
@@ -94,5 +100,13 @@ public class Transaction {
 
     public void setCrypto_exchange(String crypto_exchange) {
         this.crypto_exchange = crypto_exchange;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 
 @Controller
 public class pruebasController {
-    /*
 
     private final UserService userService;
     private final WalletService walletService;
@@ -26,6 +25,9 @@ public class pruebasController {
         this.walletCryptoService = walletCryptoService;
     }
 
+
+
+
     @GetMapping("/")
     public String getAllUsers(Model model) {
         model.addAttribute("wallet_cryptos", walletCryptoService.findAll());
@@ -34,12 +36,28 @@ public class pruebasController {
         return "index";
     }
 
-    @GetMapping("/cryptos")
-    List<Crypto> all() {
-        return cryptoService.findAll();
+
+
+    @GetMapping("prueba")
+    public String getCryptos(Model model) {
+        return "prueba";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        if (id != null) {
+            userService.deleteById(id);
+        }
+        return "redirect:/";
+    }
 
+    @GetMapping("/actualizarBD")
+    public String actualizarBD() {
+        cryptoService.updateBD();
+        return "redirect:/";
+    }
+
+    /*
     @GetMapping("/transactions")
     public String getTransactions(Model model) {
         model.addAttribute("transactions",transactionService.findAll() );
@@ -52,7 +70,7 @@ public class pruebasController {
         return "auth/register";
     }
 
-
+    /*
     @PostMapping("/register")
     public String createUser(Usuario user) {
         user.setRol("USER");
@@ -71,13 +89,9 @@ public class pruebasController {
         return "redirect:/";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        if (id != null) {
-            userService.deleteById(id);
-        }
-        return "redirect:/";
-    }
+
+
+
 
     @GetMapping("/transactionCreate/{id}")
     public String transaction(Model model, @PathVariable Long id) {
@@ -90,19 +104,15 @@ public class pruebasController {
 
     @PostMapping("/createTransaction")
     public String createTransaction(Transaction transaction) {
-        wallet_crypto(transaction);
-        return "redirect:/";
-    }
-
-    @GetMapping("/actualizarBD")
-    public String actualizarBD() {
-        cryptoService.updateBD();
+        transactionCreate(transaction);
         return "redirect:/";
     }
 
 
 
-    private void wallet_crypto(Transaction transaction) {
+
+
+    private void transactionCreate(Transaction transaction) {
         double resultado = 0;
 
         Crypto crypto = cryptoService.findByName(transaction.getCrypto_name());
@@ -148,6 +158,7 @@ public class pruebasController {
 
     }
 
-     */
+    */
+
 
 }
