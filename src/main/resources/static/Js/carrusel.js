@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $.get("http://localhost:8080/cryptos", (data) => {
+    $.get("/cryptos", (data) => {
         console.log(data)
     }).done((data) => {
         renderCarrusel(data)

@@ -25,15 +25,15 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/**").permitAll()
-                                .anyRequest().hasRole("USER")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/register.html").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login") // Define la URL de tu propio formulario de login
                         .loginProcessingUrl("/login") // URL que manejará la autenticación
                         .usernameParameter("email") // Nombre del parámetro del formulario
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/prueba", true)
+                        .defaultSuccessUrl("/Home.html", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )
@@ -70,6 +70,7 @@ public class WebSecurity {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

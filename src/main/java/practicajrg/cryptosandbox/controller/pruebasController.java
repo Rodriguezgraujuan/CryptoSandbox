@@ -115,7 +115,7 @@ public class pruebasController {
     private void transactionCreate(Transaction transaction) {
         double resultado = 0;
 
-        Crypto crypto = cryptoService.findByName(transaction.getCrypto_name());
+        Crypto = cryptoService.findByName(transaction.getCrypto_name());
         Wallet wallet= transaction.getWallet();
         Wallet_Crypto walletCrypto = new Wallet_Crypto();
         for (Wallet_Crypto wC : walletCryptoService.findAll()) {

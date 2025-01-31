@@ -172,7 +172,7 @@
             };
             
             $.ajax({
-                url: 'http://127.0.0.1:8080/register', // URL de tu API
+                url: '/register', // URL de tu API
                 type: 'POST',
                 contentType: 'application/json', // Tipo de contenido
                 data: JSON.stringify(userData), // Convertimos el objeto a JSON
@@ -180,7 +180,7 @@
                 success: function(response) {
                     console.log('Usuario creado correctamente', response);
                     alert('¡Usuario creado exitosamente!');
-                    window.location.href = 'http://127.0.0.1:8080/login';
+                    window.location.href = '/login';
                 },
                 error: function(xhr, status, error) {                    
                     console.log('Error:', error);

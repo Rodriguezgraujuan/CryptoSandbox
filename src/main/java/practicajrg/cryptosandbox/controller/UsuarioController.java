@@ -17,7 +17,7 @@ import practicajrg.cryptosandbox.entities.Wallet_Crypto;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://127.0.0.1:5500")
+@CrossOrigin("*")
 public class UsuarioController {
 
     private final PasswordEncoder passwordEncoder;
