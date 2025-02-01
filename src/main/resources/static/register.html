@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -67,29 +67,66 @@
 
 <body class="d-flex flex-column min-vh-100">
 <header>
+    <!-- Carrusel de criptomonedas -->
     <section class="container-fluid navbar navbar-expand-md navbar-dark">
         <div class="carrusel-container">
             <div class="carrusel-content d-flex" id="carrusel"></div>
         </div>
     </section>
-    <nav class="navbar navbar-expand-md navbar-dark">
+    <!-- Inicio del menu -->
+    <nav class="navbar navbar-expand-md navbar-dark ">
         <div class="container-fluid">
+            <!-- icono o nombre -->
+
             <a class="navbar-brand" href="invitado.html">
                 <i class="bi bi-flower1"></i>
                 <span class="text-warning">Crypto SandBox</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+
+            <!-- boton del menu -->
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- elementos del menu colapsable -->
+
             <div class="collapse navbar-collapse" id="menu">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="/login">Inicio de sesión</a></li>
-                    <li class="nav-item"><a class="nav-link" href="register.html">Registro</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login">Inicio de sesion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Registro</a>
+                    </li>
                 </ul>
+
+                <hr class="d-md-none text-white-50">
+
+                <!-- enlaces redes sociales -->
+
+                <ul class="navbar-nav flex-row flex-wrap text-light">
+
+                    <li class="nav-item col-6 col-md-auto p-3">
+                        <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
+
+                            <i class="bi bi-github"></i>
+                            <small class="d-md-none ms-2">GitHub</small>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!--boton Informacion -->
+
                 <form class="d-flex">
-                    <a class="btn btn-outline-warning d-none d-md-inline-block" href="login.html">Wallet</a>
+                    <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit" href="login.html">Wallet</a>
                 </form>
+
+
             </div>
+
         </div>
     </nav>
 </header>
@@ -98,39 +135,117 @@
     <div class="py-4">
         <h2 class="display-6">Register</h2>
     </div>
-    <div>
-        <form class="form" id="registration-form">
+    <div style="height: 80vh;">
+        <form class="form">
             <div class="flex-column">
                 <label for="username" class="form-label">Username</label>
                 <div class="inputForm">
-                    <input type="text" id="username" class="input" placeholder="Enter username" required>
+                    <input type="text" id="username" class="input" placeholder="Enter username">
                 </div>
             </div>
             <div class="flex-column">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email address</label>
                 <div class="inputForm">
-                    <input type="email" id="email" class="input" placeholder="Enter email" required>
+                    <input type="email" id="email" class="input" placeholder="Enter email">
                 </div>
             </div>
             <div class="flex-column">
                 <label for="password" class="form-label">Password</label>
                 <div class="inputForm">
-                    <input type="password" id="password" class="input" placeholder="Enter password" required>
+                    <input type="password" id="password" class="input" placeholder="Enter password">
                 </div>
             </div>
             <div class="flex-column">
                 <label for="confirm-password" class="form-label">Confirm Password</label>
                 <div class="inputForm">
-                    <input type="password" id="confirm-password" class="input" placeholder="Confirm password" required>
+                    <input type="password" id="confirm-password" class="input" placeholder="Confirm password">
+                </div>
+            </div>
+            <div class="flex-row">
+                <div>
+                    <input type="checkbox" id="terms" class="form-check-input">
+                    <label for="terms">I accept the terms and conditions</label>
                 </div>
             </div>
             <button type="submit" class="button-submit">Register</button>
         </form>
     </div>
 </div>
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem me-3"></i>CryptoSandbox
+                    </h6>
+                    <p>
+                        Esperamos que disfrutes aprendiendo.
+                    </p>
+                </div>
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        TECNOLOGIA UTILIZADA
+                    </h6>
+                    <p>
+                        <a href="#!" class="text-reset">bootstrap</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">jquery</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">spring</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
 
-<footer class="text-center text-lg-start bg-dark text-muted py-1">
-    <div class="text-center p-4">&copy; Crypto SandBox - Simulador de Criptomonedas</div>
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Useful links
+                    </h6>
+                    <p>
+                        <a href="#!" class="text-reset">Pricing</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">Settings</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">Help</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                    <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                    <p>
+                        <i class="fas fa-envelope me-3"></i>
+                        info@example.com
+                    </p>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row -->
+        </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+    </div>
+    <!-- Copyright -->
 </footer>
 
 <script>
