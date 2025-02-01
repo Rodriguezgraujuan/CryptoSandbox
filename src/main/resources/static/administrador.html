@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto SandBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="Css/headerFooterBody.css">
+    <link rel="stylesheet" href="Css/home.css">
+    <script src="Js/renderCryptos.js"></script>
+    <script src="Js/carrusel.js"></script>
+    <script src="Js/SetColor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+
+</head>
+<style>
+    #chart-container-cvi {
+        height: 70vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #chart-container-totales {
+        height: 40vh;
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Carrusel de criptomonedas -->
+        <section class="container-fluid navbar navbar-expand-md">
+            <div class="carrusel-container">
+                <div class="carrusel-content d-flex" id="carrusel"></div>
+            </div>
+        </section>
+        <!-- Inicio del menu -->
+        <nav class="navbar navbar-expand-md navbar-dark" id="navMenu">
+            <div class="container-fluid">
+                <!-- icono o nombre -->
+
+                <a class="navbar-brand" href="Home.html">
+                    <i class="bi bi-flower1"></i>
+                    <span class="text-warning">Crypto SandBox</span>
+                </a>
+
+                <!-- boton del menu -->
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- elementos del menu colapsable -->
+
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Usuario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" id="toggle-theme">Modo Claro</a>
+                        </li>
+
+                        <li class="navbar-toggler">
+                            <a class="nav-link" href="wallet.html">Wallet</a>
+                        </li>
+
+                    </ul>
+
+                    <hr class="d-md-none text-white-50">
+
+                    <!-- enlaces redes sociales -->
+
+                    <ul class="navbar-nav flex-row flex-wrap text-light">
+
+                        <li class="nav-item col-6 col-md-auto p-3">
+                            <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
+
+                            <i class="bi bi-github"></i>
+                                <small class="d-md-none ms-2">GitHub</small>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!--boton Informacion -->
+
+                    <form class="d-flex">
+                        <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit" href="wallet.html">Wallet</a>
+                    </form>
+
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Parte Arriba -->
+    <div class="container-fluid flex-grow-1">
+        <div class="row flex-grow-1">
+            <!-- Reportes -->
+            <div class="col-md-4 py-3">
+                <h3>Reportes</h3>
+
+            </div>
+
+            <!-- Datos Totales -->
+            <div class="col-md-4 py-3">
+                <h3>Datos totales</h3>
+                <div id="chart-container-totales">
+                </div>
+            </div>
+
+
+            <!-- Usuarios -->
+            <div class="col-md-4 py-3">
+                <h3>Usuarios</h3>
+                <input type="text" id="searchUser" class="form-control" placeholder="Buscar usuario...">
+                <div id="userList" class="border p-2 mt-2" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Contenido Parte  Abajo -->
+    <div class="container-fluid flex-grow-1">
+        <div class="row flex-grow-1">
+            <!-- Estadísticas -->
+            <div class="col-md-4 py-3">
+                <h3>Estadísticas Diarias V/C/I</h3>
+                <div id="chart-container-cvi">
+                </div>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="col-md-4 py-3">
+                <h3>Estadísticas</h3>
+
+            </div>
+
+
+            <!-- Usuario selecionado -->
+            <div class="col-md-4 py-3">
+                <h3>Usuario seleccionado</h3>
+                <div id="selectedUser" class="border p-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>CryptoSandbox
+                        </h6>
+                        <p>
+                            Esperamos que disfrutes aprendiendo.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            TECNOLOGIA UTILIZADA
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">bootstrap</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">jquery</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">spring</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Useful links
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">Pricing</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Settings</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Orders</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Help</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            info@example.com
+                        </p>
+                        <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+                        <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Script para el grafico de V/C/I -->
+    <script>
+
+        var domcvi = document.getElementById('chart-container-cvi');
+        var myChartcvi = echarts.init(domcvi, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+        var app = {};
+
+        var optioncvi;
+
+        setTimeout(function () {
+            optioncvi = {
+                legend: {},
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                dataset: {
+                    source: [
+                        ['Producto', '31/1/2025', '1/2/2025', '2/2/2025', '3/2/2025', '4/2/2025'],
+                        ['Intercambios', 10, 20, 15, 33, 40],
+                        ['Ventas', 15, 10, 20, 30, 40],
+                        ['Compras', 20, 15, 78, 22, 10]
+                    ]
+                },
+                xAxis: { type: 'category' },
+                yAxis: { gridIndex: 0 },
+                grid: { top: '55%' },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        start: 0,
+                        end: 100,
+                        textStyle: {
+                            color: '#8392A5'
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        xAxisIndex: 0
+                    }
+                ],
+                series: [
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        emphasis: { focus: 'series' }
+                    },
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        emphasis: { focus: 'series' }
+                    },
+                    {
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        emphasis: { focus: 'series' }
+                    },
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '30%',
+                        center: ['50%', '25%'],
+                        emphasis: {
+                            focus: 'self'
+                        },
+                        label: {
+                            formatter: '{b}: {@Intercambios} ({d}%)'
+                        },
+                        encode: {
+                            itemName: 'Producto',
+                            value: 'Intercambios',
+                            tooltip: 'Intercambios'
+                        }
+                    }
+                ]
+            };
+            myChartcvi.on('updateAxisPointer', function (event) {
+                const xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) {
+                    const dimension = xAxisInfo.value + 1;
+                    myChartcvi.setOption({
+                        series: {
+                            id: 'pie',
+                            label: {
+                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                            },
+                            encode: {
+                                value: dimension,
+                                tooltip: dimension
+                            }
+                        }
+                    });
+                }
+            });
+            myChartcvi.setOption(optioncvi);
+        });
+
+
+        // -------------------------------------------
+        var domtotal = document.getElementById('chart-container-totales');
+        var myCharttotal = echarts.init(domtotal, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var optiontotal;
+
+        // Definir ganancias y pérdidas totales
+        const gananciasTotales = Math.round(Math.random() * 5000);
+        const perdidasTotales = Math.round(Math.random() * 5000);
+
+        optiontotal = {
+            xAxis: {
+                max: 'dataMax'
+            },
+            yAxis: {
+                type: 'category',
+                data: ['Ganancias Totales', 'Pérdidas Totales'],
+                inverse: true
+            },
+            series: [
+                {
+                    name: 'Monto',
+                    type: 'bar',
+                    data: [gananciasTotales, -perdidasTotales], // Pérdidas representadas como valores negativos
+                    label: {
+                        show: true,
+                        position: 'right',
+                        valueAnimation: true
+                    }
+                }
+            ],
+            legend: {
+                show: true
+            },
+            animationDuration: 0,
+            animationDurationUpdate: 3000,
+            animationEasing: 'linear',
+            animationEasingUpdate: 'linear'
+        };
+
+        myCharttotal.setOption(optiontotal);
+
+
+
+        // Ajustar tamaño al cambiar la ventana
+        window.addEventListener('resize', () => {
+            myCharttotal.resize();
+            myChartcvi.resize();
+        });
+    </script>
+    <!-- Script para el buscador Usuarios -->
+    <script>
+        const users = [
+            { id: 1, name: "Juan Pérez", email: "juan@example.com", rol: "admin" },
+            { id: 2, name: "María López", email: "maria@example.com", rol: "user" },
+            { id: 3, name: "Carlos García", email: "carlos@example.com", rol: "user" },
+            { id: 4, name: "Ana Fernández", email: "ana@example.com", rol: "user" }
+        ];
+
+        function renderUsers(filter = "") {
+            const userList = document.getElementById("userList");
+            userList.innerHTML = "";
+            users
+                .filter(user => user.name.toLowerCase().includes(filter.toLowerCase()))
+                .forEach(user => {
+                    const div = document.createElement("div");
+                    div.className = "user-item p-1 border-bottom";
+                    div.textContent = user.name;
+                    div.style.cursor = "pointer";
+                    div.onclick = () => selectUser(user);
+                    userList.appendChild(div);
+                });
+        }
+
+        function selectUser(user) {
+            document.getElementById("selectedUser").innerHTML = `
+                    <p><strong>Nombre:</strong> ${user.name}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Rol:</strong> ${user.rol}</p>
+                `;
+        }
+
+        document.getElementById("searchUser").addEventListener("input", (e) => {
+            renderUsers(e.target.value);
+        });
+
+        renderUsers();
+    </script>
+
+</body>
+
+</html>

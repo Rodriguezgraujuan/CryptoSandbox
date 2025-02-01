@@ -25,7 +25,7 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register", "/register.html").permitAll()
+                        .requestMatchers("/Css/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

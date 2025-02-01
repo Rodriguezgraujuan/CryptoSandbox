@@ -1,39 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto SandBox</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./style.css">
+  <title>LogIn</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../static/Css/headerFooterBody.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/Js/carrusel.js"></script>
+  <script src="../static/Js/SetColor.js"></script>
+
   <style>
-    /* From Uiverse.io by JohnnyCSilva */
+    body {
+      background-color: #121212;
+      color: white;  /* Texto blanco para mayor contraste */
+    }
+
     .form {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      background-color: #f8f9fa;
-      /* Background color */
+      background-color: white;  /* Fondo gris oscuro para el formulario */
       padding: 30px;
       width: 450px;
       border-radius: 20px;
-      /* Rounded corners */
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      /* Optional shadow for better visibility */
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
     ::placeholder {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      color: #b0b0b0; /* Color gris claro para los textos de los placeholders */
     }
 
     .form button {
       align-self: flex-end;
     }
 
-    .flex-column>label {
-      color: #151717;
+    .flex-column > label {
+      color: black; /* Etiquetas en color gris claro */
       font-weight: 600;
     }
 
@@ -53,6 +60,8 @@
       border: none;
       width: 100%;
       height: 100%;
+      color: black;  /* Texto blanco dentro de los campos de entrada */
+      background-color: white;  /* Fondo oscuro en los campos de entrada */
     }
 
     .input:focus {
@@ -71,12 +80,6 @@
       justify-content: space-between;
     }
 
-    .flex-row>div>label {
-      font-size: 14px;
-      color: black;
-      font-weight: 400;
-    }
-
     .span {
       font-size: 14px;
       margin-left: 5px;
@@ -87,7 +90,7 @@
 
     .button-submit {
       margin: 20px 0 10px 0;
-      background-color: #151717;
+      background-color: #2d79f3;  /* Botón con un color azul brillante */
       border: none;
       color: white;
       font-size: 15px;
@@ -100,57 +103,143 @@
 
     .p {
       text-align: center;
-      color: black;
+      color: #ddd; /* Texto gris claro */
       font-size: 14px;
       margin: 5px 0;
+    }
+
+    /* Fondo oscuro para el pie de página */
+    footer {
+      background-color: #1d1d1d;
+      color: white;
+    }
+
+    footer a {
+      color: #f8f9fa;
+    }
+
+    footer a:hover {
+      color: #2d79f3;
     }
   </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-
-  <header class="bg-primary text-white py-3 row mx-0">
-    <div class="col-10 container">
-      <a href="invitado.html" class="text-decoration-none text-white">
-        <h1 class="display-6">Crypto SandBox</h1>
+<header>
+  <!-- Carrusel de criptomonedas -->
+  <section class="container-fluid navbar navbar-expand-md navbar-dark">
+    <div class="carrusel-container">
+      <div class="carrusel-content d-flex" id="carrusel"></div>
+    </div>
+  </section>
+  <!-- Inicio del menu -->
+  <nav class="navbar navbar-expand-md navbar-dark ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="invitado.html">
+        <i class="bi bi-flower1"></i>
+        <span class="text-warning">Crypto SandBox</span>
       </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Inicio de sesion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.html">Registro</a>
+          </li>
+        </ul>
+
+        <hr class="d-md-none text-white-50">
+
+        <ul class="navbar-nav flex-row flex-wrap text-light">
+          <li class="nav-item col-6 col-md-auto p-3">
+            <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
+              <i class="bi bi-github"></i>
+              <small class="d-md-none ms-2">GitHub</small>
+            </a>
+          </li>
+        </ul>
+
+        <form class="d-flex">
+          <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit" href="login.html">Wallet</a>
+        </form>
+      </div>
     </div>
-  </header>
-  <div class="container d-flex flex-column align-items-center">
-    <div class="py-4">
-      <h2 class="display-6">Login</h2>
-    </div>
-    <div>
-      <form class="form" th:action="@{/login}" method="POST">
-        <div class="flex-column">
-          <label for="email" class="form-label">Email</label>
-          <div class="inputForm">
-            <input type="text" id="email" name="email" class="input" placeholder="Put your email">
-          </div>
-        </div>
-        <div class="flex-column">
-          <label for="password" class="form-label">Password</label>
-          <div class="inputForm">
-            <input type="password" id="password" name="password" class="input" placeholder="Password">
-          </div>
-        </div>
-        <div class="flex-row">
-          <div>
-            <input type="checkbox" id="check" class="form-check-input">
-            <label for="check">Check me out</label>
-          </div>
-        </div>
-        <a href="/register.html">Register</a>
-        <button type="submit" class="button-submit">Submit</button>
-      </form>
-    </div>
+  </nav>
+</header>
+
+<div class="container d-flex flex-column align-items-center">
+  <div class="py-4">
+    <h2 class="display-6">Login</h2>
   </div>
-  <!-- Footer -->
-<footer class="bg-dark text-white py-3 mt-auto">
-    <div class="container text-center">
-      <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+  <div style="height: 60vh;">
+    <form class="form" method="POST" th:action="@{/login}">
+      <div class="flex-column">
+        <label for="email" class="form-label">Email address</label>
+        <div class="inputForm">
+          <input type="email" id="email" name="email" class="input" placeholder="Enter email">
+        </div>
+      </div>
+      <div class="flex-column">
+        <label for="password" class="form-label">Password</label>
+        <div class="inputForm">
+          <input type="password" id="password" name="password" class="input" placeholder="Password">
+        </div>
+      </div>
+      <div class="flex-row">
+        <div>
+          <input type="checkbox" id="check" class="form-check-input">
+          <label for="check" style="color: black">Check me out</label>
+        </div>
+      </div>
+      <button type="submit" class="button-submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start text-muted py-1">
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <div class="row mt-3">
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3"></i>CryptoSandbox
+          </h6>
+          <p>Esperamos que disfrutes aprendiendo.</p>
+        </div>
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">TECNOLOGIA UTILIZADA</h6>
+          <p><a href="#!" class="text-reset">bootstrap</a></p>
+          <p><a href="#!" class="text-reset">jquery</a></p>
+          <p><a href="#!" class="text-reset">spring</a></p>
+        </div>
+
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">Useful links</h6>
+          <p><a href="#!" class="text-reset">Pricing</a></p>
+          <p><a href="#!" class="text-reset">Settings</a></p>
+          <p><a href="#!" class="text-reset">Orders</a></p>
+          <p><a href="#!" class="text-reset">Help</a></p>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+          <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+          <p><i class="fas fa-envelope me-3"></i> info@example.com</p>
+          <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+          <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+        </div>
+      </div>
     </div>
-  </footer>
+  </section>
+</footer>
 </body>
 
 </html>

@@ -1,74 +1,64 @@
-    /* Sidebar */
-    aside {
-        background-color: #0b2027;
-        border-right: 1px solid #383838;
-        padding: 1rem;
-        height: 100%;
-    }
+/* Sidebar */
 
-    aside h2 {
-        margin-bottom: 1rem;
 
-    }
+aside ul {
+    padding: 0;
+    list-style: none;
+}
 
-    aside ul {
-        padding: 0;
-        list-style: none;
-    }
+aside ul li {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+}
 
-    aside ul li {
-        padding: 0.5rem;
-        margin: 0.5rem 0;
-        border: 1px solid #ffffff;
-        border-radius: 4px;
-        text-align: center;
-        cursor: pointer;
-    }
+.list-group-item {
+    background-color: #12343f;
+    color: white;
+}
 
-    .list-group-item {
-        background-color: #12343f;
-        color: white;
-    }
+aside ul li:hover {
+    background-color: #cdaf50;
+}
 
-    aside ul li:hover {
-        background-color: #cdaf50;
-    }
+/* Additional Styles for Buy/Sell Inputs */
+.input-container {
+    display: none;
+    margin-top: 10px;
+}
 
-    /* Additional Styles for Buy/Sell Inputs */
-    .input-container {
-        display: none;
-        margin-top: 10px;
-    }
+.input-container input {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 5px 0;
+}
 
-    .input-container input {
-        width: 100%;
-        padding: 0.5rem;
-        margin: 5px 0;
-    }
+.input-container button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 10px;
+}
 
-    .input-container button {
-        width: 100%;
-        padding: 0.5rem;
-        margin-top: 10px;
-    }
+.input-container .result {
+    margin-top: 10px;
+}
 
-    .input-container .result {
-        margin-top: 10px;
-    }
+.scroll-div {
+    max-height: 76vh;
+    /* Altura máxima relativa al viewport */
+    overflow-y: auto;
+    /* Muestra scroll solo si es necesario */
+}
 
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
     .scroll-div {
-        max-height: 76vh;
-        /* Altura máxima relativa al viewport */
-        overflow-y: auto;
-        /* Muestra scroll solo si es necesario */
+        max-height: 50vh;
+        /* Reduce la altura en dispositivos móviles */
     }
-
-    /* Ajustes para pantallas más pequeñas */
-    @media (max-width: 768px) {
-        .scroll-div {
-            max-height: 50vh;
-            /* Reduce la altura en dispositivos móviles */
-        }
-    }
+}
 
     
