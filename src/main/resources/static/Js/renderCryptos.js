@@ -9,7 +9,7 @@ $(document).ready(function () {
 function renderCryptos(cryptos) {
     let cryptoList = document.getElementById('crypto-list');
     cryptoList.innerHTML = cryptos.map(crypto => `
-    <li class="list-group-item d-flex justify-content-between align-items-center">
+    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #ffffff; color: black">
         <span>${crypto.name}</span>
         <span class="badge bg-primary">${crypto.value} EUR</span>
     </li>`).join('');
