@@ -64,19 +64,26 @@ public class TransactionController {
                 walletCrypto = wC;
             }
         }
-        if (transaction.getWallet().getBalance() >= transaction.getQuantity() * crypto.getValue()&& transaction.getOperation().equals("Compra")){
+        if (transaction.getWallet().getBalance() <= transaction.getQuantity() * crypto.getValue()&& transaction.getOperation().equals("Compra")) {
+            throw new IllegalArgumentException("Saldo insuficiente para realizar la compra");
+        }
             if(!transaction.getOperation().equals("Intercambio")){
 
                 if(transaction.getOperation().equals("Compra")){
-                        resultado += transaction.getWallet().getBalance()-transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
-                        walletCrypto.setQuantity(walletCrypto.getQuantity() + transaction.getQuantity());
+                    transaction.setQuantity(transaction.getAmount() / crypto.getValue());
+                    resultado += transaction.getWallet().getBalance()-transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
+                    walletCrypto.setQuantity(Math.round((walletCrypto.getQuantity()+transaction.getQuantity())*100.0)/100.0);
                         walletCryptoService.saveWallet_Crypto(walletCrypto);
                 } else {
+                    transaction.setAmount(transaction.getQuantity() * crypto.getValue());
                     resultado += transaction.getWallet().getBalance()+transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
-                    walletCrypto.setQuantity(walletCrypto.getQuantity()-transaction.getQuantity());
+                    if (transaction.getQuantity()<walletCrypto.getQuantity()){
+                        walletCrypto.setQuantity(Math.round((walletCrypto.getQuantity()-transaction.getQuantity())*100.0)/100.0);
+                    }else{
+                        throw new IllegalArgumentException("Cantidad insuficiente de criptomonedas para la venta");
+                    }
                     walletCryptoService.saveWallet_Crypto(walletCrypto);
                 }
-                walletCryptoService.saveWallet_Crypto(walletCrypto);
                 transaction.getWallet().setBalance(resultado);
 
             } else {
@@ -91,7 +98,7 @@ public class TransactionController {
                         }
                     }
                 }
-            }
+
 
             transaction.setCommission(0);
             transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());

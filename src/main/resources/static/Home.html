@@ -115,7 +115,7 @@
 
                 <!-- Inputs de Compra -->
                 <form id="comprar-inputs" class="input-container" method="post">
-                    <input type="number" id="comprar-amount" placeholder="Cantidad de dinero a gastar">
+                    <input type="number" id="comprar-amount" name="amount" placeholder="Cantidad de dinero a gastar">
                     <div id="comprar-result" class="result"></div>
                     <button class="btn btn-primary" id="comprar-confirm" type="submit">Confirmar Compra</button>
                 </form>
@@ -304,8 +304,8 @@
             e.preventDefault();
             console.log("Dentro de compras")
             console.log(selectedCurrency)
-            let cryptoAmount = $("#vender-amount").val();
-
+            let cryptoAmount = $("#comprar-amount").val();
+            console.log(cryptoAmount)
             let transaction = {
                 crypto_name: selectedCurrency.toString(),
                 amount: cryptoAmount,
@@ -327,7 +327,8 @@
                     console.log('Error:', error);
                     console.log('Estado de la respuesta:', status);
                     console.log('Detalles de la respuesta:', xhr.responseText);
-                    alert('Hubo un error al comprar la crypto. Por favor, intente de nuevo.');
+                    let errorMessage = xhr.responseText || 'Hubo un error al comprar la crypto.';
+                    alert(`Error: ${errorMessage}`);
                 }
             });
         });
