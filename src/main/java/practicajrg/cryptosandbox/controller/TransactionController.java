@@ -100,10 +100,10 @@ public class TransactionController {
                 }
 
 
-            transaction.setCommission(0);
-            transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
-            transactionService.saveTransaction(transaction);
-        }
 
+        }
+        transaction.setCommission(0);
+        transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
+        transactionService.saveTransaction(transaction);
     }
 }

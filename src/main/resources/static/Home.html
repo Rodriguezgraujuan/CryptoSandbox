@@ -333,6 +333,39 @@
             });
         });
 
+        $('#vender-inputs').on('submit', function(e) {
+            e.preventDefault();
+            console.log("Dentro de ventas")
+            console.log(selectedCurrency)
+            let quantity = $("#vender-amount").val();
+            console.log(quantity)
+            let transaction = {
+                crypto_name: selectedCurrency.toString(),
+                quantity: quantity,
+                operation: "Venta",
+            };
+
+            $.ajax({
+                url: '/createTransaction', // URL de tu API
+                type: 'POST',
+                contentType: 'application/json', // Tipo de contenido
+                data: JSON.stringify(transaction), // Convertimos el objeto a JSON
+
+                success: function(response) {
+                    console.log('Crypto Comprada correctamente', response);
+                    alert('¡Crypto vendida correctamente!');
+                    window.location.href = '/';
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('Estado de la respuesta:', status);
+                    console.log('Detalles de la respuesta:', xhr.responseText);
+                    let errorMessage = xhr.responseText || 'Hubo un error al comprar la crypto.';
+                    alert(`Error: ${errorMessage}`);
+                }
+            });
+        });
+
     </script>
 
 
