@@ -28,5 +28,8 @@ public class TransactionService {
     }
 
 
+    public List<Transaction> findByWalletId(Long walletId) {
+        return transactionRepository.findByWalletId(walletId);
+    }
 
 }

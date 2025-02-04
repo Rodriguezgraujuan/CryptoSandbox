@@ -35,9 +35,12 @@ public class TransactionController {
     List<Transaction> all() {return transactionService.findAll();}
 
     //La id es la id del wallet
-    @GetMapping("/transaction/{id}")
-    List<Transaction> transaction(@PathVariable Long id) {
-        return transactionService.findAll().stream().filter(t -> t.getWallet().getId().equals(id)).toList();
+    @GetMapping("/transactionUser")
+    List<Transaction> transaction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Wallet wallet = userService.findByUsername(username).getWallet();
+        return transactionService.findByWalletId(wallet.getId());
     }
 
     @PostMapping("/createTransaction")
