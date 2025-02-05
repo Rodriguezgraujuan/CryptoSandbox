@@ -1,5 +1,6 @@
 package practicajrg.cryptosandbox.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ public class Transaction {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "wallet_id", nullable = false)
+    @JsonIgnore
     private Wallet wallet;
 
     public Wallet getWallet() {

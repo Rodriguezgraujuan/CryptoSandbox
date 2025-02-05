@@ -1,5 +1,6 @@
 package practicajrg.cryptosandbox.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import practicajrg.cryptosandbox.entities.Transaction;
 import practicajrg.cryptosandbox.entities.Usuario;
@@ -21,6 +22,7 @@ public class Wallet {
 
     @OneToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id")
+    @JsonIgnore
     private Usuario user;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)

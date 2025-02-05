@@ -1,5 +1,6 @@
 package practicajrg.cryptosandbox.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Wallet_Crypto {
 
     @ManyToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Wallet wallet;
 
     @ManyToOne

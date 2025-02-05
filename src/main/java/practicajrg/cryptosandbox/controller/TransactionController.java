@@ -1,5 +1,6 @@
 package practicajrg.cryptosandbox.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -40,10 +41,11 @@ public class TransactionController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Wallet wallet = userService.findByUsername(username).getWallet();
-        return transactionService.findByWalletId(wallet.getId());
+        return wallet.getTransactions().stream().toList();
     }
 
     @PostMapping("/createTransaction")
+    @Transactional
     public ResponseEntity<String> createTransaction(@RequestBody Transaction transaction) {
         transactionCreate(transaction);
         return ResponseEntity.ok("Transaction created successfully");
@@ -67,7 +69,7 @@ public class TransactionController {
                 walletCrypto = wC;
             }
         }
-        if (transaction.getWallet().getBalance() <= transaction.getQuantity() * crypto.getValue()&& transaction.getOperation().equals("Compra")) {
+        if (transaction.getOperation().equals("Compra")&& transaction.getWallet().getBalance() <= transaction.getQuantity() * crypto.getValue()) {
             throw new IllegalArgumentException("Saldo insuficiente para realizar la compra");
         }
             if(!transaction.getOperation().equals("Intercambio")){
@@ -87,26 +89,31 @@ public class TransactionController {
                     }
                     walletCryptoService.saveWallet_Crypto(walletCrypto);
                 }
+                transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
                 transaction.getWallet().setBalance(resultado);
 
             } else {
+
                 Crypto cryptoExchange = cryptoService.findByName(transaction.getCrypto_exchange());
-                if ((transaction.getQuantity()<walletCrypto.getQuantity())){
+                if ((transaction.getQuantity()<=walletCrypto.getQuantity())||transaction.getQuantity()<=0){
                     double quantityExchange = crypto.getValue()*transaction.getQuantity()/cryptoExchange.getValue();
                     for (Wallet_Crypto wC: walletCryptoService.findAll()){
                         if (wC.getWallet().equals(wallet) && wC.getCrypto().equals(cryptoExchange)) {
                             wC.setQuantity(wC.getQuantity()+quantityExchange);
-                            walletCryptoService.saveWallet_Crypto(wC);
                             walletCrypto.setQuantity(walletCrypto.getQuantity()-transaction.getQuantity());
+                            if (walletCrypto.getQuantity()<=0.001){
+                                walletCrypto.setQuantity(0.0);
+                            }
+                            walletCryptoService.saveWallet_Crypto(walletCrypto);
+                            walletCryptoService.saveWallet_Crypto(wC);
+                            transaction.setAmount(Math.round(quantityExchange*100.0)/100.0);
                         }
                     }
+                }else {
+                    throw new IllegalArgumentException("Cantidad insuficiente de criptomonedas para el intercambio");
                 }
-
-
-
         }
         transaction.setCommission(0);
-        transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
         transactionService.saveTransaction(transaction);
     }
 }
