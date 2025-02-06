@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @NoArgsConstructor
 
@@ -30,6 +32,9 @@ public class Usuario {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Wallet wallet;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reporte> reportes;
 
     public Long getId() {
         return id;
@@ -77,5 +82,13 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Reporte> getReportes() {
+        return reportes;
+    }
+
+    public void setReportes(List<Reporte> reportes) {
+        this.reportes = reportes;
     }
 }

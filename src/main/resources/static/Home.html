@@ -49,7 +49,7 @@
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="usuario.html">Perfil</a>
+                            <a class="nav-link" href="/usuario.html">Perfil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="toggle-theme">Modo Claro</a>
@@ -321,7 +321,7 @@
                 success: function(response) {
                     console.log('Crypto Comprada correctamente', response);
                     alert('¡Crypto Comprada correctamente!');
-                    window.location.href = '/';
+                    window.location.href = '/wallet.html';
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
@@ -354,7 +354,7 @@
                 success: function(response) {
                     console.log('Crypto Comprada correctamente', response);
                     alert('¡Crypto vendida correctamente!');
-                    window.location.href = '/';
+                    window.location.href = '/wallet.html';
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);

@@ -7,12 +7,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import practicajrg.cryptosandbox.Service.CustomUserDetailsService;
@@ -21,19 +24,21 @@ import practicajrg.cryptosandbox.Service.CustomUserDetailsService;
 public class WebSecurity {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
                         .requestMatchers("/Css/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/administrador.html").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login") // Define la URL de tu propio formulario de login
                         .loginProcessingUrl("/login") // URL que manejará la autenticación
                         .usernameParameter("email") // Nombre del parámetro del formulario
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/Home.html", true)
+                        .successHandler(customSuccessHandler())
                         .failureUrl("/login?error")
                         .permitAll()
                 )
@@ -81,6 +86,17 @@ public class WebSecurity {
                         .allowedMethods("GET", "POST", "PUT", "DELETE0", "OPTIONS")
                         .allowedHeaders("*");
             }
+        };
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return (request, response, authentication) -> {
+            String redirectUrl = "/Home.html"; // Redirección por defecto
+            if (AuthorityUtils.authorityListToSet(authentication.getAuthorities()).contains("ROLE_ADMIN")) {
+                redirectUrl = "/administrador.html";
+            }
+            response.sendRedirect(redirectUrl);
         };
     }
 }

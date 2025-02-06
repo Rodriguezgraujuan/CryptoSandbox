@@ -3,6 +3,8 @@ package practicajrg.cryptosandbox.controller;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.CryptoService;
@@ -14,6 +16,8 @@ import practicajrg.cryptosandbox.entities.Usuario;
 import practicajrg.cryptosandbox.entities.Wallet;
 import practicajrg.cryptosandbox.entities.Wallet_Crypto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -39,9 +43,10 @@ public class UsuarioController {
         return userService.findAll();
     }
 
-    @GetMapping("/user/{id}")
-    Usuario info(@PathVariable Long id) {
-        return userService.findById(id);
+    @GetMapping("/user")
+    List<String> info() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return new ArrayList<>(Arrays.asList(userService.findByUsername(authentication.getName()).getUsername(), userService.findByUsername(authentication.getName()).getEmail()));
     }
 
     @PostMapping("/register")
@@ -92,5 +97,23 @@ public class UsuarioController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("Login exitoso");
+    }
+
+    @PostMapping("/editProfile")
+    public void editProfile(@RequestBody Usuario usuario) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Usuario loggedUser = userService.findByUsername(authentication.getName());
+        loggedUser.setUsername(usuario.getUsername());
+        loggedUser.setEmail(usuario.getEmail());
+        loggedUser.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        userService.saveUser(loggedUser);
+    }
+
+
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userService.deleteById(userService.findByUsername(authentication.getName()).getId());
+        return ResponseEntity.ok("Usuario eliminado correctamente");
     }
 }

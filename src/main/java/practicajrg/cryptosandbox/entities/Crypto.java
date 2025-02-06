@@ -1,9 +1,9 @@
 package practicajrg.cryptosandbox.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -47,6 +47,7 @@ public class Crypto {
     private double price_change_24h;
 
     @OneToMany(mappedBy = "crypto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Registro> cryptosRegister;
 
     public Crypto() {}

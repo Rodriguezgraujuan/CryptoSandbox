@@ -178,7 +178,7 @@
     <h2 class="display-6">Login</h2>
   </div>
   <div style="height: 60vh;">
-    <form class="form" method="POST" th:action="@{/login}">
+    <form class="form" method="POST" th:action="@{/login}" id="loginForm">
       <div class="flex-column">
         <label for="email" class="form-label">Email address</label>
         <div class="inputForm">
@@ -201,8 +201,6 @@
     </form>
   </div>
 </div>
-
-<!-- Footer -->
 </body>
 
 </html>
