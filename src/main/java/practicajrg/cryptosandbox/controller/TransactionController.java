@@ -95,7 +95,7 @@ public class TransactionController {
             } else {
 
                 Crypto cryptoExchange = cryptoService.findByName(transaction.getCrypto_exchange());
-                if ((transaction.getQuantity()<=walletCrypto.getQuantity())||transaction.getQuantity()<=0){
+                if ((transaction.getQuantity()<=walletCrypto.getQuantity())&&transaction.getQuantity()>=0.001){
                     double quantityExchange = crypto.getValue()*transaction.getQuantity()/cryptoExchange.getValue();
                     for (Wallet_Crypto wC: walletCryptoService.findAll()){
                         if (wC.getWallet().equals(wallet) && wC.getCrypto().equals(cryptoExchange)) {
@@ -110,7 +110,7 @@ public class TransactionController {
                         }
                     }
                 }else {
-                    throw new IllegalArgumentException("Cantidad insuficiente de criptomonedas para el intercambio");
+                    throw new IllegalArgumentException("Cantidad invalida");
                 }
         }
         transaction.setCommission(0);

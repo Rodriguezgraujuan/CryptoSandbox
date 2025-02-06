@@ -115,14 +115,14 @@
 
                 <!-- Inputs de Compra -->
                 <form id="comprar-inputs" class="input-container" method="post">
-                    <input type="number" id="comprar-amount" name="amount" placeholder="Cantidad de dinero a gastar">
+                    <input type="number" id="comprar-amount" name="amount" placeholder="Cantidad de dinero a gastar" step="0.01" min="0">
                     <div id="comprar-result" class="result"></div>
                     <button class="btn btn-primary" id="comprar-confirm" type="submit">Confirmar Compra</button>
                 </form>
 
                 <!-- Inputs de Venta -->
                 <form id="vender-inputs" class="input-container" method="post">
-                    <input type="number" id="vender-amount" placeholder="Cantidad de cryptos a vender">
+                    <input type="number" id="vender-amount" placeholder="Cantidad de cryptos a vender" step="0.01" min="0">
                     <div id="vender-result" class="result"></div>
                     <button class="btn btn-primary" id="vender-confirm" type="submit">Confirmar Venta</button>
                 </form>
