@@ -27,4 +27,8 @@ public class RegistroService {
     public void deleteById(Long id) {
         registroRepository.deleteById(id);
     }
+
+    public List<Registro> findBySymbol(String symbol) {
+        return registroRepository.findByCryptoSymbol(symbol);
+    }
 }

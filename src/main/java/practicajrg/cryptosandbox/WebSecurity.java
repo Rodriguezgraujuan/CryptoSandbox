@@ -32,7 +32,7 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Css/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos").permitAll()
+                        .requestMatchers("/Css/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos", "/registro/{symbol}").permitAll()
                         .requestMatchers("/administrador.html").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

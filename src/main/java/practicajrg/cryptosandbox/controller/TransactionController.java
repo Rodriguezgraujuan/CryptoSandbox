@@ -59,7 +59,7 @@ public class TransactionController {
         double resultado = 0;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Wallet userWallet = userService.findByUsername(username).getWallet();
+        Wallet userWallet = userService.findByEmail(username).getWallet();
         transaction.setWallet(userWallet);
         Crypto crypto = cryptoService.findByName(transaction.getCrypto_name());
         Wallet wallet= transaction.getWallet();

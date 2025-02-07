@@ -42,4 +42,28 @@ public class Registro {
     public Long getId() {
         return id;
     }
+
+    public Crypto getCrypto() {
+        return crypto;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setCrypto(Crypto crypto) {
+        this.crypto = crypto;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
 }

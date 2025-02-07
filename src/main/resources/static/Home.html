@@ -225,6 +225,7 @@
     <!-- Script to Handle Crypto Selection -->
     <script>
         let selectedCurrency = null;
+        let selectedSymbol = null;
         $(document).ready(function () {
             let cryptoData = {};
 
@@ -241,6 +242,15 @@
             // Manejador de selección de criptomoneda
             $(document).on("click", "#crypto-list li", function () {
                 selectedCurrency = $(this).find("span:first").text();
+                $.get(`/crypto/${selectedCurrency}`, (data) => {
+                    console.log(data)
+                }).done((data) => {
+                    selectedSymbol = data.symbol;
+                    console.log(selectedSymbol)
+                }).fail((error) =>
+                    alert("Error al obtener datos de la criptomoneda: " + error.responseText)
+                );
+
                 $("#selected-crypto").text(`Seleccionado: ${selectedCurrency}`).addClass("text-warning");
             });
 

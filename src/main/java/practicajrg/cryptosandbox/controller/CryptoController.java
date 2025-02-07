@@ -2,7 +2,9 @@ package practicajrg.cryptosandbox.controller;
 
 import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.CryptoService;
+import practicajrg.cryptosandbox.Service.RegistroService;
 import practicajrg.cryptosandbox.entities.Crypto;
+import practicajrg.cryptosandbox.entities.Registro;
 
 import java.util.List;
 
@@ -11,9 +13,11 @@ import java.util.List;
 public class CryptoController {
 
     private final CryptoService cryptoService;
+    private final RegistroService registroService;
 
-    public CryptoController(CryptoService cryptoService) {
+    public CryptoController(CryptoService cryptoService, RegistroService registroService) {
         this.cryptoService = cryptoService;
+        this.registroService = registroService;
     }
 
     @GetMapping("/cryptos")
@@ -24,6 +28,17 @@ public class CryptoController {
     @GetMapping("/cryptos/{id}")
     Crypto one(@PathVariable Long id) {
         return cryptoService.findById(id);
+    }
+
+    @GetMapping("/crypto/{name}")
+    Crypto oneName(@PathVariable String name) {
+        return cryptoService.findByName(name);
+    }
+
+
+    @GetMapping("/registro/{symbol}")
+    List<Registro> registro(@PathVariable String symbol) {
+        return registroService.findBySymbol(symbol);
     }
 
 }
