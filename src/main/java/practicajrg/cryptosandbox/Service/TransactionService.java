@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import practicajrg.cryptosandbox.Reposritory.*;
 import practicajrg.cryptosandbox.entities.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,4 +33,7 @@ public class TransactionService {
         return transactionRepository.findByWalletId(walletId);
     }
 
+    public List<Transaction> findByOperation(String operation) {
+
+        return transactionRepository.findByOperation(operation);}
 }

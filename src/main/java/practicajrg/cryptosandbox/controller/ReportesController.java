@@ -4,12 +4,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import practicajrg.cryptosandbox.Service.ReportesService;
 import practicajrg.cryptosandbox.Service.UserService;
 import practicajrg.cryptosandbox.entities.Reporte;
 import practicajrg.cryptosandbox.entities.Usuario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ReportesController {
@@ -28,4 +32,6 @@ public class ReportesController {
         reportesService.saveReporte(reporte);
         return ResponseEntity.ok("Reporte enviado correctamente");
     }
+
+
 }

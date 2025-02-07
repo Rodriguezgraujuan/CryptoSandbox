@@ -11,7 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="Css/headerFooterBody.css">
     <link rel="stylesheet" href="Css/home.css">
-    <script src="Js/renderCryptos.js"></script>
     <script src="Js/carrusel.js"></script>
     <script src="Js/SetColor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
@@ -111,6 +110,7 @@
             <!-- Reportes -->
             <div class="col-md-4 py-3">
                 <h3>Reportes</h3>
+                <div id="reportList" class="border p-2 mt-2" style="max-height: 200px; overflow-y: auto;"></div>
 
             </div>
 
@@ -240,22 +240,29 @@
     
     <!-- Script para el buscador Usuarios -->
     <script>
-        const users = [
-            { id: 1, name: "Juan Pérez", email: "juan@example.com", rol: "admin" },
-            { id: 2, name: "María López", email: "maria@example.com", rol: "user" },
-            { id: 3, name: "Carlos García", email: "carlos@example.com", rol: "user" },
-            { id: 4, name: "Ana Fernández", email: "ana@example.com", rol: "user" }
+        let users = [
+
         ];
+        getUsers()
+        function getUsers() {
+            $.get("/users", (data) => {
+                console.log(data);
+            }).done((data) => {
+                users = data;
+
+                renderUsers();
+            }).fail((error) => alert(error));
+        }
 
         function renderUsers(filter = "") {
             const userList = document.getElementById("userList");
             userList.innerHTML = "";
             users
-                .filter(user => user.name.toLowerCase().includes(filter.toLowerCase()))
+                .filter(user => user.username.toLowerCase().includes(filter.toLowerCase()))
                 .forEach(user => {
                     const div = document.createElement("div");
                     div.className = "user-item p-1 border-bottom";
-                    div.textContent = user.name;
+                    div.textContent = user.username;
                     div.style.cursor = "pointer";
                     div.onclick = () => selectUser(user);
                     userList.appendChild(div);
@@ -264,7 +271,7 @@
 
         function selectUser(user) {
             document.getElementById("selectedUser").innerHTML = `
-                    <p><strong>Nombre:</strong> ${user.name}</p>
+                    <p><strong>Nombre:</strong> ${user.username}</p>
                     <p><strong>Email:</strong> ${user.email}</p>
                     <p><strong>Rol:</strong> ${user.rol}</p>
                 `;
@@ -274,7 +281,37 @@
             renderUsers(e.target.value);
         });
 
-        renderUsers();
+    </script>
+    <script>
+        let reportes = [
+
+        ];
+        getReportes()
+        function getReportes() {
+            $.get("/reportes", (data) => {
+                console.log(data);
+            }).done((data) => {
+                reportes = data;
+                renderReportes();
+            }).fail((error) => {
+                    alert(error)
+            });
+        }
+
+        function renderReportes(filter = "") {
+            const reportList = document.getElementById("reportList");
+            reportList.innerHTML = "";
+            reportes
+                .filter(reporte => reporte.usuario.username.toLowerCase().includes(filter.toLowerCase()))
+                .forEach(reporte => {
+                    const div = document.createElement("div");
+                    div.className = "user-item p-1 border-bottom";
+                    div.textContent = reporte.descripcion;
+                    div.style.cursor = "pointer";
+                    reportList.appendChild(div);
+                });
+        }
+
     </script>
 
 </body>

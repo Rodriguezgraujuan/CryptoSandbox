@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.*;
 import practicajrg.cryptosandbox.entities.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -35,6 +36,11 @@ public class TransactionController {
     @GetMapping("/transactions")
     List<Transaction> all() {return transactionService.findAll();}
 
+    @GetMapping("/transaction/{operation}")
+    List<Transaction> transaction(@PathVariable String operation) {
+        return transactionService.findByOperation(operation);
+    }
+
     //La id es la id del wallet
     @GetMapping("/transactionUser")
     List<Transaction> transaction() {
@@ -51,9 +57,15 @@ public class TransactionController {
         return ResponseEntity.ok("Transaction created successfully");
     }
 
+    @GetMapping("/ganancias")
+    double ganancias() {
+        return transactionService.findAll().stream().filter(p->p.getOperation().equals("Venta")).toList().stream().mapToDouble(Transaction::getAmount).sum();
+    }
 
-
-
+    @GetMapping("/perdidas")
+    double perdidas() {
+        return transactionService.findAll().stream().filter(p->p.getOperation().equals("Compra")).toList().stream().mapToDouble(Transaction::getAmount).sum();
+    }
 
     private void transactionCreate(Transaction transaction) {
         double resultado = 0;
@@ -79,8 +91,9 @@ public class TransactionController {
                     resultado += transaction.getWallet().getBalance()-transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
                     walletCrypto.setQuantity(Math.round((walletCrypto.getQuantity()+transaction.getQuantity())*100.0)/100.0);
                         walletCryptoService.saveWallet_Crypto(walletCrypto);
+                    transaction.getWallet().setBalance(resultado);
                 } else {
-                    transaction.setAmount(transaction.getQuantity() * crypto.getValue());
+                    transaction.setAmount((transaction.getQuantity() * crypto.getValue())*0.95);
                     resultado += transaction.getWallet().getBalance()+transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
                     if (transaction.getQuantity()<walletCrypto.getQuantity()){
                         walletCrypto.setQuantity(Math.round((walletCrypto.getQuantity()-transaction.getQuantity())*100.0)/100.0);
@@ -88,9 +101,9 @@ public class TransactionController {
                         throw new IllegalArgumentException("Cantidad insuficiente de criptomonedas para la venta");
                     }
                     walletCryptoService.saveWallet_Crypto(walletCrypto);
+                    transaction.getWallet().setBalance(resultado*0.95);
                 }
                 transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
-                transaction.getWallet().setBalance(resultado);
 
             } else {
 
@@ -114,6 +127,7 @@ public class TransactionController {
                 }
         }
         transaction.setCommission(0);
+            transaction.setDate(LocalDate.now());
         transactionService.saveTransaction(transaction);
     }
 }

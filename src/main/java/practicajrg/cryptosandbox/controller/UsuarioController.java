@@ -7,14 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import practicajrg.cryptosandbox.Service.CryptoService;
-import practicajrg.cryptosandbox.Service.UserService;
-import practicajrg.cryptosandbox.Service.WalletService;
-import practicajrg.cryptosandbox.Service.Wallet_CryptoService;
-import practicajrg.cryptosandbox.entities.Crypto;
-import practicajrg.cryptosandbox.entities.Usuario;
-import practicajrg.cryptosandbox.entities.Wallet;
-import practicajrg.cryptosandbox.entities.Wallet_Crypto;
+import practicajrg.cryptosandbox.Service.*;
+import practicajrg.cryptosandbox.entities.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,13 +23,15 @@ public class UsuarioController {
     private final WalletService walletService;
     private final CryptoService cryptoService;
     private final Wallet_CryptoService walletCryptoService;
+    private final ReportesService reportesService;
 
-    public UsuarioController(PasswordEncoder passwordEncoder, UserService userService, WalletService walletService, CryptoService cryptoService, Wallet_CryptoService walletCryptoService) {
+    public UsuarioController(PasswordEncoder passwordEncoder, UserService userService, WalletService walletService, CryptoService cryptoService, Wallet_CryptoService walletCryptoService, ReportesService reportesService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.walletService = walletService;
         this.cryptoService = cryptoService;
         this.walletCryptoService = walletCryptoService;
+        this.reportesService = reportesService;
     }
 
     @GetMapping("/users")
@@ -115,5 +111,14 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userService.deleteById(userService.findByUsername(authentication.getName()).getId());
         return ResponseEntity.ok("Usuario eliminado correctamente");
+    }
+
+    @GetMapping("/reportes")
+    List<Reporte> reportes(){
+        List<Reporte> rep = reportesService.findAll();
+        if (rep==null){
+            rep=new ArrayList<>();
+        }
+        return reportesService.findAll();
     }
 }
