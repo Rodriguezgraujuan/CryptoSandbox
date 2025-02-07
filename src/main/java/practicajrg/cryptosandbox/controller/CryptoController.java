@@ -20,6 +20,7 @@ public class CryptoController {
     List<Crypto> all() {
         return cryptoService.findAll();
     }
+
     @GetMapping("/cryptos/{id}")
     Crypto one(@PathVariable Long id) {
         return cryptoService.findById(id);

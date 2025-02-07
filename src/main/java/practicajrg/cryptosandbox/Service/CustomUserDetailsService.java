@@ -1,6 +1,7 @@
 package practicajrg.cryptosandbox.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByEmail(email);
         if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado");
+            throw new BadCredentialsException("Credenciales incorrectas");
         }
-        UserDetails user = User.withUsername(usuario.getUsername())
+        return User.withUsername(usuario.getEmail())
                 .password(usuario.getPassword())
                 .roles(usuario.getRol())
                 .build();
-        return user;
     }
+
 }

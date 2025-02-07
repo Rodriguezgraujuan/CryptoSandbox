@@ -201,6 +201,13 @@
     </form>
   </div>
 </div>
+
+<script>
+  let param = new URLSearchParams(window.location.search);
+  if (param.get("error")==='true') {
+    alert("Error al iniciar sesión. Por favor, verifica tus credenciales.")
+  }
+</script>
 </body>
 
 </html>
