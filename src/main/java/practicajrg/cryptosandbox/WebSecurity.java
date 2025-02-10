@@ -21,18 +21,21 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import practicajrg.cryptosandbox.Service.CustomOAuth2UserService;
 import practicajrg.cryptosandbox.Service.CustomUserDetailsService;
 
 @Configuration
 public class WebSecurity {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Css/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos", "/registro/{symbol}").permitAll()
+                        .requestMatchers("/Css/**","/images/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos", "/registro/{symbol}").permitAll()
                         .requestMatchers("/administrador.html").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -49,6 +52,14 @@ public class WebSecurity {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login") // Página personalizada de login para OAuth2
+                        .defaultSuccessUrl("/Home.html", true) // Redirigir a /dashboard después de un login exitoso
+                        .failureUrl("/login?error")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
                 );
         return http.build();
     }
