@@ -54,7 +54,7 @@ function actualizarGrafico(datos) {
     xAxis: {
       type: 'category',
       data: fechas,
-      boundaryGap: false,
+      boundaryGap: true,
       axisLine: { onZero: false },
       splitLine: { show: false },
       min: 'dataMin',
