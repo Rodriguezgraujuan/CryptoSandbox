@@ -45,7 +45,13 @@ public class UsuarioController {
     @GetMapping("/user")
     List<String> info() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ArrayList<>(Arrays.asList(userService.findByUsername(authentication.getName()).getUsername(), userService.findByUsername(authentication.getName()).getEmail()));
+        List<String> userInfo;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            userInfo = new ArrayList<>(Arrays.asList(((OAuth2User) authentication.getPrincipal()).getAttribute("name"), ((OAuth2User) authentication.getPrincipal()).getAttribute("email")));
+        }else {
+            userInfo = new ArrayList<>(Arrays.asList(userService.findByUsername(authentication.getName()).getUsername(), userService.findByUsername(authentication.getName()).getEmail()));
+        }
+        return userInfo;
     }
 
     @PostMapping("/register")

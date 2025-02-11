@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,12 @@ public class TransactionController {
     @GetMapping("/transactionUser")
     List<Transaction> transaction() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            username=((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        }else {
+            username=authentication.getName();
+        }
         Wallet wallet = userService.findByUsername(username).getWallet();
         return wallet.getTransactions().stream().toList();
     }
@@ -70,7 +76,12 @@ public class TransactionController {
     private void transactionCreate(Transaction transaction) {
         double resultado = 0;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            username=((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        }else {
+            username=authentication.getName();
+        }
         Wallet userWallet = userService.findByEmail(username).getWallet();
         transaction.setWallet(userWallet);
         Crypto crypto = cryptoService.findByName(transaction.getCrypto_name());

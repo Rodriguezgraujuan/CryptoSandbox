@@ -2,6 +2,7 @@ package practicajrg.cryptosandbox.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.CryptoService;
 import practicajrg.cryptosandbox.Service.UserService;
@@ -31,7 +32,12 @@ public class WalletController {
     @GetMapping("/walletUser")
     List<Wallet_Crypto> wallet() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            username=((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        }else {
+            username=authentication.getName();
+        }
         Wallet wallet = userService.findByUsername(username).getWallet();
         return wallet.getWalletCryptos().stream().filter(p->p.getQuantity()>0.0).toList();
     }
@@ -39,14 +45,24 @@ public class WalletController {
     @GetMapping("/getWallet")
     double getWallet() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            username=((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        }else {
+             username=authentication.getName();
+        }
         return userService.findByUsername(username).getWallet().getBalance();
     }
 
     @PostMapping("/addcash")
     public void addCash(@RequestBody Wallet wallet) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            username=((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        }else {
+            username=authentication.getName();
+        }
         double balance = wallet.getBalance();
         Wallet userWallet = userService.findByUsername(username).getWallet();
         userWallet.setBalance(userWallet.getBalance() + balance);

@@ -9,20 +9,24 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import practicajrg.cryptosandbox.Service.CustomOAuth2UserService;
-import practicajrg.cryptosandbox.Service.CustomUserDetailsService;
+import practicajrg.cryptosandbox.Reposritory.UserRepository;
+import practicajrg.cryptosandbox.Service.*;
+import practicajrg.cryptosandbox.entities.Crypto;
+import practicajrg.cryptosandbox.entities.Usuario;
+import practicajrg.cryptosandbox.entities.Wallet;
+import practicajrg.cryptosandbox.entities.Wallet_Crypto;
+
+import java.util.Map;
 
 @Configuration
 public class WebSecurity {
@@ -30,6 +34,14 @@ public class WebSecurity {
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private WalletService walletService;
+    @Autowired
+    private CryptoService cryptoService;
+    @Autowired
+    private Wallet_CryptoService wallet_CryptoService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,8 +72,46 @@ public class WebSecurity {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
+                        .successHandler(oauth2SuccessHandler())
                 );
         return http.build();
+    }
+
+    private AuthenticationSuccessHandler oauth2SuccessHandler() {
+        return (request, response, authentication) -> {
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            String email = (String) attributes.get("email");
+            String name = (String) attributes.get("name");
+
+            Usuario usuario = userRepository.findByEmail(email);
+
+            if (usuario == null) {
+                usuario = new Usuario();
+                usuario.setEmail(email);
+                usuario.setUsername(name);
+                usuario.setPassword(passwordEncoder().encode("1"));
+                if (usuario.getEmail().equals("juan@gmail.com")) {
+                    usuario.setRol("ADMIN");
+                }else {
+                    usuario.setRol("USER");
+                }
+                userRepository.save(usuario);
+                Wallet wallet = new Wallet();
+                wallet.setUser(usuario);
+                wallet.setBalance(100000);
+                walletService.saveWallet(wallet);
+
+                for (Crypto crypto : cryptoService.findAll()) {
+                    Wallet_Crypto wallet_crypto = new Wallet_Crypto();
+                    wallet_crypto.setWallet(wallet);
+                    wallet_crypto.setCrypto(crypto);
+                    wallet_crypto.setQuantity(0);
+                    wallet_CryptoService.saveWallet_Crypto(wallet_crypto);
+                }
+            }
+            response.sendRedirect("/Home.html");
+        };
     }
 
     @Bean
