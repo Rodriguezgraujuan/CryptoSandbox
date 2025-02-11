@@ -21,10 +21,16 @@ $(document).ready(function () {
 })
 
 function renderMyCryptos(cryptos) {
+    let backgroundColor = document.body.style.backgroundColor;
+    let color = document.body.style.color;
+    console.log(backgroundColor.charAt(4));
+    if (backgroundColor.charAt(4) === "1"){
+        backgroundColor = "rgb(51,51,51)";
+    }
     let cryptosList = document.getElementById('your-crypto-list');
     cryptos.sort((a, b) => a.id - b.id);
     cryptosList.innerHTML = cryptos.map(crypto => {
-        return `<li class="list-group-item text-center">
+        return `<li class="list-group-item text-center" style="background-color: ${backgroundColor}; color: ${color}">
         <span>${crypto.crypto.symbol.toUpperCase()}:</span>
         <span> ${Math.round(crypto.quantity*100.0)/100.0}</span>
     </li>`}).join('');

@@ -20,6 +20,12 @@ $(document).ready(function () {
 })
 
 function renderTransaction(transactions) {
+    let backgroundColor = document.body.style.backgroundColor;
+    let color = document.body.style.color;
+    console.log(backgroundColor.charAt(4));
+    if (backgroundColor.charAt(4) === "1"){
+        backgroundColor = "rgb(51,51,51)";
+    }
     let transactionList = document.getElementById('listed-transactions');
     transactions.sort((a, b) => a.id - b.id);
     transactionList.innerHTML = transactions.map(transaction => {
@@ -35,13 +41,13 @@ function renderTransaction(transactions) {
             sign="-";
             colorClass = "text-success"
         }
-        return `<li class="list-group-item text-center ${colorClass}">
+        return `<li class="list-group-item text-center ${colorClass}" style="background-color: ${backgroundColor};color: ${color}">
         <span>${sign}${Math.round(transaction.quantity*100.0)/100.0}</span>
         <span>${transaction.crypto_name}</span>
     </li>`}else {
             sign=">";
             colorClass = "text-warning";
-            return `<li class="list-group-item text-center ${colorClass}">  
+            return `<li class="list-group-item text-center ${colorClass}" style="background-color: ${backgroundColor};color: ${color}">  
             <span>-${transaction.quantity} ${transaction.crypto_name} ${sign} +${Math.round(transaction.amount*100.0)/100.0} ${transaction.crypto_exchange}</span>  
         </li>`
         }}).join('');
