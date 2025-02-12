@@ -107,6 +107,7 @@
             <aside class="col-md-3 p-3">
                 <h3>Comprar o Vender</h3>
                 <div id="selected-crypto" class="text-center my-2 text-warning">Selecciona una crypto</div>
+                <div id="quantity-crypto" class="text-center my-2 text-warning"></div>
                 <div class="d-flex justify-content-between">
                     <button class="btn btn-success" id="btn-comprar">Comprar</button>
                     <button class="btn btn-danger" id="btn-vender">Vender</button>
@@ -227,6 +228,7 @@
         let selectedSymbol = null;
         $(document).ready(function () {
             let cryptoData = {};
+            let cryptoQuantity
 
             // Cargar y renderizar criptomonedas desde el servidor
             $.get("http://localhost:8080/cryptos", (data) => {
@@ -252,6 +254,7 @@
                 );
 
                 $("#selected-crypto").text(`Seleccionado: ${selectedCurrency}`).addClass("text-warning");
+                $("#quantity-crypto").text(`Tienes: `).addClass("text-warning");
             });
 
             // Mostrar inputs al comprar o vender
