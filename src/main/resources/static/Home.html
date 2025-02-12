@@ -237,7 +237,7 @@
                 $("#quantity-crypto").text("READY");
             })
             // Cargar y renderizar criptomonedas desde el servidor
-            $.get("http://localhost:8080/cryptos", (data) => {
+            $.get("/cryptos", (data) => {
                 cryptoData = data.reduce((acc, crypto) => {
                     acc[crypto.name] = crypto.value;
                     return acc;
