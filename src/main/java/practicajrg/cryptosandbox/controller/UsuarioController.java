@@ -47,7 +47,7 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<String> userInfo;
         if (authentication.getPrincipal() instanceof OAuth2User) {
-            userInfo = new ArrayList<>(Arrays.asList(((OAuth2User) authentication.getPrincipal()).getAttribute("name"), ((OAuth2User) authentication.getPrincipal()).getAttribute("email")));
+            userInfo = new ArrayList<>(Arrays.asList(((OAuth2User) userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"))).getName(), ((OAuth2User) authentication.getPrincipal()).getAttribute("email")));
         }else {
             userInfo = new ArrayList<>(Arrays.asList(userService.findByUsername(authentication.getName()).getUsername(), userService.findByUsername(authentication.getName()).getEmail()));
         }
