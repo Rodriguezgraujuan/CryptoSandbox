@@ -242,3 +242,4 @@ Promise.all([gananciasPromise, perdidasPromise]).then(([gananciasGet, perdidasGe
 }).catch(error => {
     console.error("Error al cargar los datos:", error);
 });
+
