@@ -3,131 +3,121 @@ let myChartcvi = echarts.init(domcvi, null, {
     renderer: 'canvas',
     useDirtyRect: false
 });
-let app = {};
 let optioncvi;
-let ventaPromise = new Promise((resolve, reject) => {
-    $.get("/transaction/Venta", (data) => {
-        resolve(data);
-        console.log(data)}
-    ).fail((error) => {
-        alert(error);
-        reject(error);
-    });
-});
-let intercambioPromise = new Promise((resolve, reject) => {
-    $.get("/transaction/Intercambio", (data) => {
-        resolve(data);
-        console.log(data)}
-    ).fail((error) => {
-        alert(error);
-        reject(error);
-    });
-});
 
-let compraPromise = new Promise((resolve, reject) => {
-    $.get("/transaction/Compra", (data) => {
-        resolve(data)
-        console.log(data)}
-    ).fail((error) => {
-        alert(error);
-        reject(error);
-    });
-});
-        setTimeout(function () {
-            let optioncvi = {
-                legend: {},
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    }
-                },
-                dataset: {
-                    source: [
-                        ['Producto', '31/1/2025', '1/2/2025', '2/2/2025', '3/2/2025', '4/2/2025'],
-                        ['Intercambios', 40,30,20,10,5],
-                        ['Ventas', 20,15,10,5,2],
-                        ['Compras', 15,10,5,2,1]
-                    ]
-                },
-                xAxis: { type: 'category' },
-                yAxis: { gridIndex: 0 },
-                grid: { top: '55%' },
-                dataZoom: [
-                    {
-                        type: 'slider',
-                        xAxisIndex: 0,
-                        start: 0,
-                        end: 100,
-                        textStyle: {
-                            color: '#8392A5'
-                        }
-                    },
-                    {
-                        type: 'inside',
-                        xAxisIndex: 0
-                    }
-                ],
-                series: [
-                    {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                    },
-                    {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                    },
-                    {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                    },
-                    {
-                        type: 'pie',
-                        id: 'pie',
-                        radius: '30%',
-                        center: ['50%', '25%'],
-                        emphasis: {
-                            focus: 'self'
-                        },
-                        label: {
-                            formatter: '{b}: {@Intercambios} ({d}%)'
-                        },
-                        encode: {
-                            itemName: 'Producto',
-                            value: 'Intercambios',
-                            tooltip: 'Intercambios'
-                        }
-                    }
-                ]
-            };
-            myChartcvi.on('updateAxisPointer', function (event) {
-                const xAxisInfo = event.axesInfo[0];
-                if (xAxisInfo) {
-                    const dimension = xAxisInfo.value + 1;
-                    myChartcvi.setOption({
-                        series: {
-                            id: 'pie',
-                            label: {
-                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-                            },
-                            encode: {
-                                value: dimension,
-                                tooltip: dimension
-                            }
-                        }
-                    });
+// Obtener datos de Compra, Venta e Intercambio
+const compraPromise = $.get("/transaction/Compra").fail(err => alert(err));
+const ventaPromise = $.get("/transaction/Venta").fail(err => alert(err));
+const intercambioPromise = $.get("/transaction/Intercambio").fail(err => alert(err));
+
+Promise.all([compraPromise, ventaPromise, intercambioPromise])
+    .then(([compras, ventas, intercambios]) => {
+        // Objeto para contar transacciones por fecha y tipo
+        const conteoPorFecha = {};
+
+        // Función para contar transacciones
+        const contarTransacciones = (transacciones, tipo) => {
+            transacciones.forEach(({ date }) => {
+                const fecha = date.split('T')[0];
+                if (!conteoPorFecha[fecha]) {
+                    conteoPorFecha[fecha] = {
+                        Compra: 0,
+                        Venta: 0,
+                        Intercambio: 0
+                    };
                 }
+                conteoPorFecha[fecha][tipo] += 1; // Contar +1 por transacción
             });
-            myChartcvi.setOption(optioncvi);});
+        };
 
+        // Procesar cada tipo de transacción
+        contarTransacciones(compras, 'Compra');
+        contarTransacciones(ventas, 'Venta');
+        contarTransacciones(intercambios, 'Intercambio');
 
+        // Ordenar fechas y extraer datos
+        const fechas = Object.keys(conteoPorFecha).sort();
+        const datosLineas = {
+            compras: fechas.map(f => conteoPorFecha[f].Compra),
+            ventas: fechas.map(f => conteoPorFecha[f].Venta),
+            intercambios: fechas.map(f => conteoPorFecha[f].Intercambio)
+        };
 
+        // Configuración del gráfico
+        optioncvi = {
+            legend: { data: ['Compras', 'Ventas', 'Intercambios'] },
+            tooltip: { trigger: 'axis' },
+            xAxis: { type: 'category', data: fechas },
+            yAxis: { type: 'value', name: 'Cantidad' },
+            grid: { top: '55%' },
+            dataZoom: [
+                {
+                    type: 'slider',
+                    xAxisIndex: 0,
+                    start: 0,
+                    end: 100,
+                    textStyle: {
+                        color: '#8392A5'
+                    }
+                },
+                {
+                    type: 'inside',
+                    xAxisIndex: 0
+                }
+            ],
+            series: [
+                {
+                    name: 'Compras',
+                    type: 'line',
+                    data: datosLineas.compras,
+                    smooth: true
+                },
+                {
+                    name: 'Ventas',
+                    type: 'line',
+                    data: datosLineas.ventas,
+                    smooth: true
+                },
+                {
+                    name: 'Intercambios',
+                    type: 'line',
+                    data: datosLineas.intercambios,
+                    smooth: true
+                },
+                {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    data: [
+                        { name: 'Compras', value: datosLineas.compras[0] || 0 },
+                        { name: 'Ventas', value: datosLineas.ventas[0] || 0 },
+                        { name: 'Intercambios', value: datosLineas.intercambios[0] || 0 }
+                    ],
+                    label: { formatter: '{b}: {c} ({d}%)' }
+                }
+            ]
+        };
+
+        // Actualizar el gráfico circular al interactuar
+        myChartcvi.on('updateAxisPointer', event => {
+            const index = event.axesInfo[0]?.value;
+            if (index !== undefined) {
+                myChartcvi.setOption({
+                    series: [{
+                        id: 'pie',
+                        data: [
+                            { name: 'Compras', value: datosLineas.compras[index] || 0 },
+                            { name: 'Ventas', value: datosLineas.ventas[index] || 0 },
+                            { name: 'Intercambios', value: datosLineas.intercambios[index] || 0 }
+                        ]
+                    }]
+                });
+            }
+        });
+
+        myChartcvi.setOption(optioncvi);
+    });
 // -------------------------------------------
 let domtotal = document.getElementById('chart-container-totales');
 let myCharttotal = echarts.init(domtotal, null, {
@@ -252,6 +242,4 @@ Promise.all([gananciasPromise, perdidasPromise]).then(([gananciasGet, perdidasGe
 }).catch(error => {
     console.error("Error al cargar los datos:", error);
 });
-
-
 
