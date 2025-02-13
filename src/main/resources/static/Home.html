@@ -326,6 +326,8 @@
 
         $('#comprar-inputs').on('submit', function(e) {
             e.preventDefault();
+            $("#comprar-confirm").prop('disabled', true);
+            $("#vender-inputs").prop('disabled', true);
             console.log("Dentro de compras")
             console.log(selectedCurrency)
             let cryptoAmount = $("#comprar-amount").val();
@@ -359,6 +361,8 @@
 
         $('#vender-inputs').on('submit', function(e) {
             e.preventDefault();
+            $("#comprar-confirm").prop('disabled', true);
+            $("#vender-inputs").prop('disabled', true);
             console.log("Dentro de ventas")
             console.log(selectedCurrency)
             let quantity = $("#vender-amount").val();
