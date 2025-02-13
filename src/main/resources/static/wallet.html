@@ -149,7 +149,7 @@
                     <div class="mb-3">
                         <h5 id="exchangeResult" class="text-primary"></h5>
                     </div>
-                    <button type="submit" class="btn btn-primary">Confirmar Intercambio</button>
+                    <button type="submit" class="btn btn-primary" id="intercamb">Confirmar Intercambio</button>
                 </form>
             <div class="py-4">
                 <h4>Recarga de euros</h4>
@@ -275,6 +275,7 @@
 
     $('#exchangeForm').on('submit', function(e) {
         e.preventDefault();
+        $("#intercamb").prop('disabled', true);
         console.log("Dentro de exchange Form")
         let cryptoOrigen = $("#selectedCrypto").val();
         let cryptoDestino = $("#destinationCrypto").val();

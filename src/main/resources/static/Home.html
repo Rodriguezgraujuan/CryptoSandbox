@@ -107,6 +107,7 @@
             <aside class="col-md-3 p-3">
                 <h3>Comprar o Vender</h3>
                 <div id="selected-crypto" class="text-center my-2 text-warning">Selecciona una crypto</div>
+                <div id="quantity-crypto" class="text-center my-2 text-warning">Loading...</div>
                 <div class="d-flex justify-content-between">
                     <button class="btn btn-success" id="btn-comprar">Comprar</button>
                     <button class="btn btn-danger" id="btn-vender">Vender</button>
@@ -227,9 +228,16 @@
         let selectedSymbol = null;
         $(document).ready(function () {
             let cryptoData = {};
+            let cryptoQuantity;
 
+            $.get("/CryptosOwn", (data) => {
+                cryptoQuantity = data
+                console.log(cryptoQuantity)
+            }).done(() => {
+                $("#quantity-crypto").text("READY");
+            })
             // Cargar y renderizar criptomonedas desde el servidor
-            $.get("http://localhost:8080/cryptos", (data) => {
+            $.get("/cryptos", (data) => {
                 cryptoData = data.reduce((acc, crypto) => {
                     acc[crypto.name] = crypto.value;
                     return acc;
@@ -250,9 +258,15 @@
                 }).fail((error) =>
                     alert("Error al obtener datos de la criptomoneda: " + error.responseText)
                 );
-
+                console.log(cryptoQuantity)
+                for (let cry of cryptoQuantity){
+                    if (cry.crypto.name === selectedCurrency){
+                        console.log(cry.quantity)
+                        $("#quantity-crypto").text(`Tienes: ${Math.round(cry.quantity*100)/100}`).addClass("text-warning");
+                    }
+                }
                 $("#selected-crypto").text(`Seleccionado: ${selectedCurrency}`).addClass("text-warning");
-            });
+            })
 
             // Mostrar inputs al comprar o vender
             $("#btn-comprar").click(() => {
@@ -312,6 +326,8 @@
 
         $('#comprar-inputs').on('submit', function(e) {
             e.preventDefault();
+            $("#comprar-confirm").prop('disabled', true);
+            $("#vender-inputs").prop('disabled', true);
             console.log("Dentro de compras")
             console.log(selectedCurrency)
             let cryptoAmount = $("#comprar-amount").val();
@@ -345,6 +361,8 @@
 
         $('#vender-inputs').on('submit', function(e) {
             e.preventDefault();
+            $("#comprar-confirm").prop('disabled', true);
+            $("#vender-inputs").prop('disabled', true);
             console.log("Dentro de ventas")
             console.log(selectedCurrency)
             let quantity = $("#vender-amount").val();

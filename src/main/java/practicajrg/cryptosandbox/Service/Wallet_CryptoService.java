@@ -27,4 +27,7 @@ public class Wallet_CryptoService {
     public void deleteById(Long id) {
         walletCryptoRepository.deleteById(id);
     }
+    public List<Wallet_Crypto> findByWalletId(Long id) {
+        return walletCryptoRepository.findByWalletId(id);
+    }
 }

@@ -125,6 +125,12 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuario eliminado correctamente");
     }
 
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok("Usuario eliminado correctamente");
+    }
+
     @GetMapping("/reportes")
     List<Reporte> reportes(){
         List<Reporte> rep = reportesService.findAll();
@@ -132,5 +138,11 @@ public class UsuarioController {
             rep=new ArrayList<>();
         }
         return reportesService.findAll();
+    }
+
+    @GetMapping("/deleteReporte/{id}")
+    public ResponseEntity<String> deleteReporte(@PathVariable("id") Long id) {
+        reportesService.deleteById(id);
+        return ResponseEntity.ok("Reporte eliminado correctamente");
     }
 }
