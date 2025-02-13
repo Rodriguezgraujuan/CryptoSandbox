@@ -262,19 +262,24 @@
         }
 
         let userData = { username, email, password };
-        $.ajax({
-            url: '/register',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(userData),
-            success: function(response) {
-                alert('¡Usuario creado exitosamente!');
-                window.location.href = '/login';
-            },
-            error: function(xhr, status, error) {
-                alert('Hubo un error al crear el usuario. Intente nuevamente.');
-            }
-        });
+        if ($("#terms").is(":checked")) {
+            $.ajax({
+                url: '/register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userData),
+                success: function (response) {
+                    alert('¡Usuario creado exitosamente!');
+                    window.location.href = '/login';
+                },
+                error: function (xhr, status, error) {
+                    alert('Hubo un error al crear el usuario. Intente nuevamente.');
+                }
+            });
+        }else {
+            alert("Debes aceptar los terminos y condiciones");
+            $('#registerButton').prop('disabled', false);
+        }
     });
 </script>
 </body>

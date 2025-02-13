@@ -297,6 +297,7 @@
             success: function(response) {
                 console.log('Intercambio realizado correctamente', response);
                 alert('¡Intercambio realizado correctamente!');
+                $("#intercamb").prop('disabled', false);
                 window.location.href = '/wallet.html';
             },
             error: function(xhr, status, error) {
@@ -304,6 +305,7 @@
                 console.log('Estado de la respuesta:', status);
                 console.log('Detalles de la respuesta:', xhr.responseText);
                 let errorMessage = xhr.responseText || 'Hubo un error al agregar saldo.';
+                $("#intercamb").prop('disabled', false);
                 alert(`Error: ${errorMessage}`);
             }
         });
