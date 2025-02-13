@@ -15,7 +15,7 @@
     <script src="Js/SetColor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="Js/administradorTablas.js" defer></script>
-
+    <script src="Js/administradorTablaPerdidasGananciasDiaSemana.js" defer></script>
 
 </head>
 <style>
@@ -30,6 +30,12 @@
         position: relative;
         overflow: hidden;
     }
+    #chart-container-estadisticas{
+        height: 40vh;
+        position: relative;
+        overflow: hidden;
+    }
+
 </style>
 
 <body>
@@ -63,10 +69,13 @@
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Usuario</a>
+                            <a class="nav-link" href="usuario.html">Usuario</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="" id="toggle-theme">Modo Claro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tutorial.html">Tutoriales</a>
                         </li>
 
                         <li class="navbar-toggler">
@@ -142,8 +151,9 @@
 
             <!-- Estadísticas -->
             <div class="col-md-4 py-3">
-                <h3>Estadísticas</h3>
-
+                <h3>Estadísticas </h3>
+                <div id="chart-container-estadisticas">
+                </div>
             </div>
 
 
