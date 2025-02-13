@@ -1,102 +1,165 @@
-let domContainer = document.getElementById('chart-container-estadisticas');
-let myChart = echarts.init(domContainer, null, { renderer: 'canvas', useDirtyRect: false });
+// -------------------------------------------
+// 1. Configuración y verificación del día actual
+const todayDate = new Date().toISOString().split('T')[0];
+let storedDate = localStorage.getItem('currentDay');
 
-// Obtener datos de ganancias y pérdidas
-Promise.all([
-    $.get("/transaction/Venta").catch(err => alert("Error ganancias: " + err.statusText)),
-    $.get("/transaction/Compra").catch(err => alert("Error pérdidas: " + err.statusText))
-]).then(([ganancias, perdidas]) => {
+// Si el día almacenado es distinto al actual, reiniciamos los contadores
+if (storedDate !== todayDate) {
+    localStorage.setItem('currentDay', todayDate);
+    localStorage.setItem('gananciasDiarias', '0');
+    localStorage.setItem('perdidasDiarias', '0');
+}
 
-    // Función para procesar datos por fecha
-    const procesarDiario = (transacciones) => {
-        return transacciones.reduce((acc, { date, value }) => {
-            const fecha = date.split('T')[0];
-            acc[fecha] = (acc[fecha] || 0) + value;
-            return acc;
-        }, {});
-    };
+let gananciasDiarias = Number(localStorage.getItem('gananciasDiarias'));
+let perdidasDiarias = Number(localStorage.getItem('perdidasDiarias'));
 
-    const getInicioSemana = (dateStr) => {
-        const date = new Date(dateStr);
-        const dia = date.getDay();
-        const diff = date.getDate() - dia + (dia === 0 ? -6 : 1); // Lunes como inicio
-        return new Date(date.setDate(diff)).toISOString().split('T')[0];
-    };
+// 2. Inicialización de la gráfica de ECharts
+const domdaily = document.getElementById('chart-container-estadisticas');
+const myChartdaily = echarts.init(domdaily, null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+});
 
-    const procesarSemanal = (transacciones) => {
-        return transacciones.reduce((acc, { date, value }) => {
-            const semana = getInicioSemana(date);
-            acc[semana] = (acc[semana] || 0) + value;
-            return acc;
-        }, {});
-    };
+// Función para actualizar el gráfico con los datos diarios actuales
+function updateChart() {
+    // Se calcula el valor máximo para configurar el rango del eje X
+    const maxValue = Math.max(gananciasDiarias, perdidasDiarias);
 
-    // Datos para gráficos
-    const datosDiarios = {
-        ganancias: procesarDiario(ganancias),
-        perdidas: procesarDiario(perdidas)
-    };
-
-    const datosSemanales = {
-        ganancias: procesarSemanal(ganancias),
-        perdidas: procesarSemanal(perdidas)
-    };
-
-    // Fechas ordenadas
-    const fechasDiarias = Object.keys(datosDiarios.ganancias).sort();
-    const fechasSemanales = Object.keys(datosSemanales.ganancias).sort().map(s => `Semana ${s}`);
-
-    // Configuración del gráfico combinado
-    myChart.setOption({
+    const optiondaily = {
         title: {
-            text: 'Balance Diario y Semanal',
+            text: 'Balance Financiero Diario',
+            subtext: todayDate,
             left: 'center',
-            textStyle: { fontSize: 18, fontWeight: 'bold', color: 'white' }
-        },
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Ganancias Diarias', 'Pérdidas Diarias', 'Ganancias Semanales', 'Pérdidas Semanales'], top: 30 },
-        xAxis: [
-            {
-                type: 'category',
-                data: fechasDiarias.concat(fechasSemanales),
-                axisLabel: { rotate: 45 }
+            textStyle: {
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: 'white'
             }
-        ],
-        yAxis: { type: 'value' },
+        },
+        xAxis: {
+            type: 'value',
+            min: -maxValue,
+            max: maxValue,
+            axisLabel: {
+                formatter: (value) => `€${value.toLocaleString()}`
+            },
+            splitLine: { show: true }
+        },
+        yAxis: {
+            type: 'category',
+            data: ['Pérdidas', '', 'Ganancias'],
+            inverse: true,
+            axisTick: { show: false }
+        },
         series: [
             {
-                name: 'Ganancias Diarias',
                 type: 'bar',
-                data: fechasDiarias.map(f => datosDiarios.ganancias[f] || 0),
-                itemStyle: { color: '#00E396' }
-            },
-            {
-                name: 'Pérdidas Diarias',
-                type: 'bar',
-                data: fechasDiarias.map(f => -(datosDiarios.perdidas[f] || 0)),
-                itemStyle: { color: '#FF4560' }
-            },
-            {
-                name: 'Ganancias Semanales',
-                type: 'line',
-                data: fechasSemanales.map(f => datosSemanales.ganancias[f.replace('Semana ', '')] || 0),
-                itemStyle: { color: '#00E396' }
-            },
-            {
-                name: 'Pérdidas Semanales',
-                type: 'line',
-                data: fechasSemanales.map(f => -(datosSemanales.perdidas[f.replace('Semana ', '')] || 0)),
-                itemStyle: { color: '#FF4560' }
+                barWidth: 25,
+                data: [
+                    {
+                        value: -perdidasDiarias,
+                        itemStyle: { color: 'red', borderColor: 'white', borderWidth: 2 },
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: (params) =>
+                                `{shadowStyle|-${Math.abs(params.value).toLocaleString()}€}`,
+                            rich: {
+                                shadowStyle: {
+                                    fontFamily: 'sans-serif',
+                                    fontWeight: 'bold',
+                                    fontSize: 12,
+                                    color: 'black',
+                                    textBorderColor: 'white',
+                                    textBorderWidth: 2
+                                }
+                            }
+                        }
+                    },
+                    { value: 0, itemStyle: { opacity: 0 } },
+                    {
+                        value: gananciasDiarias,
+                        itemStyle: { color: 'green', borderColor: 'white', borderWidth: 2 },
+                        label: {
+                            show: true,
+                            position: 'left',
+                            formatter: (params) =>
+                                `{shadowStyle|${Math.abs(params.value).toLocaleString()}€}`,
+                            rich: {
+                                shadowStyle: {
+                                    fontFamily: 'sans-serif',
+                                    fontWeight: 'bold',
+                                    fontSize: 12,
+                                    color: 'black',
+                                    textBorderColor: 'white',
+                                    textBorderWidth: 2
+                                }
+                            }
+                        }
+                    }
+                ]
             }
         ],
-        grid: { left: '10%', right: '10%', containLabel: true },
-        animationDuration: 0
+        grid: {
+            left: '20%',
+            right: '20%',
+            containLabel: true
+        },
+        legend: { show: false },
+        animationDuration: 0,
+        animationDurationUpdate: 3000,
+        animationEasing: 'linear',
+        animationEasingUpdate: 'linear'
+    };
+
+    myChartdaily.setOption(optiondaily);
+}
+
+// 3. Función para consultar nuevos datos y actualizar datos diarios
+function updateDailyData() {
+    // Se asume que cada consulta devuelve el valor total actual (no el incremento)
+    $.get("/ganancias", function(data) {
+        const totalGanancias = Number(data) || 0;
+        if (totalGanancias !== gananciasDiarias) {
+            gananciasDiarias = totalGanancias;
+            localStorage.setItem('gananciasDiarias', gananciasDiarias);
+            updateChart();
+        }
+    }).fail(function(error) {
+        console.error("Error al obtener ganancias:", error);
     });
 
-    // Redimensionar al cambiar ventana
-    window.addEventListener('resize', () => {
-        myChart.resize();
+    $.get("/perdidas", function(data) {
+        const totalPerdidas = Number(data) || 0;
+        if (totalPerdidas !== perdidasDiarias) {
+            perdidasDiarias = totalPerdidas;
+            localStorage.setItem('perdidasDiarias', perdidasDiarias);
+            updateChart();
+        }
+    }).fail(function(error) {
+        console.error("Error al obtener pérdidas:", error);
     });
+}
 
-}).catch(error => console.error("Error:", error));
+// 4. Inicializamos el gráfico y gestionamos el redimensionado
+updateChart();
+window.addEventListener('resize', () => {
+    myChartdaily.resize();
+});
 
+// 5. Intervalo para consultar datos y verificar cambio de día cada 10 segundos
+setInterval(() => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    if (currentDate !== localStorage.getItem('currentDay')) {
+        // Ha cambiado el día: se reinician los contadores y se actualiza la fecha en localStorage
+        localStorage.setItem('currentDay', currentDate);
+        gananciasDiarias = 0;
+        perdidasDiarias = 0;
+        localStorage.setItem('gananciasDiarias', '0');
+        localStorage.setItem('perdidasDiarias', '0');
+        updateChart();
+    } else {
+        // Se consulta la API para ver si hay nuevos datos
+        updateDailyData();
+    }
+}, 10000);
