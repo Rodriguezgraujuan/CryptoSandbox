@@ -170,6 +170,75 @@
         </form>
     </div>
 </div>
+<!-- Modal de Error de Contraseña -->
+<div class="modal fade" id="passwordErrorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Error en la Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-dark">
+                La contraseña debe tener al menos 8 caracteres, incluir una mayúscula y una minúscula.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de Error: Términos y Condiciones No Aceptados -->
+<div class="modal fade" id="termsErrorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">Términos y Condiciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-black">
+                Debes aceptar los términos y condiciones antes de continuar con el registro.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">¡Éxito!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-black">
+                ¡Usuario creado exitosamente!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de error (por si falla la solicitud) -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-black">
+                El usuario ya esta registrado.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
     <!-- Section: Links  -->
@@ -248,6 +317,11 @@
 </footer>
 
 <script>
+    let passwordErrorModal = new bootstrap.Modal(document.getElementById('passwordErrorModal'));
+    let termsErrorModal = new bootstrap.Modal(document.getElementById('termsErrorModal'));
+    let successModal = new bootstrap.Modal(document.getElementById('successModal'))
+    let errorModal = new bootstrap.Modal(document.getElementById('errorModal'))
+
     $('#registration-form').on('submit', function(e) {
         e.preventDefault();
         $('#registerButton').prop('disabled', true);
@@ -262,25 +336,38 @@
         }
 
         let userData = { username, email, password };
-        if ($("#terms").is(":checked")) {
-            $.ajax({
-                url: '/register',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(userData),
-                success: function (response) {
-                    alert('¡Usuario creado exitosamente!');
-                    window.location.href = '/login';
-                },
-                error: function (xhr, status, error) {
-                    alert('Hubo un error al crear el usuario. Intente nuevamente.');
-                }
-            });
-        }else {
-            alert("Debes aceptar los terminos y condiciones");
+        if (validarContrasena($("#password").val())) {
+            if ($("#terms").is(":checked")) {
+                $.ajax({
+                    url: '/register',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function (response) {
+                        if (response === "Usuario creado con éxito") {
+                            successModal.show();
+                        }
+                        window.location.href = '/login';
+                    },
+                    error: function (xhr, status, error) {
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
+                    }
+                });
+            } else {
+                termsErrorModal.show();
+                $('#registerButton').prop('disabled', false);
+            }
+        }else{
+            passwordErrorModal.show();
             $('#registerButton').prop('disabled', false);
         }
     });
+
+    function validarContrasena(contrasena) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        return regex.test(contrasena);
+    }
 </script>
 </body>
 
