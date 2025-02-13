@@ -110,7 +110,12 @@ public class UsuarioController {
     @PostMapping("/editProfile")
     public void editProfile(@RequestBody Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Usuario loggedUser = userService.findByUsername(authentication.getName());
+        Usuario loggedUser;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            loggedUser=userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
+        }else {
+            loggedUser=userService.findByUsername(authentication.getName());
+        }
         loggedUser.setUsername(usuario.getUsername());
         loggedUser.setEmail(usuario.getEmail());
         loggedUser.setPassword(passwordEncoder.encode(usuario.getPassword()));

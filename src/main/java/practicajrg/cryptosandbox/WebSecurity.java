@@ -48,7 +48,7 @@ public class WebSecurity {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
                         .requestMatchers("/Css/**","/images/**", "/Js/**", "/char/**", "/images/**", "/login", "/register", "/register.html", "invitado.html", "/cryptos", "/registro/{symbol}").permitAll()
-                        .requestMatchers("/administrador.html").hasRole("ADMIN")
+                        .requestMatchers("/administrador.html", "/").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
