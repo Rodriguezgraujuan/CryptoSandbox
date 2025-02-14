@@ -8,6 +8,9 @@ if (storedDate !== todayDate) {
     localStorage.setItem('currentDay', todayDate);
     localStorage.setItem('gananciasDiarias', '0');
     localStorage.setItem('perdidasDiarias', '0');
+    // Eliminar valores iniciales anteriores
+    localStorage.removeItem('initialGanancias');
+    localStorage.removeItem('initialPerdidas');
 }
 
 let gananciasDiarias = Number(localStorage.getItem('gananciasDiarias'));
@@ -22,9 +25,7 @@ const myChartdaily = echarts.init(domdaily, null, {
 
 // Función para actualizar el gráfico con los datos diarios actuales
 function updateChart() {
-    // Se calcula el valor máximo para configurar el rango del eje X
     const maxValue = Math.max(gananciasDiarias, perdidasDiarias);
-
     const optiondaily = {
         title: {
             text: 'Balance Financiero Diario',
@@ -111,29 +112,35 @@ function updateChart() {
         animationEasing: 'linear',
         animationEasingUpdate: 'linear'
     };
-
     myChartdaily.setOption(optiondaily);
 }
 
 // 3. Función para consultar nuevos datos y actualizar datos diarios
 function updateDailyData() {
-    // Se asume que cada consulta devuelve el valor total actual (no el incremento)
+    // Obtener valores iniciales del día
+    const initialGanancias = Number(localStorage.getItem('initialGanancias')) || 0;
+    const initialPerdidas = Number(localStorage.getItem('initialPerdidas')) || 0;
+
+    // Actualizar ganancias diarias
     $.get("/ganancias", function(data) {
         const totalGanancias = Number(data) || 0;
-        if (totalGanancias !== gananciasDiarias) {
-            gananciasDiarias = totalGanancias;
-            localStorage.setItem('gananciasDiarias', gananciasDiarias);
+        const dailyGanancias = totalGanancias - initialGanancias;
+        if (dailyGanancias !== gananciasDiarias) {
+            gananciasDiarias = dailyGanancias;
+            localStorage.setItem('gananciasDiarias', gananciasDiarias.toString());
             updateChart();
         }
     }).fail(function(error) {
         console.error("Error al obtener ganancias:", error);
     });
 
+    // Actualizar pérdidas diarias
     $.get("/perdidas", function(data) {
         const totalPerdidas = Number(data) || 0;
-        if (totalPerdidas !== perdidasDiarias) {
-            perdidasDiarias = totalPerdidas;
-            localStorage.setItem('perdidasDiarias', perdidasDiarias);
+        const dailyPerdidas = totalPerdidas - initialPerdidas;
+        if (dailyPerdidas !== perdidasDiarias) {
+            perdidasDiarias = dailyPerdidas;
+            localStorage.setItem('perdidasDiarias', perdidasDiarias.toString());
             updateChart();
         }
     }).fail(function(error) {
@@ -150,16 +157,50 @@ window.addEventListener('resize', () => {
 // 5. Intervalo para consultar datos y verificar cambio de día cada 10 segundos
 setInterval(() => {
     const currentDate = new Date().toISOString().split('T')[0];
-    if (currentDate !== localStorage.getItem('currentDay')) {
-        // Ha cambiado el día: se reinician los contadores y se actualiza la fecha en localStorage
-        localStorage.setItem('currentDay', currentDate);
-        gananciasDiarias = 0;
-        perdidasDiarias = 0;
-        localStorage.setItem('gananciasDiarias', '0');
-        localStorage.setItem('perdidasDiarias', '0');
-        updateChart();
+    const storedDate = localStorage.getItem('currentDay');
+
+    if (currentDate !== storedDate) {
+        // Nuevo día: obtener y guardar valores iniciales
+        Promise.all([
+            $.get("/ganancias"),
+            $.get("/perdidas")
+        ]).then(([gananciasData, perdidasData]) => {
+            const initialGanancias = Number(gananciasData) || 0;
+            const initialPerdidas = Number(perdidasData) || 0;
+
+            localStorage.setItem('currentDay', currentDate);
+            localStorage.setItem('initialGanancias', initialGanancias.toString());
+            localStorage.setItem('initialPerdidas', initialPerdidas.toString());
+
+            // Restablecer contadores diarios
+            localStorage.setItem('gananciasDiarias', '0');
+            localStorage.setItem('perdidasDiarias', '0');
+            gananciasDiarias = 0;
+            perdidasDiarias = 0;
+
+            updateChart();
+        }).catch(error => {
+            console.error("Error al obtener valores iniciales:", error);
+        });
     } else {
-        // Se consulta la API para ver si hay nuevos datos
-        updateDailyData();
+        // Verificar si los valores iniciales están establecidos
+        if (!localStorage.getItem('initialGanancias') || !localStorage.getItem('initialPerdidas')) {
+            // Si no hay valores iniciales, obtenerlos
+            Promise.all([
+                $.get("/ganancias"),
+                $.get("/perdidas")
+            ]).then(([gananciasData, perdidasData]) => {
+                const initialGanancias = Number(gananciasData) || 0;
+                const initialPerdidas = Number(perdidasData) || 0;
+
+                localStorage.setItem('initialGanancias', initialGanancias.toString());
+                localStorage.setItem('initialPerdidas', initialPerdidas.toString());
+                updateDailyData();
+            }).catch(error => {
+                console.error("Error al obtener valores iniciales:", error);
+            });
+        } else {
+            updateDailyData();
+        }
     }
 }, 10000);
