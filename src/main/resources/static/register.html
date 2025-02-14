@@ -148,16 +148,27 @@
                     <input type="email" id="email" class="input" placeholder="Enter email">
                 </div>
             </div>
-            <div class="flex-column">
-                <label for="password" class="form-label">Password</label>
-                <div class="inputForm">
-                    <input type="password" id="password" class="input" placeholder="Enter password">
+            <div class="d-flex flex-column">
+                <label for="password" class="form-label fw-bold">Password</label>
+                <div class="input-group">
+                    <input type="password" id="password" class="form-control" placeholder="Enter password">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="bi bi-eye"></i>
+                    </button>
                 </div>
+                <ul class="mt-2 small text-muted">
+                    <li id="caracteres">8 caracteres</li>
+                    <li id="mayuscula">1 mayúscula</li>
+                    <li id="minuscula">1 minúscula</li>
+                </ul>
             </div>
-            <div class="flex-column">
+            <div class="d-flex flex-column">
                 <label for="confirm-password" class="form-label">Confirm Password</label>
-                <div class="inputForm">
-                    <input type="password" id="confirm-password" class="input" placeholder="Confirm password">
+                <div class="input-group">
+                    <input type="password" id="confirm-password" class="form-control" placeholder="Confirm password">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                        <i class="bi bi-eye"></i>
+                    </button>
                 </div>
             </div>
             <div class="flex-row">
@@ -341,6 +352,45 @@
             }
         })
     }
+    $("#password").on("keyup", function() {
+        let contrasena = $(this).val();
+        validarRequisito(contrasena.length >= 8, "#caracteres");
+        validarRequisito(/[A-Z]/.test(contrasena), "#mayuscula");
+        validarRequisito(/[a-z]/.test(contrasena), "#minuscula");
+    });
+
+    function validarRequisito(condicion, etiqueta) {
+        if (condicion) {
+            $(etiqueta).removeClass("text-danger").addClass("text-success");
+            $(etiqueta).find("i").removeClass("bi-x-circle").addClass("bi-check-circle");
+        } else {
+            $(etiqueta).removeClass("text-success").addClass("text-danger");
+            $(etiqueta).find("i").removeClass("bi-check-circle").addClass("bi-x-circle");
+        }
+    }
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        let passwordInput = document.getElementById('password');
+        let icon = this.querySelector('i');
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye");
+        }
+    });
+
+    document.getElementById('togglePassword2').addEventListener('click', function () {
+        let passwordInput = document.getElementById('confirm-password');
+        let icon = this.querySelector('i');
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.replace("bi-eye", "bi-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.replace("bi-eye-slash", "bi-eye");
+        }
+    });
 </script>
 </body>
 
