@@ -170,67 +170,16 @@
         </form>
     </div>
 </div>
-<!-- Modal de Error de Contraseña -->
-<div class="modal fade" id="passwordErrorModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Error en la Contraseña</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-dark">
-                La contraseña debe tener al menos 8 caracteres, incluir una mayúscula y una minúscula.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal de Error: Términos y Condiciones No Aceptados -->
-<div class="modal fade" id="termsErrorModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-warning text-dark">
-                <h5 class="modal-title">Términos y Condiciones</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-black">
-                Debes aceptar los términos y condiciones antes de continuar con el registro.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal de éxito -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">¡Éxito!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-black">
-                ¡Usuario creado exitosamente!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Modal de error (por si falla la solicitud) -->
 <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Error</h5>
+            <div class="modal-header bg-danger text-white" id="headerModal">
+                <h5 class="modal-title" id="titleModal">Error</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-black">
-                El usuario ya esta registrado.
+                <p id="textModal"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -317,10 +266,10 @@
 </footer>
 
 <script>
-    let passwordErrorModal = new bootstrap.Modal(document.getElementById('passwordErrorModal'));
-    let termsErrorModal = new bootstrap.Modal(document.getElementById('termsErrorModal'));
-    let successModal = new bootstrap.Modal(document.getElementById('successModal'))
     let errorModal = new bootstrap.Modal(document.getElementById('errorModal'))
+    let text = document.getElementById("textModal");
+    let header = document.getElementById("headerModal");
+    let title = document.getElementById("titleModal");
 
     $('#registration-form').on('submit', function(e) {
         e.preventDefault();
@@ -345,21 +294,38 @@
                     data: JSON.stringify(userData),
                     success: function (response) {
                         if (response === "Usuario creado con éxito") {
-                            successModal.show();
+                            deleteBG(header)
+                            header.classList.add("bg-success")
+                            title.textContent = "Usuario creado con exito"
+                            text.textContent = "El usuario ha sido creado con exito."
+                            errorModal.show();
                         }
                         window.location.href = '/login';
                     },
                     error: function (xhr, status, error) {
+                        deleteBG(header)
+                        header.classList.add("bg-danger")
+                        title.textContent = "Error"
+                        text.textContent = "Error al registrar el usuario"
                         errorModal.show();
+
                         $('#registerButton').prop('disabled', false);
                     }
                 });
             } else {
-                termsErrorModal.show();
+                deleteBG(header)
+                header.classList.add("bg-warning")
+                title.textContent = "Advertencia"
+                text.textContent = "Debes aceptar los terminos y condiciones."
+                errorModal.show();
                 $('#registerButton').prop('disabled', false);
             }
         }else{
-            passwordErrorModal.show();
+            deleteBG(header)
+            header.classList.add("bg-warning")
+            title.textContent = "Advertencia"
+            text.textContent = "Contraseña incorrecta, debe contener al menos 8 caracteres, una mayuscula y una minuscula."
+            errorModal.show();
             $('#registerButton').prop('disabled', false);
         }
     });
@@ -367,6 +333,13 @@
     function validarContrasena(contrasena) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return regex.test(contrasena);
+    }
+    function deleteBG(header){
+        header.classList.forEach(clase => {
+            if (clase.startsWith("bg-")) {
+                header.classList.remove(clase);
+            }
+        })
     }
 </script>
 </body>
