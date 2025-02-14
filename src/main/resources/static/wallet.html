@@ -166,6 +166,23 @@
     </div>
 </div>
 
+    <!-- Modal de error (por si falla la solicitud) -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white" id="conenedor-mensaje">
+                    <h5 class="modal-title" id="mensaje">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-black">
+                    <p id="menaje-detallado">Error de conexion.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrar">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
@@ -244,6 +261,12 @@
     <!-- Copyright -->
 </footer>
 <script>
+    let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    let mensaje = document.getElementById("mensaje");
+    let contenedorMensaje = document.getElementById("conenedor-mensaje");
+    let menajeDetallado = document.getElementById("menaje-detallado");
+    let botonCerrar = document.getElementById("cerrar");
+
     $('#cashForm').on('submit', function(e) {
         e.preventDefault();
         console.log("Dentro de agregar saldo")
@@ -251,26 +274,58 @@
         let wallet = {
             balance: amount
         };
+        if (amount > 0) {
+            $.ajax({
+                url: '/addcash', // URL de tu API
+                type: 'POST',
+                contentType: 'application/json', // Tipo de contenido
+                data: JSON.stringify(wallet), // Convertimos el objeto a JSON
 
-        $.ajax({
-            url: '/addcash', // URL de tu API
-            type: 'POST',
-            contentType: 'application/json', // Tipo de contenido
-            data: JSON.stringify(wallet), // Convertimos el objeto a JSON
+                success: function () {
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-success");
+                    mensaje.textContent = "Enhorabuena!";
+                    menajeDetallado.textContent = "Saldo agregado correctamente.";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
+                    botonCerrar.addEventListener("click", function () {
+                        window.location.href = '/wallet.html'
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error:', error);
+                    console.log('Estado de la respuesta:', status);
+                    console.log('Detalles de la respuesta:', xhr.responseText);
 
-            success: function(response) {
-                console.log('Saldo agregado correctamente', response);
-                alert('¡Saldo agregado correctamente!');
-                window.location.href = '/wallet.html';
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
-                console.log('Estado de la respuesta:', status);
-                console.log('Detalles de la respuesta:', xhr.responseText);
-                let errorMessage = xhr.responseText || 'Hubo un error al agregar saldo.';
-                alert(`Error: ${errorMessage}`);
-            }
-        });
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-danger");
+                    mensaje.textContent = "Error";
+                    menajeDetallado.textContent = "Hubo un error al conectar a la api.";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
+                }
+            });
+        } else {
+            contenedorMensaje.classList.forEach(clase => {
+                if (/^bg-/.test(clase)) {
+                    contenedorMensaje.classList.remove(clase);
+                }
+            });
+            contenedorMensaje.classList.add("bg-warning");
+            mensaje.textContent = "Recuerda!";
+            menajeDetallado.textContent = "El saldo a añadir tiene que ser mayor que 0.";
+            errorModal.show();
+            $('#registerButton').prop('disabled', false);
+
+        }
     });
 
 </script>
@@ -297,19 +352,37 @@
             contentType: 'application/json', // Tipo de contenido
             data: JSON.stringify(transaction), // Convertimos el objeto a JSON
 
-            success: function(response) {
-                console.log('Intercambio realizado correctamente', response);
-                alert('¡Intercambio realizado correctamente!');
-                $("#intercamb").prop('disabled', false);
-                window.location.href = '/wallet.html';
+            success: function() {
+
+                contenedorMensaje.classList.forEach(clase => {
+                    if (/^bg-/.test(clase)) {
+                        contenedorMensaje.classList.remove(clase);
+                    }
+                });
+                contenedorMensaje.classList.add("bg-success");
+                mensaje.textContent = "Enhorabuena!";
+                menajeDetallado.textContent = "Intercambio realizado correctamente.";
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
+                botonCerrar.addEventListener("click", function () {
+                    window.location.href = '/wallet.html'
+                });
             },
             error: function(xhr, status, error) {
                 console.log('Error:', error);
                 console.log('Estado de la respuesta:', status);
                 console.log('Detalles de la respuesta:', xhr.responseText);
-                let errorMessage = xhr.responseText || 'Hubo un error al agregar saldo.';
-                $("#intercamb").prop('disabled', false);
-                alert(`Error: ${errorMessage}`);
+
+                contenedorMensaje.classList.forEach(clase => {
+                    if (/^bg-/.test(clase)) {
+                        contenedorMensaje.classList.remove(clase);
+                    }
+                });
+                contenedorMensaje.classList.add("bg-danger");
+                mensaje.textContent = "Error";
+                menajeDetallado.textContent = "Hubo un error al intercambiar criptomonedas, comprueba la cantidad que quieres intercambiar.";
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
             }
         });
     });
