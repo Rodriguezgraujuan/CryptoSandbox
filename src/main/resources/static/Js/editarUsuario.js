@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    const perfilModal = new bootstrap.Modal(document.getElementById('perfilModal'));
+    const header = document.getElementById("headerModal");
+    const title = document.getElementById("titleModal");
+    const text = document.getElementById("textModal");
     $("#editProfileForm").on("submit", function (event) {
         event.preventDefault(); // Evita el envío del formulario tradicional
         $("#editButton").attr("disabled", true);
@@ -9,7 +13,11 @@ $(document).ready(function () {
         const confirmPassword = $("#confirm-password").val().trim();
 
         if (username === "" || email === "") {
-            alert("Por favor, complete todos los campos obligatorios.");
+            deleteBG(header);
+            header.classList.add("bg-warning")
+            title.innerHTML = "Aviso"
+            text.innerHTML = "Por favor, rellene todos los campos obligatorios."
+            perfilModal.show()
             $("#editButton").attr("disabled", false);
             return;
         }
@@ -37,16 +45,34 @@ $(document).ready(function () {
                 contentType: "application/json",
                 data: JSON.stringify(usuario),
                 success: function (response) {
-                    alert("Perfil actualizado correctamente");
+                    deleteBG(header);
+                    header.classList.add("bg-success")
+                    title.innerHTML = "Usuario editado con exito"
+                    text.innerHTML = "El usuario ha sido editado con exito."
+                    perfilModal.show();
                     console.log("Perfil actualizado:", {username, email, password});
-                    window.location.href = "/logout";
+                    setTimeout(function() {
+                        window.location.href = "/logout"
+                    }, 2000);
                 },
                 error: function (xhr, status, error) {
-                    alert("Error al actualizar el perfil");
+                    deleteBG(header);
+                    header.classList.add("bg-danger")
+                    title.innerHTML = "Error"
+                    text.innerHTML = "Error al actualizar el perfil, intentelo de nuevo mas tarde"
+                    if (xhr.responseText){
+                        text.innerHTML = "Correo en uso"
+                    }
+                    perfilModal.show()
+                    $("#editButton").attr("disabled", false);
                 }
             })
         }else{
-            alert("Contraseña invalida")
+            deleteBG(header);
+            header.classList.add("bg-warning")
+            title.innerHTML = "Aviso"
+            text.innerHTML = "Contraseña invalida, recuerda que debe contener al menos 8 caracteres, una mayuscula y una minuscula."
+            perfilModal.show()
             $("#editButton").attr("disabled", false);
         }
 
@@ -69,5 +95,13 @@ $(document).ready(function () {
     function validarContrasena(contrasena) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return regex.test(contrasena);
+    }
+
+    function deleteBG(header){
+        header.classList.forEach(clase => {
+            if (clase.startsWith("bg-")) {
+                header.classList.remove(clase);
+            }
+        })
     }
 });

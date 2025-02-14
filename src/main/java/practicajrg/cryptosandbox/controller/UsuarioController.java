@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.*;
 import practicajrg.cryptosandbox.entities.*;
 
+import javax.security.auth.login.CredentialException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -116,7 +117,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/editProfile")
-    public void editProfile(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> editProfile(@RequestBody Usuario usuario) throws CredentialException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Usuario loggedUser;
         if (authentication.getPrincipal() instanceof OAuth2User) {
@@ -124,10 +125,18 @@ public class UsuarioController {
         }else {
             loggedUser=userService.findByUsername(authentication.getName());
         }
+        if (!loggedUser.getEmail().equals(usuario.getEmail())) {
+            for (Usuario usu : userService.findAll()) {
+                if (usu.getEmail().equals(usuario.getEmail()) && !(usu == loggedUser)) {
+                    throw new CredentialException("El correo ya está registrado");
+                }
+            }
+        }
         loggedUser.setUsername(usuario.getUsername());
         loggedUser.setEmail(usuario.getEmail());
         loggedUser.setPassword(passwordEncoder.encode(usuario.getPassword()));
         userService.saveUser(loggedUser);
+        return ResponseEntity.ok("Usuario registrado con éxito");
     }
 
 
