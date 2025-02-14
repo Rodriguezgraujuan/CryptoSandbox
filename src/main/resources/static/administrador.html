@@ -164,7 +164,22 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-dark">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-black">
+                    Error al recibir registros
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Footer -->
     <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
         <!-- Section: Links  -->
@@ -247,7 +262,7 @@
         <!-- Copyright -->
     </footer>
     <!-- Script para el grafico de V/C/I y G/P -->
-    
+
     <!-- Script para el buscador Usuarios -->
     <script>
         let users = [
@@ -311,6 +326,7 @@
 
     </script>
     <script>
+        let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
         let reportes = [];
 
         getReportes();
@@ -322,7 +338,7 @@
                 reportes = data;
                 renderReportes();
             }).fail((error) => {
-                alert("Error al obtener reportes: " + error);
+                errorModal.show()
             });
         }
 
