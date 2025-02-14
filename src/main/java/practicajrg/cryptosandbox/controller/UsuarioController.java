@@ -16,10 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin("*")
 public class UsuarioController {
+
+    private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+    private static final Pattern pattern = Pattern.compile(PASSWORD_REGEX);
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
@@ -47,7 +51,8 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<String> userInfo;
         if (authentication.getPrincipal() instanceof OAuth2User) {
-            userInfo = new ArrayList<>(Arrays.asList(((OAuth2User) authentication.getPrincipal()).getAttribute("name"), ((OAuth2User) authentication.getPrincipal()).getAttribute("email")));
+            Usuario usuario = userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
+            userInfo = new ArrayList<>(Arrays.asList(usuario.getUsername(), usuario.getEmail()));
         }else {
             userInfo = new ArrayList<>(Arrays.asList(userService.findByUsername(authentication.getName()).getUsername(), userService.findByUsername(authentication.getName()).getEmail()));
         }
@@ -64,26 +69,29 @@ public class UsuarioController {
         }else{
             try {
                 user.setRol("USER");
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                if (user.getEmail().equals("juan@gmail.com")||user.getEmail().equals("admin@gmail.com")) {
-                    user.setRol("ADMIN");
+                if (pattern.matcher(user.getPassword()).matches()) {
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    if (user.getEmail().equals("juan@gmail.com") || user.getEmail().equals("admin@gmail.com")) {
+                        user.setRol("ADMIN");
+                    }
+                    userService.saveUser(user);
+
+                    Wallet wallet = new Wallet();
+                    wallet.setUser(user);
+                    wallet.setBalance(100000);
+                    walletService.saveWallet(wallet);
+
+                    for (Crypto crypto : cryptoService.findAll()) {
+                        Wallet_Crypto wallet_crypto = new Wallet_Crypto();
+                        wallet_crypto.setWallet(wallet);
+                        wallet_crypto.setCrypto(crypto);
+                        wallet_crypto.setQuantity(0);
+                        walletCryptoService.saveWallet_Crypto(wallet_crypto);
+                    }
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
+                }else {
+                    return ResponseEntity.badRequest().body("Contraseña invalida");
                 }
-                userService.saveUser(user);
-
-                Wallet wallet = new Wallet();
-                wallet.setUser(user);
-                wallet.setBalance(100000);
-                walletService.saveWallet(wallet);
-
-                for (Crypto crypto : cryptoService.findAll()) {
-                    Wallet_Crypto wallet_crypto = new Wallet_Crypto();
-                    wallet_crypto.setWallet(wallet);
-                    wallet_crypto.setCrypto(crypto);
-                    wallet_crypto.setQuantity(0);
-                    walletCryptoService.saveWallet_Crypto(wallet_crypto);
-                }
-
-                return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el usuario");
             }
@@ -110,7 +118,12 @@ public class UsuarioController {
     @PostMapping("/editProfile")
     public void editProfile(@RequestBody Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Usuario loggedUser = userService.findByUsername(authentication.getName());
+        Usuario loggedUser;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            loggedUser=userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
+        }else {
+            loggedUser=userService.findByUsername(authentication.getName());
+        }
         loggedUser.setUsername(usuario.getUsername());
         loggedUser.setEmail(usuario.getEmail());
         loggedUser.setPassword(passwordEncoder.encode(usuario.getPassword()));

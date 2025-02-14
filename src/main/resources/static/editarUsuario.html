@@ -36,6 +36,9 @@
                         <li class="nav-item"><a class="nav-link" href="usuario.html">Perfil</a></li>
                         <li class="nav-item"><a class="nav-link" href="#" id="toggle-theme">Modo Claro</a></li>
                         <li class="navbar-toggler"><a class="nav-link" href="wallet.html">Wallet</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tutorial.html">Tutoriales</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav flex-row flex-wrap text-light">
                         <li class="nav-item col-6 col-md-auto p-3">
@@ -71,7 +74,7 @@
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Nueva Contraseña</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Dejar en blanco si no desea cambiar">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Introduzca la nueva contraseña">
                                 <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password">
                                     <i class="bi bi-eye"></i>
                                 </button>
@@ -87,12 +90,13 @@
                             </div>
                             <small id="password-error" class="text-danger d-none">Las contraseñas no coinciden</small>
                         </div>
-                        <button type="submit" class="btn btn-warning w-100">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-warning w-100" id="editButton">Guardar Cambios</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1 mt-auto">

@@ -54,6 +54,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="toggle-theme">Modo Claro</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tutorial.html">Tutoriales</a>
+                        </li>
 
                         <li class="navbar-toggler">
                             <a class="nav-link" href="wallet.html">Wallet</a>
@@ -122,6 +125,23 @@
             </div>
         </div>
     </div>
+       <!-- Modal de error (por si falla la solicitud) -->
+       <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+           <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header bg-danger text-white" id="conenedor-mensaje">
+                       <h5 class="modal-title" id="mensaje">Error</h5>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                   </div>
+                   <div class="modal-body text-black">
+                       <p id="menaje-detallado">Error de conexion.</p>
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrar">Cerrar</button>
+                   </div>
+               </div>
+           </div>
+       </div>
 
      <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted py-1">
@@ -200,6 +220,11 @@
     <!-- Copyright -->
 </footer>
 <script>
+    let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    let mensaje = document.getElementById("mensaje");
+    let contenedorMensaje = document.getElementById("conenedor-mensaje");
+    let menajeDetallado = document.getElementById("menaje-detallado");
+
     $('#formReporte').on('submit', function(e){
         e.preventDefault();
         let texto = $('#textoReporte').val();
@@ -214,9 +239,17 @@
             contentType: 'application/json', // Tipo de contenido
             data: JSON.stringify(reporte), // Convertimos el objeto a JSON
 
-            success: function(response) {
-                console.log('Reporte enviado correctamente', response);
-                alert('¡Reporte enviado!')
+            success: function() {
+                contenedorMensaje.classList.forEach(clase => {
+                    if (/^bg-/.test(clase)) {
+                        contenedorMensaje.classList.remove(clase);
+                    }
+                });
+                contenedorMensaje.classList.add("bg-success");
+                mensaje.textContent = "Enhorabuena!";
+                menajeDetallado.textContent = "Reporte enviado correctamente.";
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
             }
         });
     });

@@ -53,6 +53,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="toggle-theme">Modo Claro</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tutorial.html">Tutoriales</a>
+                        </li>
 
                         <li class="navbar-toggler">
                             <a class="nav-link" href="wallet.html">Wallet</a>
@@ -135,6 +138,24 @@
                 <div id="chart-container" style="width: 100%; height: 400px;">
                     <script src="https://fastly.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
                     <script src="char/Grafico.js"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de error (por si falla la solicitud) -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white" id="conenedor-mensaje">
+                    <h5 class="modal-title" id="mensaje">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-black">
+                    <p id="menaje-detallado">Error de conexion.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrar">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -224,8 +245,14 @@
 
     <!-- Script to Handle Crypto Selection -->
     <script>
+        let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        let mensaje = document.getElementById("mensaje");
+        let contenedorMensaje = document.getElementById("conenedor-mensaje");
+        let menajeDetallado = document.getElementById("menaje-detallado");
+        let botonCerrar = document.getElementById("cerrar");
         let selectedCurrency = null;
         let selectedSymbol = null;
+        let quanti=null;
         $(document).ready(function () {
             let cryptoData = {};
             let cryptoQuantity;
@@ -244,7 +271,10 @@
                 }, {});
             }).done((data) => {
                 renderCryptos(data);
-            }).fail((error) => alert("Error al obtener criptomonedas: " + error.responseText));
+            }).fail(function (xhr, status, error) {
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
+            });
 
             // Manejador de selección de criptomoneda
             $(document).on("click", "#crypto-list li", function () {
@@ -255,13 +285,13 @@
                     selectedSymbol = data.symbol;
                     cogersymobolo(selectedSymbol);
                     console.log(selectedSymbol)
-                }).fail((error) =>
-                    alert("Error al obtener datos de la criptomoneda: " + error.responseText)
-                );
+                }).fail(function (xhr, status, error) {
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
+                });
                 console.log(cryptoQuantity)
                 for (let cry of cryptoQuantity){
                     if (cry.crypto.name === selectedCurrency){
-                        console.log(cry.quantity)
                         $("#quantity-crypto").text(`Tienes: ${Math.round(cry.quantity*100)/100}`).addClass("text-warning");
                     }
                 }
@@ -274,7 +304,16 @@
                     $("#comprar-inputs").show();
                     $("#vender-inputs").hide();
                 } else {
-                    alert("Por favor, selecciona una criptomoneda antes de comprar.");
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-warning");
+                    mensaje.textContent = "Recuerda";
+                    menajeDetallado.textContent = "Selecciona una criptomoneda para comprar";
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
                 }
             });
 
@@ -283,7 +322,16 @@
                     $("#vender-inputs").show();
                     $("#comprar-inputs").hide();
                 } else {
-                    alert("Por favor, selecciona una criptomoneda antes de vender.");
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-warning");
+                    mensaje.textContent = "Recuerda";
+                    menajeDetallado.textContent = "Selecciona una criptomoneda para vender";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
                 }
             });
 
@@ -292,6 +340,7 @@
                 let money = parseFloat($(this).val());
                 if (money && selectedCurrency) {
                     let cryptoAmount = (money / cryptoData[selectedCurrency]).toFixed(4);
+                    quanti=cryptoAmount
                     $("#comprar-result").text(`Puedes comprar ${cryptoAmount} ${selectedCurrency}`);
                 } else {
                     $("#comprar-result").text("");
@@ -311,7 +360,7 @@
             $("#comprar-confirm").click(() => {
                 let money = parseFloat($("#comprar-amount").val());
                 if (!money || money <= 0 || !selectedCurrency) {
-                    alert("Por favor ingresa una cantidad válida de dinero y selecciona una criptomoneda.");
+
                     return;
                 }
                 let cryptoAmount = (money / cryptoData[selectedCurrency]).toFixed(4);
@@ -327,7 +376,7 @@
         $('#comprar-inputs').on('submit', function(e) {
             e.preventDefault();
             $("#comprar-confirm").prop('disabled', true);
-            $("#vender-inputs").prop('disabled', true);
+            $("#vender-confirm").prop('disabled', true);
             console.log("Dentro de compras")
             console.log(selectedCurrency)
             let cryptoAmount = $("#comprar-amount").val();
@@ -337,32 +386,66 @@
                 amount: cryptoAmount,
                 operation: "Compra",
             };
+            console.log(quanti)
+            if (quanti>=0.01) {
+                $.ajax({
+                    url: '/createTransaction', // URL de tu API
+                    type: 'POST',
+                    contentType: 'application/json', // Tipo de contenido
+                    data: JSON.stringify(transaction), // Convertimos el objeto a JSON
 
-            $.ajax({
-                url: '/createTransaction', // URL de tu API
-                type: 'POST',
-                contentType: 'application/json', // Tipo de contenido
-                data: JSON.stringify(transaction), // Convertimos el objeto a JSON
+                    success: function (response) {
+                        console.log('Crypto Comprada correctamente', response);
+                        contenedorMensaje.classList.forEach(clase => {
+                            if (/^bg-/.test(clase)) {
+                                contenedorMensaje.classList.remove(clase);
+                            }
+                        });
+                        contenedorMensaje.classList.add("bg-success");
+                        mensaje.textContent = "Enhorabuena!";
+                        menajeDetallado.textContent = "Criptomoneda Comprada correctamente.";
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
+                        botonCerrar.addEventListener("click",function (){
+                            window.location.href = '/wallet.html'
+                        });},
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                        console.log('Estado de la respuesta:', status);
+                        console.log('Detalles de la respuesta:', xhr.responseText);
 
-                success: function(response) {
-                    console.log('Crypto Comprada correctamente', response);
-                    alert('¡Crypto Comprada correctamente!');
-                    window.location.href = '/wallet.html';
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error);
-                    console.log('Estado de la respuesta:', status);
-                    console.log('Detalles de la respuesta:', xhr.responseText);
-                    let errorMessage = xhr.responseText || 'Hubo un error al comprar la crypto.';
-                    alert(`Error: ${errorMessage}`);
-                }
-            });
+                        contenedorMensaje.classList.forEach(clase => {
+                            if (/^bg-/.test(clase)) {
+                                contenedorMensaje.classList.remove(clase);
+                            }
+                        });
+                        contenedorMensaje.classList.add("bg-danger");
+                        mensaje.textContent = "Error";
+                        menajeDetallado.textContent = "Hubo un error al comprar la crypto.";
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
+                    }
+                });
+            }else {
+                contenedorMensaje.classList.forEach(clase => {
+                    if (/^bg-/.test(clase)) {
+                        contenedorMensaje.classList.remove(clase);
+                    }
+                });
+                contenedorMensaje.classList.add("bg-warning");
+                mensaje.textContent = "Recuerda";
+                menajeDetallado.textContent = "Por favor ingresa una cantidad válida de dinero, minimo tienes que ganar 0,01 criptomonedas.";
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
+                $("#comprar-confirm").prop('disabled', false);
+                $("#vender-confirm").prop('disabled', false);
+            }
         });
 
         $('#vender-inputs').on('submit', function(e) {
             e.preventDefault();
             $("#comprar-confirm").prop('disabled', true);
-            $("#vender-inputs").prop('disabled', true);
+            $("#vender-confirm").prop('disabled', true);
             console.log("Dentro de ventas")
             console.log(selectedCurrency)
             let quantity = $("#vender-amount").val();
@@ -380,16 +463,30 @@
                 data: JSON.stringify(transaction), // Convertimos el objeto a JSON
 
                 success: function(response) {
-                    console.log('Crypto Comprada correctamente', response);
-                    alert('¡Crypto vendida correctamente!');
-                    window.location.href = '/wallet.html';
+                    console.log('Crypto comprada correctamente', response);
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-success");
+                    mensaje.textContent = "Enhorabuena!";
+                    menajeDetallado.textContent = "Criptomoneda comprada correctamente.";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
+                    botonCerrar.addEventListener("click",function (){
+                        window.location.href = '/wallet.html'
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
                     console.log('Estado de la respuesta:', status);
                     console.log('Detalles de la respuesta:', xhr.responseText);
-                    let errorMessage = xhr.responseText || 'Hubo un error al comprar la crypto.';
-                    alert(`Error: ${errorMessage}`);
+
+                    mensaje.textContent = "Error";
+                    menajeDetallado.textContent = "Hubo un error al comprar la crypto.";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
                 }
             });
         });
