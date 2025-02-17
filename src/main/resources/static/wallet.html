@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="Css/headerFooterBody.css">
     <link rel="stylesheet" href="char/char.css">
+    <link rel="stylesheet" href="Css/home.css">
     <script src="Js/carrusel.js"></script>
     <script src="Js/SetColor.js"></script>
     <script src="Js/renderTransactions.js"></script>
@@ -104,6 +105,12 @@
         <!-- Sidebar de Criptos -->
         <aside class="col-md-3 p-3">
             <h4>Registro de Movimientos</h4>
+            <select name="filtro" id="filtro" class="btn btn-primary">
+                <option value="all">Todos</option>
+                <option value="Compra">Compras</option>
+                <option value="Venta">Ventas</option>
+                <option value="Intercambio">Intercambios</option>
+            </select>
             <div class="scroll-div">
                 <ul class="list-group" id="listed-transactions">
 
@@ -115,9 +122,11 @@
         <!-- Panel de Compra/Venta -->
         <aside class="col-md-3 p-3">
                     <h4>Tus criptomonedas</h4>
+            <div class="scroll-div">
                     <ul class="list-group" id="your-crypto-list">
 
                     </ul>
+            </div>
         </aside>
 
 

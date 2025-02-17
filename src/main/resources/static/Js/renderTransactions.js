@@ -10,6 +10,11 @@ $(document).ready(function () {
                 const jsonData = JSON.parse(data);
                 console.log("JSON parseado:", jsonData);
                 renderTransaction(jsonData)
+                $("#filtro").change(function () {
+                    const filtro = $(this).val();
+                    const filteredData = filterTransactions(filtro, jsonData);
+                    renderTransaction(filteredData);
+                });
             } catch (e) {
                 console.error("Error al parsear JSON:", e);
             }
@@ -18,6 +23,12 @@ $(document).ready(function () {
             console.error("Error en la solicitud:", jqXHR.responseText);
         });
 })
+function filterTransactions(filtro, transactions) {
+    if (filtro === "all") {
+        return transactions; // Si es "Todos", no filtramos nada
+    }
+    return transactions.filter(transaction => transaction.operation === filtro);
+}
 
 function renderTransaction(transactions) {
     let backgroundColor = document.body.style.backgroundColor;
