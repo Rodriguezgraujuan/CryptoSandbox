@@ -62,7 +62,12 @@ public class WebSecurity {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            request.getSession().invalidate(); // Invalidar la sesión manualmente
+                            response.sendRedirect("/login?logout");
+                        })
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -156,6 +161,8 @@ public class WebSecurity {
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
         return (request, response, authentication) -> {
+            CustomUserDetailsService.resetContador();
+
             String redirectUrl = "/Home.html";
             if (AuthorityUtils.authorityListToSet(authentication.getAuthorities()).contains("ROLE_ADMIN")) {
                 redirectUrl = "/administrador.html";

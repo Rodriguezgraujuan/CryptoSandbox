@@ -38,4 +38,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
+    public static void resetContador() {
+        contador = 0;
+    }
+
 }
