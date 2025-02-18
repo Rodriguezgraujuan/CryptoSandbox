@@ -23,7 +23,10 @@ jobs:
 
       # 3️⃣ Construir la aplicación usando Maven
       - name: Build with Maven          # Nombre del paso.
-        run: mvn clean package          # Construir proyecto, generando .war.
+        run: mvn -X clean package          # Construir proyecto, generando .war.
+
+      - name: Listar contenido de target
+        run: ls -lh target/
 
       # 4️⃣ Copiar el archivo .war a la instancia EC2
       - name: Copy .war to EC2          # Nombre del paso.
