@@ -3,7 +3,7 @@ name: Deploy Spring Boot to EC2 (Ubuntu)  # Nombre del workflow
 on:
   push:                                 # Workflow activa cuando se hace push.
     branches:
-      - main                            # Solo se ejecuta si push en rama main
+      - master                            # Solo se ejecuta si push en rama main
 
 jobs:
   build-and-deploy:                     # Define trabajo llamado buildanddeploy
@@ -23,7 +23,10 @@ jobs:
 
       # 3️⃣ Construir la aplicación usando Maven
       - name: Build with Maven          # Nombre del paso.
-        run: mvn clean package          # Construir proyecto, generando .war.
+        run: mvn -X clean package          # Construir proyecto, generando .war.
+
+      - name: Listar contenido de target
+        run: ls -lh target/
 
       # 4️⃣ Copiar el archivo .war a la instancia EC2
       - name: Copy .war to EC2          # Nombre del paso.
@@ -32,7 +35,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}    # Dirección IP de la instancia EC2
           username: ${{ secrets.EC2_USERNAME }}  # Nombre usuario EC2
           key: ${{ secrets.EC2_PRIVATE_KEY }}    # Clave privada SSH
-          source: target/demo-0.0.1-SNAPSHOT.war  # Ruta del archivo .war
+          source: target/CryptoSandbox-0.0.1-SNAPSHOT.war  # Ruta del archivo .war
           target: /home/ubuntu/                   # Carpeta destino en EC2
           strip_components: 1                     # Elimina directorios
 
@@ -44,7 +47,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }} # Nombre de usuario de EC2
           key: ${{ secrets.EC2_PRIVATE_KEY }}   # Clave privada SSH
           script: |
-            sudo mv /home/ubuntu/demo-0.0.1-SNAPSHOT.war /var/lib/tomcat10/webapps/demo.war  
+            sudo mv /home/ubuntu/CryptoSandbox-0.0.1-SNAPSHOT.war /var/lib/tomcat10/webapps/demo.war  
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/demo.war  
             sudo chmod 755 /var/lib/tomcat10/webapps/demo.war 
             
