@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import practicajrg.cryptosandbox.Reposritory.UserRepository;
+import practicajrg.cryptosandbox.controller.UsuarioController;
 import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Usuario;
 import practicajrg.cryptosandbox.entities.Wallet;
@@ -63,18 +64,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             user.setRol("USER");
             userRepository.save(user);
 
-            Wallet wallet = new Wallet();
-            wallet.setUser(user);
-            wallet.setBalance(100000);
-            walletService.saveWallet(wallet);
-
-            for (Crypto crypto : cryptoService.findAll()) {
-                Wallet_Crypto wallet_crypto = new Wallet_Crypto();
-                wallet_crypto.setWallet(wallet);
-                wallet_crypto.setCrypto(crypto);
-                wallet_crypto.setQuantity(0);
-                walletCryptoService.saveWallet_Crypto(wallet_crypto);
-            }
+            UsuarioController.setWalletUsuarios(user, walletService, cryptoService, walletCryptoService);
         }
 
         return new DefaultOAuth2User(
