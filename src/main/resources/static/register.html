@@ -302,7 +302,18 @@
         let userData = { username, email, password };
         if (validarContrasena($("#password").val())) {
             if ($("#terms").is(":checked")) {
-
+                $.ajax({
+                    url: '/correo/enviar',
+                    type: 'POST',
+                    data: {
+                        destinatario: $("#email").val()
+                    },
+                    success: function(response) {
+                        console.log("✅ " + response);
+                    },
+                    error: function(xhr, status, error) {
+                    }
+                });
                 $.ajax({
                     url: '/register',
                     type: 'POST',
@@ -316,18 +327,6 @@
                             text.textContent = "El usuario ha sido creado con exito."
                             errorModal.show();
                         }
-                        $.ajax({
-                            url: '/correo/enviar',
-                            type: 'POST',
-                            data: {
-                                destinatario: $("#email").val()
-                            },
-                            success: function(response) {
-                                console.log("✅ " + response);
-                            },
-                            error: function(xhr, status, error) {
-                            }
-                        });
                         window.location.href = '/login';
                     },
                     error: function (xhr, status, error) {
