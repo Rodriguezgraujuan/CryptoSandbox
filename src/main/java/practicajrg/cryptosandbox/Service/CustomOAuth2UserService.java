@@ -1,8 +1,10 @@
 package practicajrg.cryptosandbox.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -10,7 +12,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import practicajrg.cryptosandbox.Reposritory.UserRepository;
+import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Usuario;
+import practicajrg.cryptosandbox.entities.Wallet;
+import practicajrg.cryptosandbox.entities.Wallet_Crypto;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -20,8 +25,20 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private WalletService walletService;
+    @Autowired
+    private CryptoService cryptoService;
+    @Autowired
+    private Wallet_CryptoService walletCryptoService;
 
     private final OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomOAuth2UserService(@Lazy PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest){
@@ -39,14 +56,30 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             user = new Usuario();
             user.setEmail(email);
             user.setUsername(oAuth2User.getAttribute("name"));
-            user.setPassword("1");  // O cualquier otra lógica
+            if (user.getUsername()==null){
+                user.setUsername(oAuth2User.getAttribute("login"));
+            }
+            user.setPassword(passwordEncoder.encode("1"));  // O cualquier otra lógica
+            user.setRol("USER");
             userRepository.save(user);
+
+            Wallet wallet = new Wallet();
+            wallet.setUser(user);
+            wallet.setBalance(100000);
+            walletService.saveWallet(wallet);
+
+            for (Crypto crypto : cryptoService.findAll()) {
+                Wallet_Crypto wallet_crypto = new Wallet_Crypto();
+                wallet_crypto.setWallet(wallet);
+                wallet_crypto.setCrypto(crypto);
+                wallet_crypto.setQuantity(0);
+                walletCryptoService.saveWallet_Crypto(wallet_crypto);
+            }
         }
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                oAuth2User.getAttributes(),
-                "name"
+                oAuth2User.getAttributes(), "email"
         );
     }
 }

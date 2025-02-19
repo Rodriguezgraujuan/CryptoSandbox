@@ -121,7 +121,7 @@
       color: #2d79f3;
     }
 
-    .google-login-btn {
+    .login-btn {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -136,12 +136,12 @@
       margin-top: 20px;
     }
 
-    .google-login-btn:hover {
+    .login-btn:hover {
       background-color: lightgray;
       color: black;
     }
 
-    .google-login-btn img {
+    .login-btn img {
       width: 20px;
     }
   </style>
@@ -221,9 +221,15 @@
 
     <!-- Botón de Google -->
     <div class="oauth-buttons">
-      <a href="/oauth2/authorization/google" class="google-login-btn">
+      <a href="/oauth2/authorization/google" class="login-btn">
         <img src="/images/google.png" alt="Google Logo" style="width: 20px; margin-right: 10px">
         Iniciar sesión con Google
+      </a>
+    </div>
+    <div class="oauth-buttons">
+      <a href="/oauth2/authorization/github" class="login-btn">
+        <img src="/images/github.png" alt="Github Logo" style="width: 20px; margin-right: 10px">
+        Iniciar sesión con Github
       </a>
     </div>
   </div>
