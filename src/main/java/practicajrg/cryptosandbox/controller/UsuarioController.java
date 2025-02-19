@@ -3,6 +3,7 @@ package practicajrg.cryptosandbox.controller;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,14 +31,17 @@ public class UsuarioController {
     private final CryptoService cryptoService;
     private final Wallet_CryptoService walletCryptoService;
     private final ReportesService reportesService;
+    private final EmailService emailService;
 
-    public UsuarioController(PasswordEncoder passwordEncoder, UserService userService, WalletService walletService, CryptoService cryptoService, Wallet_CryptoService walletCryptoService, ReportesService reportesService) {
+
+    public UsuarioController(PasswordEncoder passwordEncoder, UserService userService, WalletService walletService, CryptoService cryptoService, Wallet_CryptoService walletCryptoService, ReportesService reportesService, EmailService emailService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.walletService = walletService;
         this.cryptoService = cryptoService;
         this.walletCryptoService = walletCryptoService;
         this.reportesService = reportesService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/users")
@@ -76,6 +80,7 @@ public class UsuarioController {
                     userService.saveUser(user);
 
                     setWalletUsuarios(user, walletService, cryptoService, walletCryptoService);
+                    emailService.enviarCorreo(user.getEmail(), "¡Bienvenido!", "Hola, gracias por registrarte.");
                     return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
                 }else {
                     return ResponseEntity.badRequest().body("Contraseña invalida");
