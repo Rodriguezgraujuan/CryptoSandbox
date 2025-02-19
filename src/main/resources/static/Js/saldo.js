@@ -9,7 +9,7 @@ $(document).ready(function () {
             try {
                 const jsonData = JSON.parse(data);
                 console.log("JSON parseado:", jsonData);
-                $("#salary").text(`Tu saldo es: ${jsonData}`);
+                $("#salary").text(`Tu saldo es: ${Math.round(jsonData*100)/100}`);
             } catch (e) {
                 console.error("Error al parsear JSON:", e);
             }
