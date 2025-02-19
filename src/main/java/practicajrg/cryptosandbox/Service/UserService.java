@@ -22,9 +22,6 @@ public class UserService {
     public Usuario saveUser(Usuario user) {
         return userRepository.save(user);
     }
-    public Usuario findById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
     public List<Usuario> findAll() {
         return userRepository.findAll();
     }

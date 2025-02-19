@@ -2,10 +2,7 @@ package practicajrg.cryptosandbox.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import practicajrg.cryptosandbox.Reposritory.UserRepository;
 import practicajrg.cryptosandbox.Reposritory.Wallet_CryptoRepository;
-import practicajrg.cryptosandbox.entities.Transaction;
-import practicajrg.cryptosandbox.entities.Usuario;
 import practicajrg.cryptosandbox.entities.Wallet_Crypto;
 
 import java.util.List;
@@ -17,9 +14,6 @@ public class Wallet_CryptoService {
 
     public Wallet_Crypto saveWallet_Crypto(Wallet_Crypto walletCrypto) {
         return walletCryptoRepository.save(walletCrypto);
-    }
-    public Wallet_Crypto findById(Long id) {
-        return walletCryptoRepository.findById(id).orElse(null);
     }
     public List<Wallet_Crypto> findAll() {
         return walletCryptoRepository.findAll();

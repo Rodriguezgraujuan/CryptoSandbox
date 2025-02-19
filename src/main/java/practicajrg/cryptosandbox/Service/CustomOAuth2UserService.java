@@ -3,7 +3,6 @@ package practicajrg.cryptosandbox.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -13,13 +12,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import practicajrg.cryptosandbox.Reposritory.UserRepository;
 import practicajrg.cryptosandbox.controller.UsuarioController;
-import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Usuario;
-import practicajrg.cryptosandbox.entities.Wallet;
-import practicajrg.cryptosandbox.entities.Wallet_Crypto;
-
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -49,10 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Usuario usuario = userRepository.findByEmail(email);
 
         Usuario user;
-        if (usuario!=null) {
-            // Si el usuario existe en la base de datos, lo obtenemos
-            user = usuario;
-        } else {
+        if (usuario==null) {
             // Si el usuario no existe, creamos uno nuevo
             user = new Usuario();
             user.setEmail(email);

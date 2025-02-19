@@ -2,9 +2,7 @@ package practicajrg.cryptosandbox.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import practicajrg.cryptosandbox.Reposritory.CryptoRepository;
 import practicajrg.cryptosandbox.Reposritory.RegistroRepository;
-import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Registro;
 
 import java.util.List;
