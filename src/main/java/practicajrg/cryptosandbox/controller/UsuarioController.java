@@ -80,7 +80,7 @@ public class UsuarioController {
                     userService.saveUser(user);
 
                     setWalletUsuarios(user, walletService, cryptoService, walletCryptoService);
-                    emailService.enviarCorreo(user.getEmail(), "¡Bienvenido!", "Hola, gracias por registrarte.");
+                    emailService.enviarCorreo(user.getEmail(), "¡Bienvenido!", "Gracias por registrarte en CryptoSandbox.");
                     return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
                 }else {
                     return ResponseEntity.badRequest().body("Contraseña invalida");
