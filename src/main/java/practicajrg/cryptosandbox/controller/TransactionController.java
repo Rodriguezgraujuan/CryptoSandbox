@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.ui.Model;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.*;
 import practicajrg.cryptosandbox.Service.*;
 import practicajrg.cryptosandbox.entities.*;
@@ -22,14 +20,12 @@ public class TransactionController {
     private final CryptoService cryptoService;
     private final TransactionService transactionService;
     private final Wallet_CryptoService walletCryptoService;
-    private final WalletService walletService;
     private final UserService userService;
 
-    public TransactionController(CryptoService cryptoService, TransactionService transactionService, Wallet_CryptoService walletCryptoService, WalletService walletService, UserService userService) {
+    public TransactionController(CryptoService cryptoService, TransactionService transactionService, Wallet_CryptoService walletCryptoService, UserService userService) {
         this.cryptoService = cryptoService;
         this.transactionService = transactionService;
         this.walletCryptoService = walletCryptoService;
-        this.walletService = walletService;
         this.userService = userService;
     }
 
@@ -45,6 +41,11 @@ public class TransactionController {
     //La id es la id del wallet
     @GetMapping("/transactionUser")
     List<Transaction> transaction() {
+        Wallet wallet= userGetOauthWallet(userService);
+        return wallet.getTransactions().stream().toList();
+    }
+
+    static Wallet userGetOauthWallet(UserService userService) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username;
         if (authentication.getPrincipal() instanceof OAuth2User) {
@@ -52,8 +53,7 @@ public class TransactionController {
         }else {
             username=authentication.getName();
         }
-        Wallet wallet = userService.findByUsername(username).getWallet();
-        return wallet.getTransactions().stream().toList();
+        return userService.findByUsername(username).getWallet();
     }
 
     @PostMapping("/createTransaction")
@@ -101,8 +101,6 @@ public class TransactionController {
                     transaction.setQuantity(transaction.getAmount() / crypto.getValue());
                     resultado += transaction.getWallet().getBalance()-transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue();
                     walletCrypto.setQuantity(Math.round((walletCrypto.getQuantity()+transaction.getQuantity())*100.0)/100.0);
-                        walletCryptoService.saveWallet_Crypto(walletCrypto);
-                    transaction.getWallet().setBalance(resultado);
                 } else {
                     transaction.setAmount((transaction.getQuantity() * crypto.getValue())*0.95);
                     resultado += transaction.getWallet().getBalance()+(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue())*0.95;
@@ -111,9 +109,9 @@ public class TransactionController {
                     }else{
                         throw new IllegalArgumentException("Cantidad insuficiente de criptomonedas para la venta");
                     }
-                    walletCryptoService.saveWallet_Crypto(walletCrypto);
-                    transaction.getWallet().setBalance(resultado);
                 }
+                walletCryptoService.saveWallet_Crypto(walletCrypto);
+                transaction.getWallet().setBalance(resultado);
                 transaction.setAmount(transaction.getQuantity() * cryptoService.findByName(transaction.getCrypto_name()).getValue());
 
             } else {

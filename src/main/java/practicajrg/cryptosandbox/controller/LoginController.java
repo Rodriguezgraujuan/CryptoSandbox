@@ -4,9 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import practicajrg.cryptosandbox.Service.UserService;
-import practicajrg.cryptosandbox.entities.Usuario;
-
-import java.util.List;
 
 @Controller
 public class LoginController {

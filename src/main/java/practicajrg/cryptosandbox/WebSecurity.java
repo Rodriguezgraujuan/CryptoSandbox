@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import practicajrg.cryptosandbox.Reposritory.UserRepository;
 import practicajrg.cryptosandbox.Service.*;
+import practicajrg.cryptosandbox.controller.UsuarioController;
 import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Usuario;
 import practicajrg.cryptosandbox.entities.Wallet;
@@ -102,20 +103,9 @@ public class WebSecurity {
                     usuario.setRol("USER");
                 }
                 userRepository.save(usuario);
-                Wallet wallet = new Wallet();
-                wallet.setUser(usuario);
-                wallet.setBalance(100000);
-                walletService.saveWallet(wallet);
-
-                for (Crypto crypto : cryptoService.findAll()) {
-                    Wallet_Crypto wallet_crypto = new Wallet_Crypto();
-                    wallet_crypto.setWallet(wallet);
-                    wallet_crypto.setCrypto(crypto);
-                    wallet_crypto.setQuantity(0);
-                    wallet_CryptoService.saveWallet_Crypto(wallet_crypto);
-                }
+                UsuarioController.setWalletUsuarios(usuario, walletService, cryptoService, wallet_CryptoService);
             }
-            response.sendRedirect("/Home.html");
+            response.sendRedirect("/home.html");
         };
     }
 
@@ -163,7 +153,7 @@ public class WebSecurity {
         return (request, response, authentication) -> {
             CustomUserDetailsService.resetContador();
 
-            String redirectUrl = "/Home.html";
+            String redirectUrl = "/home.html";
             if (AuthorityUtils.authorityListToSet(authentication.getAuthorities()).contains("ROLE_ADMIN")) {
                 redirectUrl = "/administrador.html";
             }

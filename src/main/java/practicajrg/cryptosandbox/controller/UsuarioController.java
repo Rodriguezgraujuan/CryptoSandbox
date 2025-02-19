@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -16,7 +15,6 @@ import javax.security.auth.login.CredentialException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @RestController
@@ -77,18 +75,7 @@ public class UsuarioController {
                     }
                     userService.saveUser(user);
 
-                    Wallet wallet = new Wallet();
-                    wallet.setUser(user);
-                    wallet.setBalance(100000);
-                    walletService.saveWallet(wallet);
-
-                    for (Crypto crypto : cryptoService.findAll()) {
-                        Wallet_Crypto wallet_crypto = new Wallet_Crypto();
-                        wallet_crypto.setWallet(wallet);
-                        wallet_crypto.setCrypto(crypto);
-                        wallet_crypto.setQuantity(0);
-                        walletCryptoService.saveWallet_Crypto(wallet_crypto);
-                    }
+                    setWalletUsuarios(user, walletService, cryptoService, walletCryptoService);
                     return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
                 }else {
                     return ResponseEntity.badRequest().body("Contraseña invalida");
@@ -99,6 +86,20 @@ public class UsuarioController {
         }
     }
 
+    public static void setWalletUsuarios(@RequestBody Usuario user, WalletService walletService, CryptoService cryptoService, Wallet_CryptoService walletCryptoService) {
+        Wallet wallet = new Wallet();
+        wallet.setUser(user);
+        wallet.setBalance(100000);
+        walletService.saveWallet(wallet);
+
+        for (Crypto crypto : cryptoService.findAll()) {
+            Wallet_Crypto wallet_crypto = new Wallet_Crypto();
+            wallet_crypto.setWallet(wallet);
+            wallet_crypto.setCrypto(crypto);
+            wallet_crypto.setQuantity(0);
+            walletCryptoService.saveWallet_Crypto(wallet_crypto);
+        }
+    }
 
 
     @PostMapping("/login")
@@ -159,7 +160,7 @@ public class UsuarioController {
         if (rep==null){
             rep=new ArrayList<>();
         }
-        return reportesService.findAll();
+        return rep;
     }
 
     @GetMapping("/deleteReporte/{id}")

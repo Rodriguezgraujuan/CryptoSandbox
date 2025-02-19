@@ -3,7 +3,6 @@ package practicajrg.cryptosandbox.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import practicajrg.cryptosandbox.Reposritory.ReportesRepository;
-import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Reporte;
 
 import java.util.List;
@@ -19,9 +18,6 @@ public class ReportesService {
 
     public Reporte saveReporte(Reporte reporte) {
         return reportesRepository.save(reporte);
-    }
-    public Reporte findById(Long id) {
-        return reportesRepository.findById(id).orElse(null);
     }
     public List<Reporte> findAll() {
         return reportesRepository.findAll();

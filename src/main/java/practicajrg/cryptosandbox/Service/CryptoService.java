@@ -1,6 +1,5 @@
 package practicajrg.cryptosandbox.Service;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import practicajrg.cryptosandbox.Reposritory.CryptoRepository;
 import practicajrg.cryptosandbox.Reposritory.RegistroRepository;
-import practicajrg.cryptosandbox.Reposritory.UserRepository;
 import practicajrg.cryptosandbox.entities.Crypto;
 import practicajrg.cryptosandbox.entities.Registro;
-import practicajrg.cryptosandbox.entities.Usuario;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -21,24 +18,17 @@ import java.util.*;
 
 @Service
 public class CryptoService {
-    private final String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=30&page=1&sparkline=false";
 
     @Autowired
     private CryptoRepository cryptoRepository;
     @Autowired
     private RegistroRepository registroRepository;
 
-    public Crypto saveCrypto(Crypto crypto) {
-        return cryptoRepository.save(crypto);
-    }
     public Crypto findById(Long id) {
         return cryptoRepository.findById(id).orElse(null);
     }
     public List<Crypto> findAll() {
         return cryptoRepository.findAll();
-    }
-    public void deleteById(Long id) {
-        cryptoRepository.deleteById(id);
     }
 
     public Crypto findByName(String name) {
@@ -48,6 +38,7 @@ public class CryptoService {
     @Scheduled(fixedRate=1800000)
     public void updateBD() {
 
+        String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=30&page=1&sparkline=false";
         if (cryptoRepository.findAll().isEmpty()) {
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<List> response = restTemplate.getForEntity(API_URL, List.class);

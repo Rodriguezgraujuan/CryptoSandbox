@@ -15,9 +15,6 @@ public class WalletService {
     public Wallet saveWallet(Wallet wallet) {
         return walletRepository.save(wallet);
     }
-    public Wallet findById(Long id) {
-        return walletRepository.findById(id).orElse(null);
-    }
     public List<Wallet> findAll() {
         return walletRepository.findAll();
     }
