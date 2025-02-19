@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
             el.style.color = "#ffffff";
         });
         document.querySelectorAll(".nav-link").forEach(el => {
-            el.style.color = "grey";
+            el.style.color = "white";
         });
         document.querySelectorAll("aside").forEach(el => {
             el.style.backgroundColor = "#121212";
