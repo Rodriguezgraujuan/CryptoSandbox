@@ -115,7 +115,7 @@ public class WebSecurity {
                     wallet_CryptoService.saveWallet_Crypto(wallet_crypto);
                 }
             }
-            response.sendRedirect("/Home.html");
+            response.sendRedirect("/home.html");
         };
     }
 
@@ -163,7 +163,7 @@ public class WebSecurity {
         return (request, response, authentication) -> {
             CustomUserDetailsService.resetContador();
 
-            String redirectUrl = "/Home.html";
+            String redirectUrl = "/home.html";
             if (AuthorityUtils.authorityListToSet(authentication.getAuthorities()).contains("ROLE_ADMIN")) {
                 redirectUrl = "/administrador.html";
             }
