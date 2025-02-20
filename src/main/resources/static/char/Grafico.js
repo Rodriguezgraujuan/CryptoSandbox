@@ -97,4 +97,4 @@ window.addEventListener('resize', myChart.resize);
 // Actualizar cada 15 segundos
 setInterval(() => {
   cogersymobolo('btc');
-}, 15000);
+}, 180000);
