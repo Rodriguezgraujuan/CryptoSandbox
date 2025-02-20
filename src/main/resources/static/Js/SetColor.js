@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
     const toggleThemeBtn = document.getElementById("toggle-theme");
     const body = document.body;
-    
+
     // Verificar si hay un tema guardado en el almacenamiento local
     if (localStorage.getItem("theme") === "dark") {
         setDarkMode();
     } else {
         setLightMode();
     }
-    
+
     toggleThemeBtn.addEventListener("click", function (e) {
         e.preventDefault();
         if (body.classList.contains("dark-mode")) {
@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("aside").forEach(el => {
             el.style.backgroundColor = "#121212";
         });
+        document.querySelectorAll(".quantity-crypto").forEach(el => {
+            el.style.color = "#ffc107";
+        });
         document.getElementById("navMenu").classList.remove("navbar-light");
         document.getElementById("navMenu").classList.add("navbar-dark");
 
@@ -59,10 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("aside").forEach(el => {
             el.style.backgroundColor = "white";
         });
+        document.querySelectorAll(".quantity-crypto").forEach(el => {
+            el.style.color = "#000000";
+        });
 
         document.getElementById("navMenu").classList.add("navbar-light");
         document.getElementById("navMenu").classList.remove("navbar-dark");
-        
+
         toggleThemeBtn.textContent = "Modo Oscuro";
         localStorage.setItem("theme", "light");
     }
