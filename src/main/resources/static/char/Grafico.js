@@ -2,8 +2,9 @@ let myChart = echarts.init(document.getElementById('chart-container'), null, {
   renderer: 'canvas',
   useDirtyRect: false
 });
-
+let simbolito = null;
 function cogersymobolo(symbolo) {
+  simbolito = symbolo;
   $.get(`/registro/${symbolo}`)
       .done((data) => {
         console.log("Datos recibidos:", data);
@@ -45,7 +46,7 @@ function actualizarGrafico(datos) {
 
   const opciones = {
     title: {
-      text: 'Historial de Precios de la Criptomoneda',
+      text: `Historial precios de la criptomoneda: ` + simbolito,
       left: 'center',
       textStyle: { color: '#ffffff' }
     },
