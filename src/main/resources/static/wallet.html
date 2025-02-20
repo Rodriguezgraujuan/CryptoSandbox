@@ -165,7 +165,7 @@
                 <h4>Recarga de euros</h4>
                 <form id="cashForm" class="form" method="post">
                     <label class="form-label">Cantidad de euros que quieres recargar:</label>
-                    <input type="number" id="inputCash" class="form-control mb-3" placeholder="Introduce la cantidad que quieres recargar" max="1000">
+                    <input type="number" id="inputCash" class="form-control mb-3" placeholder="Introduce la cantidad que quieres recargar">
                     <button type="submit" class="btn btn-primary">Confirmar</button>
                 </form>
             </div>
@@ -189,11 +189,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div id="videoModal">
-        <iframe id="videoFrame" width="560" height="315" allow="autoplay" class="border-0"></iframe>
-        <br>
-        <button id="cerrarModal" class="btn-close bg-none text-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
 
     <!-- Footer -->
@@ -297,7 +292,19 @@
                 data: JSON.stringify(wallet), // Convertimos el objeto a JSON
 
                 success: function () {
-                    obtenerVideoAnuncio();
+                    contenedorMensaje.classList.forEach(clase => {
+                        if (/^bg-/.test(clase)) {
+                            contenedorMensaje.classList.remove(clase);
+                        }
+                    });
+                    contenedorMensaje.classList.add("bg-success");
+                    mensaje.textContent = "Enhorabuena!";
+                    menajeDetallado.textContent = "Saldo agregado correctamente.";
+                    errorModal.show();
+                    $('#registerButton').prop('disabled', false);
+                    botonCerrar.addEventListener("click", function () {
+                        window.location.href = '/wallet.html'
+                    });
                 },
                 error: function (xhr, status, error) {
                     console.log('Error:', error);
@@ -331,67 +338,6 @@
         }
     });
 
-    function mostrarModal(videoURL) {
-        $("#videoFrame").attr("src", videoURL);
-        $("#videoModal").fadeIn();
-        $("#cerrarModal").prop('disabled', true)
-        setTimeout(()=>{
-            $("#cerrarModal").prop('disabled', false)
-        }, 5000);
-    }
-
-    $('#cerrarModal').on('click', function() {
-        $("#videoModal").fadeOut();
-        $('#videoFrame').attr('src', '');
-        contenedorMensaje.classList.forEach(clase => {
-            if (/^bg-/.test(clase)) {
-                contenedorMensaje.classList.remove(clase);
-            }
-        });
-        contenedorMensaje.classList.add("bg-success");
-        mensaje.textContent = "Enhorabuena!";
-        menajeDetallado.textContent = "Saldo agregado correctamente.";
-        errorModal.show();
-        $('#registerButton').prop('disabled', false);
-        botonCerrar.addEventListener("click", function () {
-            window.location.href = '/wallet.html'
-        });
-    });
-
-
-    /*$('#modal-bg').on('click', function() {
-        $('#modal, #modal-bg').fadeOut();
-        $('#video-frame').attr('src', '');
-    });
-
-     */
-
-    function obtenerVideoAnuncio() {
-        $.ajax({
-            url: "https://www.googleapis.com/youtube/v3/search",
-            method: "GET",
-            data: {
-                part: "snippet",
-                q: "anuncio publicidad",
-                maxResults: 5, // Obtiene un solo video
-                type: "video",
-                key: "AIzaSyBz7RRJqQUenmGeyPR2srlGixikLkpRahM"
-            },
-            success: function(data) {
-                console.log("Respuesta API:", data);
-                if (data.items && data.items.length > 0) {
-                    const videoId = data.items[Math.floor(Math.random()*5)].id.videoId;
-                    const videoURL = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0`;
-                    mostrarModal(videoURL);
-                } else {
-                    console.error("No se encontraron videos.");
-                }
-            },
-            error: function(error) {
-                console.error("Error al obtener el video:", error);
-            }
-        });
-    }
 </script>
 <script>
 
