@@ -13,3 +13,12 @@
 .btn-close {
     filter: invert(1); /* Invierte los colores */
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
