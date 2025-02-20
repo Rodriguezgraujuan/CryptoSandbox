@@ -20,9 +20,7 @@ aside ul li {
     color: white;
 }
 
-aside ul li:hover {
-    background-color: #cdaf50;
-}
+
 
 /* Additional Styles for Buy/Sell Inputs */
 .input-container {
