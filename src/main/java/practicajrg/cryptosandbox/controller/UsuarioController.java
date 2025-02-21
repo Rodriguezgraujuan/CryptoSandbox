@@ -163,7 +163,7 @@ public class UsuarioController {
         emailService.enviarCorreo(loggedUser.getEmail(), "¡Cuenta eliminada!", "Su cuenta de CryptoSandbox ha sido eliminada con éxito.");
         userService.deleteById(loggedUser.getId());
 
-        response.sendRedirect("/login");
+        response.sendRedirect("/logout");
     }
 
     @GetMapping("/delete/{id}")
