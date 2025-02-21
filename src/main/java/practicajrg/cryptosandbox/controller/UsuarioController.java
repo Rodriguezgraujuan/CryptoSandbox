@@ -150,8 +150,14 @@ public class UsuarioController {
     @GetMapping("/delete")
     public ResponseEntity<String> deleteUser() throws MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        emailService.enviarCorreo(userService.findByUsername(authentication.getName()).getEmail(), "¡Cuenta eliminada!", "Su cuenta de CryptoSandbox ha sido eliminada con exito.");
-        userService.deleteById(userService.findByUsername(authentication.getName()).getId());
+        Usuario loggedUser;
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            loggedUser=userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
+        }else {
+            loggedUser=userService.findByUsername(authentication.getName());
+        }
+        emailService.enviarCorreo(loggedUser.getEmail(), "¡Cuenta eliminada!", "Su cuenta de CryptoSandbox ha sido eliminada con exito.");
+        userService.deleteById(loggedUser.getId());
         return ResponseEntity.ok("Usuario eliminado correctamente");
     }
 
