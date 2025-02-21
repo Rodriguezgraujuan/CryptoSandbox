@@ -52,5 +52,6 @@ jobs:
             sudo mv /home/ubuntu/CryptoSandbox-0.0.1-SNAPSHOT.war /var/lib/tomcat10/webapps/ROOT.war  
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/ROOT.war  
             sudo chmod 755 /var/lib/tomcat10/webapps/ROOT.war 
-            echo "spring.mail.password=${{ secrets.SPRING_MAIL_PASSWORD }}" >> /home/ubuntu/application.properties
+            echo "export SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" | sudo tee -a /etc/profile
+            echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" | sudo tee -a /etc/environment
             sudo systemctl restart tomcat10
