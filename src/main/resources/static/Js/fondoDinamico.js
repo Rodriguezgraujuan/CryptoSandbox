@@ -63,6 +63,7 @@ var Stars = function(args) {
                 y: Math.random() * 10 - 5
             }
         }
+
         this.update = function() {
             this.vel.x *= 1;
             this.vel.y *= 1;
