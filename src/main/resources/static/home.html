@@ -454,40 +454,56 @@
                 quantity: quantity,
                 operation: "Venta",
             };
+            if (quantity>=0.01) {
+                $.ajax({
+                    url: '/createTransaction', // URL de tu API
+                    type: 'POST',
+                    contentType: 'application/json', // Tipo de contenido
+                    data: JSON.stringify(transaction), // Convertimos el objeto a JSON
 
-            $.ajax({
-                url: '/createTransaction', // URL de tu API
-                type: 'POST',
-                contentType: 'application/json', // Tipo de contenido
-                data: JSON.stringify(transaction), // Convertimos el objeto a JSON
+                    success: function (response) {
+                        console.log('Crypto comprada correctamente', response);
+                        contenedorMensaje.classList.forEach(clase => {
+                            if (/^bg-/.test(clase)) {
+                                contenedorMensaje.classList.remove(clase);
+                            }
+                        });
+                        contenedorMensaje.classList.add("bg-success");
+                        mensaje.textContent = "Enhorabuena!";
+                        menajeDetallado.textContent = "Criptomoneda comprada correctamente.";
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
+                        botonCerrar.addEventListener("click", function () {
+                            window.location.href = '/wallet.html'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                        console.log('Estado de la respuesta:', status);
+                        console.log('Detalles de la respuesta:', xhr.responseText);
 
-                success: function(response) {
-                    console.log('Crypto comprada correctamente', response);
-                    contenedorMensaje.classList.forEach(clase => {
-                        if (/^bg-/.test(clase)) {
-                            contenedorMensaje.classList.remove(clase);
-                        }
-                    });
-                    contenedorMensaje.classList.add("bg-success");
-                    mensaje.textContent = "Enhorabuena!";
-                    menajeDetallado.textContent = "Criptomoneda comprada correctamente.";
-                    errorModal.show();
-                    $('#registerButton').prop('disabled', false);
-                    botonCerrar.addEventListener("click",function (){
-                        window.location.href = '/wallet.html'
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error);
-                    console.log('Estado de la respuesta:', status);
-                    console.log('Detalles de la respuesta:', xhr.responseText);
-
-                    mensaje.textContent = "Error";
-                    menajeDetallado.textContent = "Hubo un error al comprar la crypto.";
-                    errorModal.show();
-                    $('#registerButton').prop('disabled', false);
-                }
-            });
+                        mensaje.textContent = "Error";
+                        menajeDetallado.textContent = "No tienes suficientes cryptos.";
+                        errorModal.show();
+                        $('#registerButton').prop('disabled', false);
+                        $("#comprar-confirm").prop('disabled', false);
+                        $("#vender-confirm").prop('disabled', false);
+                    }
+                });
+            }else{
+                contenedorMensaje.classList.forEach(clase => {
+                    if (/^bg-/.test(clase)) {
+                        contenedorMensaje.classList.remove(clase);
+                    }
+                });
+                contenedorMensaje.classList.add("bg-warning");
+                mensaje.textContent = "Recuerda";
+                menajeDetallado.textContent = "Por favor ingresa una cantidad válida de dinero, minimo tienes que ganar 0,01 criptomonedas.";
+                errorModal.show();
+                $('#registerButton').prop('disabled', false);
+                $("#comprar-confirm").prop('disabled', false);
+                $("#vender-confirm").prop('disabled', false);
+            }
         });
 
     </script>
