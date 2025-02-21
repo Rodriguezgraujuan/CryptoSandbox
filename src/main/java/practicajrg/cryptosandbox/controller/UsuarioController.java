@@ -1,6 +1,7 @@
 package practicajrg.cryptosandbox.controller;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import practicajrg.cryptosandbox.Service.*;
 import practicajrg.cryptosandbox.entities.*;
 
 import javax.security.auth.login.CredentialException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -148,17 +150,20 @@ public class UsuarioController {
 
 
     @GetMapping("/delete")
-    public ResponseEntity<String> deleteUser() throws MessagingException {
+    public void deleteUser(HttpServletResponse response) throws IOException, MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Usuario loggedUser;
+
         if (authentication.getPrincipal() instanceof OAuth2User) {
-            loggedUser=userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
-        }else {
-            loggedUser=userService.findByUsername(authentication.getName());
+            loggedUser = userService.findByEmail(((OAuth2User) authentication.getPrincipal()).getAttribute("email"));
+        } else {
+            loggedUser = userService.findByUsername(authentication.getName());
         }
-        emailService.enviarCorreo(loggedUser.getEmail(), "¡Cuenta eliminada!", "Su cuenta de CryptoSandbox ha sido eliminada con exito.");
+
+        emailService.enviarCorreo(loggedUser.getEmail(), "¡Cuenta eliminada!", "Su cuenta de CryptoSandbox ha sido eliminada con éxito.");
         userService.deleteById(loggedUser.getId());
-        return ResponseEntity.ok("Usuario eliminado correctamente");
+
+        response.sendRedirect("/login");
     }
 
     @GetMapping("/delete/{id}")
