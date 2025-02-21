@@ -486,6 +486,8 @@
                         menajeDetallado.textContent = "No tienes suficientes cryptos.";
                         errorModal.show();
                         $('#registerButton').prop('disabled', false);
+                        $("#comprar-confirm").prop('disabled', false);
+                        $("#vender-confirm").prop('disabled', false);
                     }
                 });
             }else{
