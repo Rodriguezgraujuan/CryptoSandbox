@@ -11,80 +11,117 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="Css/headerFooterBody.css">
-    <link rel="stylesheet" href="char/char.css">
+    <link rel="stylesheet" href="Css/home.css">
     <script src="Js/renderCryptos.js"></script>
     <script src="Js/carrusel.js"></script>
-    <link rel="stylesheet" href="Css/home.css">
+    <script src="Js/SetColor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+    <script src="charInvitado/GraficoInvitado.js"></script>
+    <script src="Js/renderCryptos.js"></script>
+
 </head>
+<style>
+    #chart-container-invitado {
+        position: relative;
+        height: 70vh;
+        overflow: hidden;
+    }
 
-<body class="bg-black">
-    <header class="bg-dark">
-        <!-- Carrusel de criptomonedas -->
-        <section class="container-fluid navbar navbar-expand-md navbar-dark">
-            <div class="carrusel-container">
-                <div class="carrusel-content d-flex" id="carrusel"></div>
-            </div>
-        </section>
-        <!-- Inicio del menu -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="container-fluid">
-                <!-- icono o nombre -->
+    #chart-overlay-invitado {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.3); /* Más oscuro para mejor contraste */
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        text-decoration: none;
+        z-index: 10; /* Asegura que esté por encima del gráfico */
+        pointer-events: none;
+        cursor: pointer;
+    }
+</style>
+<body>
+<!-- Header -->
+<header>
+    <!-- Carrusel de criptomonedas -->
+    <section class="container-fluid navbar navbar-expand-md">
+        <div class="carrusel-container">
+            <div class="carrusel-content d-flex" id="carrusel"></div>
+        </div>
+    </section>
+    <!-- Inicio del menu -->
+    <nav class="navbar navbar-expand-md navbar-dark" id="navMenu">
+        <div class="container-fluid">
+            <!-- icono o nombre -->
 
-                <a class="navbar-brand" href="invitado.html">
-                    <i class="bi bi-flower1"></i>
-                    <span class="bg-warning text-black p-2 mb-1 rounded">Crypto SandBox</span>
-                </a>
+            <a class="navbar-brand" href="home.html">
+                <i class="bi bi-flower1"></i>
+                <span class="bg-warning text-black p-2 mb-1 rounded ">Crypto SandBox</span>
+            </a>
 
-                <!-- boton del menu -->
+            <!-- boton del menu -->
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- elementos del menu colapsable -->
+            <!-- elementos del menu colapsable -->
 
-                <div class="collapse navbar-collapse" id="menu">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Inicio de sesion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="register.html">Registro</a>
-                        </li>
-                    </ul>
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usuario.html">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="toggle-theme">Modo Claro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tutorial.html">Tutoriales</a>
+                    </li>
 
-                    <hr class="d-md-none text-white-50">
+                    <li class="navbar-toggler">
+                        <a class="nav-link" href="wallet.html">Wallet</a>
+                    </li>
 
-                    <!-- enlaces redes sociales -->
+                </ul>
 
-                    <ul class="navbar-nav flex-row flex-wrap text-light">
+                <hr class="d-md-none text-white-50">
 
-                        <li class="nav-item col-6 col-md-auto p-3">
-                            <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
+                <!-- enlaces redes sociales -->
 
+                <ul class="navbar-nav flex-row flex-wrap text-light">
+
+                    <li class="nav-item col-6 col-md-auto p-3">
+                        <a class="text-white" href="https://github.com/Rodriguezgraujuan/CryptoSandbox.git">
                             <i class="bi bi-github"></i>
-                                <small class="d-md-none ms-2">GitHub</small>
-                            </a>
-                        </li>
+                            <small class="d-md-none ms-2">GitHub</small>
+                        </a>
+                    </li>
 
-                    </ul>
+                </ul>
 
-                    <!--boton Informacion -->
+                <!--boton Informacion -->
 
-                    <form class="d-flex">
-                        <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit" href="login.html">Wallet</a>
-                    </form>
+                <form class="d-flex">
+                    <a class="btn btn-outline-warning d-none d-md-inline-block " type="submit" href="wallet.html">Wallet</a>
+                </form>
 
-
-                </div>
 
             </div>
-        </nav>
-    </header>
 
-   <!-- Contenido Principal -->
-   <div class="container-fluid flex-grow-1">
+        </div>
+    </nav>
+</header>
+
+<!-- Contenido Principal -->
+<div class="container-fluid flex-grow-1">
     <div class="row flex-grow-1">
         <!-- Sidebar de Criptos -->
         <aside class="col-md-3 p-3">
@@ -100,145 +137,162 @@
         <!-- Panel de Compra/Venta -->
         <aside class="col-md-3 p-3">
             <h3>Comprar o Vender</h3>
-            <div id="selected-crypto" class="text-center my-2 text-warning">Selecciona una crypto</div>
+            <div id="selected-crypto" class=" text-center my-2 bg-warning text-black p-3 mb-2 rounded">Selecciona una crypto</div>
+            <div id="quantity-crypto" class=" text-center my-2 bg-warning text-black p-3 mb-2 rounded">Loading...</div>
             <div class="d-flex justify-content-between">
                 <button class="btn btn-success" id="btn-comprar">Comprar</button>
                 <button class="btn btn-danger" id="btn-vender">Vender</button>
             </div>
 
             <!-- Inputs de Compra -->
-            <div id="comprar-inputs" class="input-container">
-                <input type="number" id="comprar-amount" placeholder="Cantidad de dinero a gastar">
+            <form id="comprar-inputs" class="input-container" method="post">
+                <input type="number" id="comprar-amount" name="amount" placeholder="Cantidad de dinero a gastar" step="0.01" min="0">
                 <div id="comprar-result" class="result"></div>
-                <button class="btn btn-primary" id="comprar-confirm">Confirmar Compra</button>
-            </div>
+                <button class="btn btn-primary" id="comprar-confirm" type="submit">Confirmar Compra</button>
+            </form>
 
             <!-- Inputs de Venta -->
-            <div id="vender-inputs" class="input-container">
-                <input type="number" id="vender-amount" placeholder="Cantidad de cryptos a vender">
+            <form id="vender-inputs" class="input-container" method="post">
+                <p class="text-warning text-center">5% de comision por venta</p>
+                <input type="number" id="vender-amount" placeholder="Cantidad de cryptos a vender" step="0.01" min="0">
                 <div id="vender-result" class="result"></div>
-                <button class="btn btn-primary" id="vender-confirm">Confirmar Venta</button>
-            </div>
+                <button class="btn btn-primary" id="vender-confirm" type="submit">Confirmar Venta</button>
+            </form>
         </aside>
-
 
         <!-- Estadísticas -->
         <div class="col-md-6 p-3">
             <h3>Estadísticas</h3>
-            <div id="chart-container">
-              <script src="https://fastly.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
-              <script src="Grafico.js"></script>
-              <div id="chart-overlay">
-                  <a href="login.html">
-                      Iniciar sesión</a>
-              </div>
-          </div>
+                <div id="chart-container-invitado" style="width: 100%; height: 400px;">
+                    <div id="chart-overlay-invitado">
+                        <a href="login.html">Iniciar sesión</a>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
-    <!-- Modal de error (por si falla la solicitud) -->
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white" id="conenedor-mensaje">
-                    <h5 class="modal-title" id="mensaje">Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-black">
-                    <p id="menaje-detallado">Error de conexion.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrar">Cerrar</button>
-                </div>
+
+<!-- Modal de error (por si falla la solicitud) -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white" id="conenedor-mensaje">
+                <h5 class="modal-title" id="mensaje">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-black">
+                <p id="menaje-detallado">Error de conexion.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="aceptar">aceptar</button>
             </div>
         </div>
     </div>
-    <!-- Footer -->
-    <footer class="text-center text-lg-start bg-body-tertiary py-1">
-        <!-- Section: Links  -->
-        <section class="">
-            <div class="container text-center text-md-start mt-5">
-                <!-- Grid row -->
-                <div class="row mt-3">
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                        <!-- Content -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            <i class="fas fa-gem me-3"></i>CryptoSandbox
-                        </h6>
-                        <p>
-                            cryptoSandBox es un simulador avanzado de inversiones en criptomonedas,
-                            proporcionando datos en tiempo real para mejorar estrategias y decisiones financieras.
-                        </p>
-                    </div>
-                    <!-- Grid column -->
-                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            TECNOLOGIA UTILIZADA
-                        </h6>
-                        <p>
-                            <a href="#!" class="text-reset">bootstrap</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-reset">jquery</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-reset">spring</a>
-                        </p>
-                    </div>
-                    <!-- Grid column -->
+</div>
 
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            Useful links
-                        </h6>
-                        <p>
-                            <a href="aboutUs.html" class="text-reset">About Us</a>
-                        </p>
-                        <p>
-                            <a href="usuario.html" class="text-reset">User</a>
-                        </p>
-                        <p>
-                            <a href="tutorial.html" class="text-reset">Tutoriales</a>
-                        </p>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                        <p><i class="fas fa-home me-3"></i> Castellon, 12002, España</p>
-                        <p>
-                            <i class="fas fa-envelope me-3"></i>
-                            info@cryptoSandBox.com
-                        </p>
-                        <p><i class="fas fa-phone me-3"></i> + 34 606 243 22</p>
-                    </div>
-                    <!-- Grid column -->
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary py-1">
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem me-3"></i>CryptoSandbox
+                    </h6>
+                    <p>
+                        cryptoSandBox es un simulador avanzado de inversiones en criptomonedas,
+                        proporcionando datos en tiempo real para mejorar estrategias y decisiones financieras.
+                    </p>
                 </div>
-                <!-- Grid row -->
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        TECNOLOGIA UTILIZADA
+                    </h6>
+                    <p>
+                        <a href="#!" class="text-reset">bootstrap</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">jquery</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">spring</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Useful links
+                    </h6>
+                    <p>
+                        <a href="aboutUs.html" class="text-reset">About Us</a>
+                    </p>
+                    <p>
+                        <a href="usuario.html" class="text-reset">User</a>
+                    </p>
+                    <p>
+                        <a href="tutorial.html" class="text-reset">Tutoriales</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                    <p><i class="fas fa-home me-3"></i> Castellon, 12002, España</p>
+                    <p>
+                        <i class="fas fa-envelope me-3"></i>
+                        info@cryptoSandBox.com
+                    </p>
+                    <p><i class="fas fa-phone me-3"></i> + 34 606 243 22</p>
+                </div>
+                <!-- Grid column -->
             </div>
-        </section>
-        <!-- Section: Links  -->
-
-        <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-            <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+            <!-- Grid row -->
         </div>
-        <!-- Copyright -->
-    </footer>
+    </section>
+    <!-- Section: Links  -->
 
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        <p>&copy; Crypto SandBox - Simulador de Criptomonedas</p>
+    </div>
+    <!-- Copyright -->
+</footer>
 
+<script>
+    // ... existing JavaScript code ...
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // ... existing event listeners ...
+
+        // Show chart when the page is loaded
+        const chartOverlay = document.getElementById("chart-overlay-invitado");
+        const chartContainer = document.getElementById("chart-container-invitado");
+        const chartScript = document.createElement("script");
+        chartScript.src = "charInvitado/GraficoInvitado.js";
+        chartContainer.appendChild(chartScript);
+
+        chartScript.onload = function () {
+            chartOverlay.style.display = "none";
+        };
+    });
+</script>
 <script>
     let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
     let mensaje = document.getElementById("mensaje");
     let contenedorMensaje = document.getElementById("conenedor-mensaje");
     let menajeDetallado = document.getElementById("menaje-detallado");
-    let botonCerrar = document.getElementById("cerrar");
+    let botonCerrar = document.getElementById("aceptar");
 
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("btn-comprar").addEventListener("click", function () {
