@@ -359,7 +359,6 @@
             $("#comprar-confirm").click(() => {
                 let money = parseFloat($("#comprar-amount").val());
                 if (!money || money <= 0 || !selectedCurrency) {
-
                     return;
                 }
                 let cryptoAmount = (money / cryptoData[selectedCurrency]).toFixed(4);
