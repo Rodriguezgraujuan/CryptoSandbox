@@ -1,7 +1,7 @@
 $(document).ready( ()=>{
     $("#delete").on("click", (event) =>{
         event.preventDefault()
-        $("#btn-eliminar").on("click", function(event) {
+        $("#delete").on("click", function(event) {
             event.preventDefault(); // Evita que el formulario se envíe automáticamente si es un botón dentro de un formulario
 
             Swal.fire({
