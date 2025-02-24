@@ -142,6 +142,7 @@
                 <div class="inputForm">
                     <input type="text" id="username" class="input" placeholder="Enter username">
                 </div>
+                <p class="d-none" id="username-error"></p>
             </div>
             <div class="flex-column">
                 <label for="email" class="form-label">Email address</label>
@@ -362,6 +363,51 @@
         validarRequisito(/[A-Z]/.test(contrasena), "#mayuscula");
         validarRequisito(/[a-z]/.test(contrasena), "#minuscula");
     });
+
+    $("#password").on("keyup", function() {
+        verificarCoincidencia();
+    });
+
+    function verificarCoincidencia() {
+        let password = $("#password").val();
+        let confirmPassword = $("#confirm-password").val();
+        let errorElement = $("#password-error");
+
+        if (confirmPassword !== "" && password !== confirmPassword) {
+            errorElement.removeClass("d-none").addClass("text-danger").text("Las contraseñas no coinciden.").fadeIn();
+        } else {
+            errorElement.text("").fadeOut(() => errorElement.addClass("d-none").removeClass("text-danger"));
+        }
+    }
+
+    $("#username").on("keyup", () => {
+        let username = $("#username").val();
+        validarNombre(username);
+    });
+
+    function validarNombre(username) {
+        let errorElement = $("#username-error");
+        let regex = /^[a-zA-Z0-9_]+$/;
+        if (username === "") {
+            mostrarError(errorElement, "El nombre de usuario no puede estar vacío.");
+        } else if (username.length < 3) {
+            mostrarError(errorElement, "Debe tener al menos 3 caracteres.");
+        } else if (!regex.test(username)) {
+            mostrarError(errorElement, "Solo se permiten letras, números y guion bajo.");
+        } else {
+            ocultarError(errorElement);
+        }
+    }
+
+    function mostrarError(element, mensaje) {
+        element.removeClass("d-none").addClass("d-danger").text(mensaje).fadeIn();
+    }
+
+    function ocultarError(element) {
+        element.text("").fadeOut(() => element.addClass("d-none").removeClass("d-danger"));
+    }
+
+
 
     function validarRequisito(condicion, etiqueta) {
         if (condicion) {
