@@ -32,9 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".nav-link").forEach(el => {
             el.style.color = "white";
         });
-        document.querySelectorAll("aside").forEach(el => {
-            el.style.backgroundColor = "#121212";
-        });
         document.querySelectorAll(".quantity-crypto").forEach(el => {
             el.style.color = "#ffc107";
         });
@@ -59,9 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".nav-link").forEach(el => {
             el.style.color = "black";
         });
-        document.querySelectorAll("aside").forEach(el => {
-            el.style.backgroundColor = "white";
-        });
+
         document.querySelectorAll(".quantity-crypto").forEach(el => {
             el.style.color = "#000000";
         });
