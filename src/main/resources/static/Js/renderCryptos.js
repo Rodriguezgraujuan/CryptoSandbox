@@ -19,7 +19,7 @@ function renderCryptos(cryptos) {
     cryptoList.innerHTML = cryptos.map(crypto => `
     <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: ${backgroundColor}; color: ${color}">
         <span>${crypto.name}</span>
-        <span class="badge bg-primary">${crypto.value} EUR</span>
+        <span class="badge bg-warning text-black">${crypto.value} EUR</span>
     </li>`).join('');
 }
 

@@ -107,7 +107,7 @@
         <!-- Sidebar de Criptos -->
         <aside class="col-md-3 p-3">
             <h4>Registro de Movimientos</h4>
-            <select name="filtro" id="filtro" class="btn btn-primary">
+            <select name="filtro" id="filtro" class="btn btn-warning">
                 <option value="all">Todos</option>
                 <option value="Compra">Compras</option>
                 <option value="Venta">Ventas</option>
@@ -146,10 +146,6 @@
                         <label for="destinationCrypto" class="form-label">Criptomoneda de destino:</label>
                         <select class="form-select" id="destinationCrypto">
                             <option value="" disabled selected>Selecciona una criptomoneda</option>
-                            <option value="Bitcoin">Bitcoin</option>
-                            <option value="Ethereum">Ethereum</option>
-                            <option value="Dogecoin">Dogecoin</option>
-                            <option value="MarcGuapo">MarcGuapo</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -159,14 +155,14 @@
                     <div class="mb-3">
                         <h5 id="exchangeResult" class="text-primary"></h5>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="intercamb">Confirmar Intercambio</button>
+                    <button type="submit" class="btn btn-warning" id="intercamb">Confirmar Intercambio</button>
                 </form>
             <div class="py-4">
                 <h4>Recarga de euros</h4>
                 <form id="cashForm" class="form" method="post">
                     <label class="form-label">Cantidad de euros que quieres recargar:</label>
                     <input type="number" id="inputCash" class="form-control mb-3" placeholder="Introduce la cantidad que quieres recargar" max="1000">
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                    <button type="submit" class="btn btn-warning">Confirmar</button>
                 </form>
             </div>
         </div>
