@@ -20,7 +20,8 @@
     <script src="Js/loadUserCryptos.js"></script>
     <script src="Js/saldo.js"></script>
     <script src="Js/cryptosLoaderDestination.js"></script>
-    <!--<script src="Js/addCash.js"></script>-->
+    <script src="Js/recarga.js" defer></script>
+    <script src="Js/intercambio.js" defer></script>
 </head>
 
 <body>
@@ -107,7 +108,7 @@
         <!-- Sidebar de Criptos -->
         <aside class="col-md-3 p-3">
             <h4>Registro de Movimientos</h4>
-            <select name="filtro" id="filtro" class="btn btn-primary">
+            <select name="filtro" id="filtro" class="btn btn-warning">
                 <option value="all">Todos</option>
                 <option value="Compra">Compras</option>
                 <option value="Venta">Ventas</option>
@@ -146,10 +147,6 @@
                         <label for="destinationCrypto" class="form-label">Criptomoneda de destino:</label>
                         <select class="form-select" id="destinationCrypto">
                             <option value="" disabled selected>Selecciona una criptomoneda</option>
-                            <option value="Bitcoin">Bitcoin</option>
-                            <option value="Ethereum">Ethereum</option>
-                            <option value="Dogecoin">Dogecoin</option>
-                            <option value="MarcGuapo">MarcGuapo</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -159,14 +156,14 @@
                     <div class="mb-3">
                         <h5 id="exchangeResult" class="text-primary"></h5>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="intercamb">Confirmar Intercambio</button>
+                    <button type="submit" class="btn btn-warning" id="intercamb">Confirmar Intercambio</button>
                 </form>
             <div class="py-4">
                 <h4>Recarga de euros</h4>
                 <form id="cashForm" class="form" method="post">
                     <label class="form-label">Cantidad de euros que quieres recargar:</label>
                     <input type="number" id="inputCash" class="form-control mb-3" placeholder="Introduce la cantidad que quieres recargar" max="1000">
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                    <button type="submit" class="btn btn-warning">Confirmar</button>
                 </form>
             </div>
         </div>
@@ -274,171 +271,7 @@
         <!-- Copyright -->
     </footer>
 
-    <script>
-        let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-        let mensaje = document.getElementById("mensaje");
-        let contenedorMensaje = document.getElementById("conenedor-mensaje");
-        let menajeDetallado = document.getElementById("menaje-detallado");
-        let botonCerrar = document.getElementById("cerrar");
-        $('#cashForm').on('submit', function(e) {
-            e.preventDefault();
-            console.log("Dentro de agregar saldo")
-            let amount = $("#inputCash").val();
-            let wallet = {
-                balance: amount
-            };
-            if (amount > 0) {
-                $.ajax({
-                    url: '/addcash', // URL de tu API
-                    type: 'POST',
-                    contentType: 'application/json', // Tipo de contenido
-                    data: JSON.stringify(wallet), // Convertimos el objeto a JSON
-                    success: function () {
-                        obtenerVideoAnuncio();
 
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Error:', error);
-                        console.log('Estado de la respuesta:', status);
-                        console.log('Detalles de la respuesta:', xhr.responseText);
-                        contenedorMensaje.classList.forEach(clase => {
-                            if (/^bg-/.test(clase)) {
-                                contenedorMensaje.classList.remove(clase);
-                            }
-                        });
-                        contenedorMensaje.classList.add("bg-danger");
-                        mensaje.textContent = "Error";
-                        menajeDetallado.textContent = "Hubo un error al conectar a la api.";
-                        errorModal.show();
-                        $('#registerButton').prop('disabled', false);
-                    }
-                });
-            } else {
-                contenedorMensaje.classList.forEach(clase => {
-                    if (/^bg-/.test(clase)) {
-                        contenedorMensaje.classList.remove(clase);
-                    }
-                });
-                contenedorMensaje.classList.add("bg-warning");
-                mensaje.textContent = "Recuerda!";
-                menajeDetallado.textContent = "El saldo a añadir tiene que ser mayor que 0.";
-                errorModal.show();
-                $('#registerButton').prop('disabled', false);
-            }
-        });
-        function mostrarModal(videoURL) {
-            $("#videoFrame").attr("src", videoURL);
-            $("#videoModal").fadeIn();
-            $("#cerrarModal").prop('disabled', true)
-            setTimeout(()=>{
-                $("#cerrarModal").prop('disabled', false)
-            }, 5000);
-        }
-        $('#cerrarModal').on('click', function() {
-            $("#videoModal").fadeOut();
-            $('#videoFrame').attr('src', '');
-            contenedorMensaje.classList.forEach(clase => {
-                if (/^bg-/.test(clase)) {
-                    contenedorMensaje.classList.remove(clase);
-                }
-            });
-            contenedorMensaje.classList.add("bg-success");
-            mensaje.textContent = "Enhorabuena!";
-            menajeDetallado.textContent = "Saldo agregado correctamente.";
-            errorModal.show();
-            $('#registerButton').prop('disabled', false);
-            botonCerrar.addEventListener("click", function () {
-                window.location.href = '/wallet.html'
-            });
-        });
-        function obtenerVideoAnuncio() {
-            $.ajax({
-                url: "https://www.googleapis.com/youtube/v3/search",
-                method: "GET",
-                data: {
-                    part: "snippet",
-                    q: "anuncio publicidad",
-                    maxResults: 5, // Obtiene un solo video
-                    type: "video",
-                    key: "AIzaSyBz7RRJqQUenmGeyPR2srlGixikLkpRahM"
-                },
-                success: function(data) {
-                    console.log("Respuesta API:", data);
-                    if (data.items && data.items.length > 0) {
-                        const videoId = data.items[Math.floor(Math.random()*5)].id.videoId;
-                        const videoURL = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0`;
-                        mostrarModal(videoURL);
-                    } else {
-                        console.error("No se encontraron videos.");
-                    }
-                },
-                error: function(error) {
-                    console.error("Error al obtener el video:", error);
-                }
-            });
-        }
-    </script>
-<script>
-
-    $('#exchangeForm').on('submit', function(e) {
-        e.preventDefault();
-        $("#intercamb").prop('disabled', true);
-        console.log("Dentro de exchange Form")
-        let cryptoOrigen = $("#selectedCrypto").val();
-        let cryptoDestino = $("#destinationCrypto").val();
-        let quantity = $("#exchangeAmount").val();
-
-        let transaction = {
-            crypto_name: cryptoOrigen,
-            quantity: quantity,
-            operation: "Intercambio",
-            crypto_exchange: cryptoDestino
-        };
-
-        $.ajax({
-            url: '/createTransaction', // URL de tu API
-            type: 'POST',
-            contentType: 'application/json', // Tipo de contenido
-            data: JSON.stringify(transaction), // Convertimos el objeto a JSON
-
-            success: function() {
-
-                contenedorMensaje.classList.forEach(clase => {
-                    if (/^bg-/.test(clase)) {
-                        contenedorMensaje.classList.remove(clase);
-                    }
-                });
-                contenedorMensaje.classList.add("bg-success");
-                mensaje.textContent = "Enhorabuena!";
-                menajeDetallado.textContent = "Intercambio realizado correctamente.";
-                errorModal.show();
-                $('#registerButton').prop('disabled', false);
-                botonCerrar.addEventListener("click", function () {
-                    window.location.href = '/wallet.html'
-                });
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
-                console.log('Estado de la respuesta:', status);
-                console.log('Detalles de la respuesta:', xhr.responseText);
-
-                contenedorMensaje.classList.forEach(clase => {
-                    if (/^bg-/.test(clase)) {
-                        contenedorMensaje.classList.remove(clase);
-                    }
-                });
-                contenedorMensaje.classList.add("bg-danger");
-                mensaje.textContent = "Error";
-                menajeDetallado.textContent = "Hubo un error al intercambiar criptomonedas, comprueba la cantidad que quieres intercambiar.";
-                errorModal.show();
-                $('#registerButton').prop('disabled', false);
-                $("#intercamb").prop('disabled', false);
-
-
-            }
-        });
-    });
-</script>
 </body>
 
 </html>
