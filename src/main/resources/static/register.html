@@ -12,13 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Js/carrusel.js"></script>
+    <link rel="stylesheet" href="Css/fondoDinamico.css">
 
     <style>
-        body {
-            background-color: #151717; /* Fondo oscuro para toda la página */
-            color: white; /* Texto blanco */
-        }
-
         .form {
             display: flex;
             flex-direction: column;
@@ -65,16 +61,17 @@
     </style>
 </head>
 
+
 <body class="d-flex flex-column min-vh-100">
 <header>
     <!-- Carrusel de criptomonedas -->
-    <section class="container-fluid navbar navbar-expand-md navbar-dark">
+    <section class="container-fluid navbar navbar-expand-md navbar-dark" style="background-color: rgba(255,255,255, 0.1)">
         <div class="carrusel-container">
             <div class="carrusel-content d-flex" id="carrusel"></div>
         </div>
     </section>
     <!-- Inicio del menu -->
-    <nav class="navbar navbar-expand-md navbar-dark ">
+    <nav class="navbar navbar-expand-md navbar-dark " style="background-color: rgba(255,255,255, 0.1)">
         <div class="container-fluid">
             <!-- icono o nombre -->
 
@@ -442,6 +439,8 @@
         }
     });
 </script>
+<script src="Js/fondoDinamico.js"></script>
+
 </body>
 
 </html>
