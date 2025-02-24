@@ -169,6 +169,7 @@
                         <i class="bi bi-eye"></i>
                     </button>
                 </div>
+                <p class="d-none" id="password-error"></p>
             </div>
             <div class="flex-row">
                 <div>
@@ -372,7 +373,9 @@
 
         if (confirmPassword !== "" && password !== confirmPassword) {
             errorElement.removeClass("d-none").addClass("text-danger").text("Las contraseñas no coinciden.").fadeIn();
-        } else {
+        } else if (password === ""|| confirmPassword === "") {
+            errorElement.text("No puede estar vacio").fadeOut(() => errorElement.addClass("d-none").removeClass("text-danger"));
+        }else {
             errorElement.text("").fadeOut(() => errorElement.addClass("d-none").removeClass("text-danger"));
         }
     }
@@ -397,11 +400,11 @@
     }
 
     function mostrarError(element, mensaje) {
-        element.removeClass("d-none").addClass("d-danger").text(mensaje).fadeIn();
+        element.removeClass("d-none").addClass("text-danger").text(mensaje).fadeIn();
     }
 
     function ocultarError(element) {
-        element.text("").fadeOut(() => element.addClass("d-none").removeClass("d-danger"));
+        element.text("").fadeOut(() => element.addClass("d-none").removeClass("text-danger"));
     }
 
 
