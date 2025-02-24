@@ -1,17 +1,22 @@
 $(document).ready(function () {
+    //Aqui recibimos los datos de los modales
     const perfilModal = new bootstrap.Modal(document.getElementById('perfilModal'));
     const header = document.getElementById("headerModal");
     const title = document.getElementById("titleModal");
     const text = document.getElementById("textModal");
+
+    //Se envia el formulario al hacer submit y se desactiva el boton.
     $("#editProfileForm").on("submit", function (event) {
         event.preventDefault(); // Evita el envío del formulario tradicional
         $("#editButton").attr("disabled", true);
-        
+
+
         const username = $("#name").val();
         const email = $("#email").val();
         const password = $("#password").val().trim();
         const confirmPassword = $("#confirm-password").val().trim();
 
+        //Se hacen las verificaciones de los campos del formulario al clickar en el boton
         if (username === "" || email === "") {
             deleteBG(header);
             header.classList.add("bg-warning")
@@ -31,14 +36,16 @@ $(document).ready(function () {
             $("#password-error").addClass("d-none");
         }
 
-        // Simulación de guardado (puedes enviar estos datos a un backend)
+        // Se genera un objeto literal de usuario el cual trata el servidor despues
         event.preventDefault();
         let usuario = {
             username: username,
             email: email,
             password: password
         }
+        //Ultima validacion del campo contraseña
         if (validarContrasena(password)) {
+            //Se envian los datos al servidor, en caso de funcionar correctamente todo se le redigira directamente a login tras 2 segundos.
             $.ajax({
                 url: "/editProfile",
                 type: "POST",
@@ -92,6 +99,7 @@ $(document).ready(function () {
             icon.removeClass("bi-eye-slash").addClass("bi-eye");
         }
     });
+
     function validarContrasena(contrasena) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return regex.test(contrasena);

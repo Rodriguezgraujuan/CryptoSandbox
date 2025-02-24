@@ -1,3 +1,6 @@
+/*
+AQUI SE GENERAN LA TABLA SEMANAL DE GANANCIAS Y PERDIDAS
+ */
 // -------------------------------------------
 // 1. Configuración y verificación del día actual
 const todayDate = new Date().toISOString().split('T')[0];
@@ -102,7 +105,7 @@ function updateChart(gananciasDiarias, perdidasDiarias) {
 }
 
 // 3. Función para consultar datos desde la API y actualizar la gráfica
-function fetchTransactions() {
+function getTransactions() {
     $.get("/transactions", function(data) {
         let gananciasDiarias = 0;
         let perdidasDiarias = 0;
@@ -126,10 +129,10 @@ function fetchTransactions() {
 }
 
 // 4. Inicializamos el gráfico y gestionamos el redimensionado
-fetchTransactions();
+getTransactions();
 window.addEventListener('resize', () => {
     myChartdaily.resize();
 });
 
 // 5. Intervalo para consultar datos cada 10 segundos
-setInterval(fetchTransactions, 10000);
+setInterval(getTransactions, 10000);

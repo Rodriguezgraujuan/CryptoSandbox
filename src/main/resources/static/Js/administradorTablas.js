@@ -1,3 +1,9 @@
+/**
+ * EN ESTE JS GENERAMOS LOS GRAFICOS DE LA PAGINA ADMINISTRADOR.
+ * LOS GRAFICOS SON:
+ * - CVI (Compras, Ventas e Intercambios)
+ * - Ganancias y Perdidas
+ */
 // Inicialización de los gráficos
 let domcvi = document.getElementById('chart-container-cvi');
 let myChartcvi = echarts.init(domcvi, null, {
