@@ -53,7 +53,7 @@ public class WebSecurity {
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login") // Define la URL de tu propio formulario de login
+                        .loginPage("/invitado.html") // Define la URL de tu propio formulario de login
                         .loginProcessingUrl("/login") // URL que manejará la autenticación
                         .usernameParameter("email") // Nombre del parámetro del formulario
                         .passwordParameter("password")
@@ -73,7 +73,7 @@ public class WebSecurity {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login") // Página personalizada de login para OAuth2
-                        .defaultSuccessUrl("/Home.html", true) // Redirigir a /dashboard después de un login exitoso
+                        .defaultSuccessUrl("/home.html", true) // Redirigir a /dashboard después de un login exitoso
                         .failureUrl("/login?error")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)

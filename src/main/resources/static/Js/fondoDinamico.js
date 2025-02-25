@@ -1,7 +1,4 @@
-/**
- * ESTA FUNCIÓN MUESTRA EL FONDO DE ESTRELLAS EN LAS PAGINAS DE REGISTRO, LOGIN y ENTRADA (INVITADO)
- *
- */
+// Clase para manejar las estrellas
 let Stars = function(args) {
     if (args === undefined) args = {};
     let _scope = this;
@@ -16,6 +13,8 @@ let Stars = function(args) {
         y: window.innerHeight / 2
     };
     let canvas, context;
+
+    // Inicializa el canvas y los eventos necesarios
     this.init = function() {
         canvas = document.createElement("canvas");
         document.body.appendChild(canvas);
@@ -23,19 +22,24 @@ let Stars = function(args) {
         context.lineCap = "round";
         this.start();
         this.resize();
+        // Escucha el evento de redimensionamiento para ajustar el canvas
         //
         window.addEventListener("resize", this.resize.bind(this));
     }
 
+    // Comienza la creación de estrellas
     this.start = function() {
         this.stars = [];
         for (let i = 0; i < this.starsCounter; i++) {
+            setTimeout(function() {
             setTimeout(function(){
                 _scope.stars.push(new Star());
+            }, i * 30);
             }, i*30);
         }
     }
 
+    // Ajusta el tamaño del canvas a las dimensiones de la ventana
     this.resize = function() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -43,10 +47,13 @@ let Stars = function(args) {
         center.y = canvas.height / 2;
     }
 
+    // Anima las estrellas continuamente
     this.animate = function() {
         window.requestAnimationFrame(this.animate.bind(this));
         this.render();
     }
+
+    // Renderiza el fondo de estrellas
     this.render = function() {
         context.fillStyle = 'rgba(1, 4, 35, 0.8)';
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -54,9 +61,12 @@ let Stars = function(args) {
         for (let i = 0; i < this.stars.length; i++) this.stars[i].update();
     }
 
+    // Clase interna para representar una estrella
     let Star = function() {
         this.x = center.x;
         this.y = center.y;
+
+        // Inicializa las propiedades de la estrella
         this.init = function() {
             this.radius = Math.random() * _scope.radius;
             this.x = center.x;
@@ -68,6 +78,7 @@ let Stars = function(args) {
             }
         }
 
+        // Actualiza el estado de la estrella
         this.update = function() {
             this.vel.x *= 1;
             this.vel.y *= 1;
@@ -79,6 +90,8 @@ let Stars = function(args) {
             this.draw();
             if (this.isDead()) this.init();
         }
+
+        // Dibuja la estrella en el canvas
         this.draw = function() {
             context.beginPath();
             context.moveTo(this.x0, this.y0);
@@ -86,12 +99,16 @@ let Stars = function(args) {
             context.lineWidth = this.lineWidth;
             context.stroke();
         }
+
+        // Comprueba si la estrella se ha salido de los límites del canvas
         this.isDead = function() {
             return (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height);
         }
+
         this.init();
         return this;
     }
+
     this.init();
     this.animate();
     return this;
