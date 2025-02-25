@@ -1,23 +1,33 @@
+// Inicialización de un modal de error
 let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+// Array para almacenar los reportes
 let reportes = [];
 
+// Llamada a la función para obtener los reportes
 getReportes();
 
+// Función para obtener los reportes del servidor
 function getReportes() {
     $.get("/reportes", (data) => {
         console.log("Reportes recibidos:", data);
     }).done((data) => {
+        // Almacenamos los reportes en el array local
         reportes = data;
+        // Llamamos a la función para renderizar los reportes
         renderReportes();
     }).fail((error) => {
+        // Mostramos el modal de error si falla la petición
         errorModal.show()
     });
 }
 
+// Función para renderizar los reportes en la lista
 function renderReportes(filter = "") {
     const reportList = document.getElementById("reportList");
+    // Limpiamos la lista de reportes
     reportList.innerHTML = "";
 
+    // Filtramos y renderizamos los reportes que coincidan con el filtro
     reportes
         .filter(reporte => reporte.usuario.username.toLowerCase().includes(filter.toLowerCase()))
         .forEach(reporte => {
@@ -25,17 +35,17 @@ function renderReportes(filter = "") {
             div.className = "user-item p-1 border-bottom d-flex justify-content-between align-items-center";
             div.style.cursor = "pointer";
 
-            // Texto del reporte
+            // Creamos un elemento span para mostrar la descripción del reporte
             const descripcion = document.createElement("span");
             descripcion.textContent = reporte.descripcion;
 
-            // Botón de eliminar
+            // Creamos un botón para eliminar el reporte
             const btnEliminar = document.createElement("button");
             btnEliminar.className = "btn btn-danger btn-sm";
             btnEliminar.textContent = "Eliminar";
             btnEliminar.setAttribute("data-id", reporte.id); // Guardamos el ID en un atributo
 
-            // Agregar elementos al div
+            // Añadimos los elementos al div
             div.appendChild(descripcion);
             div.appendChild(btnEliminar);
             reportList.appendChild(div);
@@ -50,13 +60,16 @@ document.addEventListener("click", (e) => {
     }
 });
 
+// Función para eliminar un reporte del servidor
 function eliminarReporte(id) {
     console.log("Eliminando reporte con ID:", id);
 
     $.get(`/deleteReporte/${id}`)
         .done(() => {
             console.log("Reporte eliminado correctamente");
-            reportes = reportes.filter(reporte => reporte.id !== id); // Eliminar del array local
+            // Eliminamos el reporte del array local
+            reportes = reportes.filter(reporte => reporte.id !== id);
+            // Redireccionamos a la página de administrador
             window.location.href = "/administrador.html";
         })
         .fail(() => {
