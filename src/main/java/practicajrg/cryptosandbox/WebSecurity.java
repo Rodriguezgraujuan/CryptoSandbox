@@ -73,7 +73,7 @@ public class WebSecurity {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login") // Página personalizada de login para OAuth2
-                        .defaultSuccessUrl("/Home.html", true) // Redirigir a /dashboard después de un login exitoso
+                        .defaultSuccessUrl("/home.html", true) // Redirigir a /dashboard después de un login exitoso
                         .failureUrl("/login?error")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
