@@ -14,6 +14,8 @@
     <script src="Js/SetColor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="Css/fondoNebulosa.css">
+    <script src="Js/fondoNebulosa.js" defer></script>
+    <script src="Js/videosInfo.js" defer></script>
 </head>
 <body>
 <!-- Header -->
@@ -57,13 +59,14 @@
     <div class="row flex-grow-1">
         <!-- Contenido principal -->
         <div class="col-md-9 p-3">
-            <h1 class="mb-4">1. Aprende Bootstrap 5 desde cero</h1>
-            <p>
-                En este capítulo, aprenderás los conceptos básicos de Bootstrap 5,
-                incluyendo su estructura, componentes y cómo se integra con tu proyecto.
+            <h1 class="mb-4" id="tituloVideo">1. Bienvenida a CryptoSandBox</h1>
+            <p id="descripcionVideo">
+                Descubre qué es CryptoSandBox y cómo te puede ayudar.
             </p>
             <div class="ratio ratio-16x9 mb-4">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/wQtUAnUQy5Y?si=z3dyMtcpOp_Mz6ps" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <video width="560" height="315" controls class="border border-5">
+                    <source src="" type="video/mp4" id="video">
+                </video>
             </div>
         </div>
 
@@ -91,8 +94,8 @@
                     </a>
                     <div class="collapse" id="layout">
                         <ul class="list-unstyled ps-3">
-                            <li><a class="nav-link" href="#">Video 1: Compra y vende</a></li>
-                            <li><a class="nav-link" href="#">Video 2: Intercambia criptomonedas</a></li>
+                            <li><a class="nav-link" href="#">Video 3: Guia de la web</a></li>
+                            <li><a class="nav-link" href="#">Video 4: Transacciones de criptomonedas</a></li>
                         </ul>
                     </div>
                 </li>
@@ -104,9 +107,9 @@
                     </a>
                     <div class="collapse" id="content">
                         <ul class="list-unstyled ps-3">
-                            <li><a class="nav-link" href="#">Video 1: Entiende las graficas</a></li>
-                            <li><a class="nav-link" href="#">Video 2: Cuando comprar y vender</a></li>
-                            <li><a class="nav-link" href="#">Video 3: No siempre se gana</a></li>
+                            <li><a class="nav-link" href="#">Video 5: Entiende las graficas</a></li>
+                            <li><a class="nav-link" href="#">Video 6: Cuando comprar y vender</a></li>
+                            <li><a class="nav-link" href="#">Video 7: No siempre se gana</a></li>
                         </ul>
                     </div>
                 </li>
@@ -193,6 +196,6 @@
     </div>
     <!-- Copyright -->
 </footer>
-<script src="Js/fondoNebulosa.js"></script>
+
 </body>
 </html>
