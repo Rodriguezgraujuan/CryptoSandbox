@@ -1,17 +1,21 @@
-var Stars = function(args) {
+/**
+ * ESTA FUNCIÓN MUESTRA EL FONDO DE ESTRELLAS EN LAS PAGINAS DE REGISTRO, LOGIN y ENTRADA (INVITADO)
+ *
+ */
+let Stars = function(args) {
     if (args === undefined) args = {};
-    var _scope = this;
+    let _scope = this;
 
     this.stars = [];
     this.vel = args.vel || 1;
     this.radius = args.radius || 1;
     this.alpha = 0.5;
     this.starsCounter = args.stars || 300;
-    var center = {
+    let center = {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2
     };
-    var canvas, context;
+    let canvas, context;
     this.init = function() {
         canvas = document.createElement("canvas");
         document.body.appendChild(canvas);
@@ -25,7 +29,7 @@ var Stars = function(args) {
 
     this.start = function() {
         this.stars = [];
-        for (var i = 0; i < this.starsCounter; i++) {
+        for (let i = 0; i < this.starsCounter; i++) {
             setTimeout(function(){
                 _scope.stars.push(new Star());
             }, i*30);
@@ -47,10 +51,10 @@ var Stars = function(args) {
         context.fillStyle = 'rgba(1, 4, 35, 0.8)';
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.strokeStyle = "white";
-        for (var i = 0; i < this.stars.length; i++) this.stars[i].update();
+        for (let i = 0; i < this.stars.length; i++) this.stars[i].update();
     }
 
-    var Star = function() {
+    let Star = function() {
         this.x = center.x;
         this.y = center.y;
         this.init = function() {
@@ -93,4 +97,4 @@ var Stars = function(args) {
     return this;
 }
 
-var _stars = new Stars();
+let _stars = new Stars();

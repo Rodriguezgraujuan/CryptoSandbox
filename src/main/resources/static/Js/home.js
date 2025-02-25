@@ -1,3 +1,5 @@
+
+//Recibimos los datos del modal, iniciamos las variables de la cryptomoneda y la cantidad. Esto se inicia aqui porque se usan en muchas funciones
 let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
 let mensaje = document.getElementById("mensaje");
 let contenedorMensaje = document.getElementById("conenedor-mensaje");
@@ -6,17 +8,20 @@ let botonCerrar = document.getElementById("cerrar");
 let selectedCurrency = null;
 let selectedSymbol = null;
 let quanti=null;
+
 $(document).ready(function () {
     let cryptoData = {};
     let cryptoQuantity;
 
+    //Aqui recibimos nuestras criptomonedas (las del usuario)
     $.get("/CryptosOwn", (data) => {
         cryptoQuantity = data
         console.log(cryptoQuantity)
     }).done(() => {
         $("#quantity-crypto").text("READY");
     })
-    // Cargar y renderizar criptomonedas desde el servidor
+
+    // Cargar y renderizar todas las criptomonedas que tiene el servidor
     $.get("/cryptos", (data) => {
         cryptoData = data.reduce((acc, crypto) => {
             acc[crypto.name] = crypto.value;
@@ -29,7 +34,7 @@ $(document).ready(function () {
         $('#registerButton').prop('disabled', false);
     });
 
-    // Manejador de selección de criptomoneda
+    // Cuando selecciones una cryptomoneda recibiras los datos y lo mostrara por pantalla cual has seleccionado
     $(document).on("click", "#crypto-list li", function () {
         selectedCurrency = $(this).find("span:first").text();
         $.get(`/crypto/${selectedCurrency}`, (data) => {
@@ -51,7 +56,7 @@ $(document).ready(function () {
         $("#selected-crypto").text(`Seleccionado: ${selectedCurrency}`).addClass("bg-warning text-black p-3 mb-2 rounded");
     })
 
-    // Mostrar inputs al comprar o vender
+    // Mostrar inputs de comprar al clickar sobre el boton compra
     $("#btn-comprar").click(() => {
         if (selectedCurrency) {
             $("#comprar-inputs").show();
@@ -70,6 +75,7 @@ $(document).ready(function () {
         }
     });
 
+    // Mostrar inputs de venta al clickar sobre el boton venta
     $("#btn-vender").click(() => {
         if (selectedCurrency) {
             $("#vender-inputs").show();
@@ -110,6 +116,8 @@ $(document).ready(function () {
             $("#vender-result").text("");
         }
     });
+
+    // Botones de compra y venta verificaciones basicas
     $("#comprar-confirm").click(() => {
         let money = parseFloat($("#comprar-amount").val());
         if (!money || money <= 0 || !selectedCurrency) {
@@ -125,6 +133,8 @@ $(document).ready(function () {
     });
 });
 
+//Al confirmar la compra de la criptomoneda se realizan las operaciones y verificaciones necesarias
+// para comprobar que todos los datos para enviar sean correctos
 $('#comprar-inputs').on('submit', function(e) {
     e.preventDefault();
     $("#comprar-confirm").prop('disabled', true);
@@ -194,6 +204,8 @@ $('#comprar-inputs').on('submit', function(e) {
     }
 });
 
+//Al confirmar la venta de la criptomoneda se realizan las operaciones y verificaciones necesarias
+// para comprobar que todos los datos para enviar sean correctos
 $('#vender-inputs').on('submit', function(e) {
     e.preventDefault();
     $("#comprar-confirm").prop('disabled', true);

@@ -1,9 +1,10 @@
 $(document).ready( ()=>{
+    //Api que elimina al usuario y todos sus datos relacionados
     $("#delete").on("click", (event) =>{
         event.preventDefault()
         $("#delete").on("click", function(event) {
-            event.preventDefault(); // Evita que el formulario se envíe automáticamente si es un botón dentro de un formulario
-
+            event.preventDefault();
+            //Es un boton que aparece cuando se da click en el boton de eliminar para verificar si esta seguro eliminar su cuenta o no
             Swal.fire({
                 title: "¿Estás seguro?",
                 text: "Esta acción no se puede deshacer.",

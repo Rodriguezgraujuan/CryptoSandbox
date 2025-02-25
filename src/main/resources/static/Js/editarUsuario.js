@@ -75,6 +75,7 @@ $(document).ready(function () {
                 }
             })
         }else{
+            //En caso de que la validacion de la contraseña falle se muestra un mensaje de error
             deleteBG(header);
             header.classList.add("bg-warning")
             title.innerHTML = "Aviso"
@@ -100,11 +101,13 @@ $(document).ready(function () {
         }
     });
 
+    // Tester de contraseña
     function validarContrasena(contrasena) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return regex.test(contrasena);
     }
 
+    //Elimina el fondo del modal
     function deleteBG(header){
         header.classList.forEach(clase => {
             if (clase.startsWith("bg-")) {

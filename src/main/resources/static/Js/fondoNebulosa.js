@@ -1,4 +1,9 @@
-    let scene, camera, renderer, particles;
+/**
+ * ESTA FUNCIÓN MUESTRA EL FONDO DE ESTRELLAS EN TODAS LAS PAGINAS MENOS EN REGISTRO, LOGIN y ENTRADA (INVITADO)
+ *
+ */
+
+let scene, camera, renderer, particles;
 
     function init() {
     scene = new THREE.Scene();
