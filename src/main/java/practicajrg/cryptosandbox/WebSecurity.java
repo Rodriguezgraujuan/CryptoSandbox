@@ -53,7 +53,7 @@ public class WebSecurity {
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login.html") // Define la URL de tu propio formulario de login
+                        .loginPage("/login") // Define la URL de tu propio formulario de login
                         .loginProcessingUrl("/login") // URL que manejará la autenticación
                         .usernameParameter("email") // Nombre del parámetro del formulario
                         .passwordParameter("password")
