@@ -1,0 +1,16 @@
+#chart-container-cvi {
+    height: 70vh;
+    position: relative;
+    overflow: hidden;
+}
+
+#chart-container-totales {
+    height: 40vh;
+    position: relative;
+    overflow: hidden;
+}
+#chart-container-estadisticas{
+    height: 40vh;
+    position: relative;
+    overflow: hidden;
+}
