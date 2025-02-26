@@ -186,4 +186,18 @@ public class UsuarioController {
         reportesService.deleteById(id);
         return ResponseEntity.ok("Reporte eliminado correctamente");
     }
+
+    @GetMapping("/checkUser")
+    public ResponseEntity<String> checkUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
+            String email = ((OAuth2User) authentication.getPrincipal()).getAttribute("email");
+            Usuario user = userService.findByEmail(email);
+            if (user != null) {
+                return ResponseEntity.ok("El correo ya está registrado");
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El correo no está registrado");
+    }
+
 }
