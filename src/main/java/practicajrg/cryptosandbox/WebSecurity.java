@@ -44,7 +44,7 @@ public class WebSecurity {
     @Autowired
     private Wallet_CryptoService wallet_CryptoService;
 
-    @Bean
+    @Bean //Update
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
