@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    console.log("hola")
     $("#checkUserBtn").click(function() {
         $.ajax({
             url: "/checkUser",
