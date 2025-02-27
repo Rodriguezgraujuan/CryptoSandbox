@@ -35,11 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
             title: "5. ¿Cuándo comprar y vender?",
             description: "Aprende estrategias para saber cuándo entrar y salir del mercado.",
             url: "videos/ComprarVender.mp4"
-        },
-        "Video 6: No siempre se gana": {
-            title: "6. No siempre se gana",
-            description: "Consejos para manejar pérdidas y gestionar riesgos.",
-            url: "https://www.youtube.com/watch?v=S0EUmPQuEpQ"
         }
     };
 
