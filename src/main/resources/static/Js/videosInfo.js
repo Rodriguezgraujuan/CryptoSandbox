@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "Video 1: Bienvenida": {
             title: "1. Bienvenida a CryptoSandBox",
             description: "Descubre qué es CryptoSandBox y cómo te puede ayudar.",
-            url: "videos/Bienvenida.mp4"
+            url: "videos/presentacion.mp4",
+            tracks: "videos/presentacion_subtitulos.vtt"
+
         },
         "Video 2: ¿Qué es CriptoSandBox?": {
             title: "2. ¿Qué es CriptoSandBox?",
