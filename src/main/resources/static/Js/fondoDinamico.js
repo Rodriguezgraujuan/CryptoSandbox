@@ -8,10 +8,7 @@ let Stars = function(args) {
     this.radius = args.radius || 1;
     this.alpha = 0.5;
     this.starsCounter = args.stars || 300;
-    let center = {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2
-    };
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     let canvas, context;
 
     // Inicializa el canvas y los eventos necesarios
@@ -22,9 +19,14 @@ let Stars = function(args) {
         context.lineCap = "round";
         this.start();
         this.resize();
-        // Escucha el evento de redimensionamiento para ajustar el canvas
-        //
         window.addEventListener("resize", this.resize.bind(this));
+        window.addEventListener("mousemove", this.updateMousePosition);
+    }
+
+    // Actualiza la posición del ratón
+    this.updateMousePosition = function(event) {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
     }
 
     // Comienza la creación de estrellas
@@ -32,10 +34,10 @@ let Stars = function(args) {
         this.stars = [];
         for (let i = 0; i < this.starsCounter; i++) {
             setTimeout(function() {
-            setTimeout(function(){
-                _scope.stars.push(new Star());
+                setTimeout(function(){
+                    _scope.stars.push(new Star());
+                }, i * 30);
             }, i * 30);
-            }, i*30);
         }
     }
 
@@ -43,8 +45,6 @@ let Stars = function(args) {
     this.resize = function() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        center.x = canvas.width / 2;
-        center.y = canvas.height / 2;
     }
 
     // Anima las estrellas continuamente
@@ -63,14 +63,14 @@ let Stars = function(args) {
 
     // Clase interna para representar una estrella
     let Star = function() {
-        this.x = center.x;
-        this.y = center.y;
+        this.x = mouse.x;
+        this.y = mouse.y;
 
         // Inicializa las propiedades de la estrella
         this.init = function() {
             this.radius = Math.random() * _scope.radius;
-            this.x = center.x;
-            this.y = center.y;
+            this.x = mouse.x;
+            this.y = mouse.y;
             this.lineWidth = 0;
             this.vel = {
                 x: Math.random() * 10 - 5,
