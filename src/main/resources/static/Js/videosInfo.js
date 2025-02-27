@@ -14,37 +14,32 @@ document.addEventListener("DOMContentLoaded", function () {
             tracks: "videos/presentacion_subtitulos.vtt"
 
         },
-        "Video 2: ¿Qué es CriptoSandBox?": {
-            title: "2. ¿Qué es CriptoSandBox?",
-            description: "Aprende qué es CryptoSandBox y cómo funciona.",
-            url: "videos/QueEsCryptoSandBox.mp4"
-        },
-        "Video 3: Guia de la web": {
-            title: "3. Guía de la web",
+        "Video 2: Guia de la web": {
+            title: "2. Guía de la web",
             description: "Aprende a navegar por la plataforma CryptoSandBox.",
             url: "videos/GuiaWEB.mp4",
             tracks: "videos/GuiaWEB.vtt"
         },
-        "Video 4: Transacciones de criptomonedas": {
-            title: "4. Transacciones de criptomonedas",
+        "Video 3: Transacciones de criptomonedas": {
+            title: "3. Transacciones de criptomonedas",
             description: "Guía para realizar transacciones en CryptoSandBox.",
             url: "videos/Transacciones.mp4",
             tracks: "videos/Transacciones.vtt"
         },
-        "Video 5: Entiende las graficas": {
-            title: "5. Entiende las gráficas",
+        "Video 4: Entiende las graficas": {
+            title: "4. Entiende las gráficas",
             description: "Analiza gráficos de precios y toma mejores decisiones.",
             url: "videos/Graficas.mp4"
         },
-        "Video 6: Cuando comprar y vender": {
-            title: "6. ¿Cuándo comprar y vender?",
+        "Video 5: Cuando comprar y vender": {
+            title: "5. ¿Cuándo comprar y vender?",
             description: "Aprende estrategias para saber cuándo entrar y salir del mercado.",
             url: "videos/ComprarVender.mp4"
         },
-        "Video 7: No siempre se gana": {
-            title: "7. No siempre se gana",
+        "Video 6: No siempre se gana": {
+            title: "6. No siempre se gana",
             description: "Consejos para manejar pérdidas y gestionar riesgos.",
-            url: "videos/Riesgos.mp4"
+            url: "https://www.youtube.com/watch?v=S0EUmPQuEpQ"
         }
     };
 
